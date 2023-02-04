@@ -1,4 +1,6 @@
-﻿namespace backend.Data
+﻿using Microsoft.Build.Framework;
+
+namespace backend.Data
 {
     public class Tarina
     {
@@ -12,7 +14,9 @@
         public virtual Matka Matka { get; set; }
 
         //Items
+        [Required]
         public DateTime Pvm { get; set; }
+        [Required]
         public string Teksti { get; set; }
     }
 }

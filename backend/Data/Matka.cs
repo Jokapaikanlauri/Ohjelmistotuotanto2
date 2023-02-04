@@ -15,7 +15,7 @@ namespace backend.Data
         [Required]
         public bool Yksityinen { get; set; }
 
-        public DateTime Alkupvm { get; set; }
-        public DateTime Loppupvm { get; set; }
+        public DateTime? Alkupvm { get; set; }
+        public DateTime? Loppupvm { get; set; }
     }
 }

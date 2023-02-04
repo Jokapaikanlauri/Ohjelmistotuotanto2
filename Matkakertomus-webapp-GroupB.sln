@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matkakertomus-webapp-GroupB", "Matkakertomus-webapp-GroupB.csproj", "{D41B80C3-B05D-40F1-BED2-5023E5863A44}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5CAE981B-3550-4C72-998F-A27205831C03} = {5CAE981B-3550-4C72-998F-A27205831C03}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "backend", "backend\backend.csproj", "{5CAE981B-3550-4C72-998F-A27205831C03}"
 EndProject

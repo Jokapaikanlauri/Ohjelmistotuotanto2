@@ -15,10 +15,10 @@ namespace backend.Data
         [Required]
         public string Password { get; set; }
 
-        public string Etunimi { get; set; }
-        public string Sukunimi { get; set; }
-        public string Paikkakunta { get; set; }
-        public string Esittely { get; set; }
-        public string Kuva { get; set; }
+        public string? Etunimi { get; set; }
+        public string? Sukunimi { get; set; }
+        public string? Paikkakunta { get; set; }
+        public string? Esittely { get; set; }
+        public string? Kuva { get; set; }
     }
 }
