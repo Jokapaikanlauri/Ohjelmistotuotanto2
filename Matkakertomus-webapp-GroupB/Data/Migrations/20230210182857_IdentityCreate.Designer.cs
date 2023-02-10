@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MatkakertomuswebappGroupB.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230210180348_IdentityCreate")]
+    [Migration("20230210182857_IdentityCreate")]
     partial class IdentityCreate
     {
         /// <inheritdoc />
