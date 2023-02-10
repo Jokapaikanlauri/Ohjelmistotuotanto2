@@ -8,7 +8,7 @@ namespace Matkakertomus_webapp_GroupB.Data
         public int MatkaId { get; set; }
 
         //Foreign key
-        public int MatkaajaId { get; set; }
+        public int Id { get; set; }
         public virtual Matkaaja Matkaaja { get; set; }
 
         //Items

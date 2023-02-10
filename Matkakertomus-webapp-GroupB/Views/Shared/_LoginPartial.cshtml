@@ -1,6 +1,7 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@using Matkakertomus_webapp_GroupB.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Matkaaja> SignInManager
+@inject UserManager<Matkaaja> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
