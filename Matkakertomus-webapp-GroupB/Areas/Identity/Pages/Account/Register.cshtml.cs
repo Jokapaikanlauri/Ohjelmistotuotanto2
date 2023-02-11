@@ -75,6 +75,35 @@ namespace Matkakertomus_webapp_GroupB.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            /// 
+
+            //Required modifications:
+            //https://learn.microsoft.com/en-us/aspnet/core/security/authentication/add-user-data?view=aspnetcore-7.0&tabs=visual-studio
+            [Required]
+            [Display(Name = "Etunimi")]
+            [DataType(DataType.Text)]
+            public string Etunimi { get; set; }
+
+            [Required]
+            [Display(Name = "Sukunimi")]
+            [DataType(DataType.Text)]
+            public string Sukunimi { get; set; }
+
+            [Required]
+            [Display(Name = "Paikkakunta")]
+            [DataType(DataType.Text)]
+            public string Paikkakunta { get; set; }
+
+            [Required]
+            [Display(Name = "Esittely")]
+            [DataType(DataType.Text)]
+            public string Esittely { get; set; }
+
+            [Required]
+            [Display(Name = "Kuva")]
+            [DataType(DataType.Text)]
+            public string Kuva { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -114,6 +143,12 @@ namespace Matkakertomus_webapp_GroupB.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                user.Etunimi = user.Etunimi;
+                user.Sukunimi = user.Sukunimi;
+                user.Paikkakunta = user.Paikkakunta;
+                user.Esittely = user.Esittely;
+                user.Kuva = user.Kuva;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

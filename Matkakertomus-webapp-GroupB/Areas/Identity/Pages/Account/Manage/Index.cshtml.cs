@@ -56,6 +56,36 @@ namespace Matkakertomus_webapp_GroupB.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            /// 
+
+            //Required modifications:
+            //https://learn.microsoft.com/en-us/aspnet/core/security/authentication/add-user-data?view=aspnetcore-7.0&tabs=visual-studio
+            [Required]
+            [Display(Name = "Etunimi")]
+            [DataType(DataType.Text)]
+            public string Etunimi { get; set; }
+
+            [Required]
+            [Display(Name = "Sukunimi")]
+            [DataType(DataType.Text)]
+            public string Sukunimi { get; set; }
+
+            [Required]
+            [Display(Name = "Paikkakunta")]
+            [DataType(DataType.Text)]
+            public string Paikkakunta { get; set; }
+
+            [Required]
+            [Display(Name = "Esittely")]
+            [DataType(DataType.Text)]
+            public string Esittely { get; set; }
+
+            [Required]
+            [Display(Name = "Kuva")]
+            [DataType(DataType.Text)]
+            public string Kuva { get; set; }
+
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -70,6 +100,11 @@ namespace Matkakertomus_webapp_GroupB.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                Etunimi = user.Etunimi,
+                Sukunimi = user.Sukunimi,
+                Paikkakunta = user.Paikkakunta,
+                Esittely = user.Esittely,
+                Kuva = user.Kuva,
                 PhoneNumber = phoneNumber
             };
         }
@@ -111,6 +146,28 @@ namespace Matkakertomus_webapp_GroupB.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            if (Input.Etunimi != user.Etunimi)
+            {
+                user.Etunimi = Input.Etunimi;
+            }
+            if (Input.Sukunimi != user.Sukunimi)
+            {
+                user.Sukunimi = Input.Sukunimi;
+            }
+            if (Input.Paikkakunta != user.Paikkakunta)
+            {
+                user.Paikkakunta = Input.Paikkakunta;
+            }
+            if (Input.Esittely != user.Esittely)
+            {
+                user.Esittely = Input.Esittely;
+            }
+            if (Input.Kuva != user.Kuva)
+            {
+                user.Kuva = Input.Kuva;
+            }
+
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
