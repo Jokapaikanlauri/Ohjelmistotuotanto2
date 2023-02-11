@@ -144,11 +144,11 @@ namespace Matkakertomus_webapp_GroupB.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.Etunimi = user.Etunimi;
-                user.Sukunimi = user.Sukunimi;
-                user.Paikkakunta = user.Paikkakunta;
-                user.Esittely = user.Esittely;
-                user.Kuva = user.Kuva;
+                user.Etunimi = Input.Etunimi;
+                user.Sukunimi = Input.Sukunimi;
+                user.Paikkakunta = Input.Paikkakunta;
+                user.Esittely = Input.Esittely;
+                user.Kuva = Input.Kuva;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

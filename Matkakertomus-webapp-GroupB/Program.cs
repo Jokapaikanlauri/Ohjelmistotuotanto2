@@ -1,6 +1,7 @@
 using Matkakertomus_webapp_GroupB.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,13 +20,24 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
+	//bypass Email Verification
+	options.SignIn.RequireConfirmedAccount = false;
     
 });
+
+
+//app.ApplicationServices.GetRequiredService<IOptions<IdentityOptions>>().Value.SignIn.RequireConfirmedAccount = true;
+// userManager.Options.SignIn.RequireConfirmedAccount
+//bypass Email Verification
+//builder.Services.Configure<IOptions<IdentityOptions>>(options => options.Value.SignIn.RequireConfirmedAccount = false);
+
+
 
 builder.Services.AddControllersWithViews();
 
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -38,6 +50,8 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+
 
 
 app.UseHttpsRedirection();
