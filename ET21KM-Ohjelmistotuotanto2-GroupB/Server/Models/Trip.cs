@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 
 namespace ET21KM_Ohjelmistotuotanto2_GroupB.Server.Models
 {
@@ -14,10 +15,17 @@ namespace ET21KM_Ohjelmistotuotanto2_GroupB.Server.Models
 
 		//Local Items
 
+		[Required]
+		[Display(Name = "Starting date")]
+		[DataType(DataType.Date)]
 		public DateTime DatumStart { get; set; }
 
+		[Required]
+		[Display(Name = "Ending date")]
+		[DataType(DataType.Date)]
 		public DateTime DatumEnd { get; set; }
 
+		[Required]
 		public Boolean Private { get; set; }
 
 

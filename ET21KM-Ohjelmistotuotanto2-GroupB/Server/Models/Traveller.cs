@@ -1,15 +1,31 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace ET21KM_Ohjelmistotuotanto2_GroupB.Server.Models
 {
+	//Replaces ApplicationUser Class
+	//Must extend IdentityUser
+	//Remeber to replace ApplicationUser with Traveller in all relevant files
 	public class Traveller : IdentityUser
 	{
 		//Local Items
+		[Required]
+		[PersonalData]
 		public string Forename { get; set; }
+		[Required]
+		[PersonalData]
 		public string Surname { get; set; }
+		[Required]
+		[PersonalData]
 		public string Nickname { get; set; }
+		[Required]
+		[PersonalData]
 		public string Municipality { get; set; }
+		[Required]
+		[PersonalData]
 		public string Description { get; set; }
+
+		[PersonalData]
 		public string Image { get; set; }
 
 		//If this class is FK in other table create ICollection to enable

@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
 using System.Security.Cryptography;
 
 namespace ET21KM_Ohjelmistotuotanto2_GroupB.Server.Models
@@ -9,11 +10,15 @@ namespace ET21KM_Ohjelmistotuotanto2_GroupB.Server.Models
 		public int DestinationId { get; set; }
 
 		//Local Items
-
+		[Required]
 		public string Name { get; set; }
+		[Required]
 		public string Country { get; set; }
+		[Required]
 		public string Municipality { get; set; }
+		[Required]
 		public string Description { get; set; }
+		[Required]
 		public string Image { get; set; }
 
 

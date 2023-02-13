@@ -1,4 +1,6 @@
-﻿namespace ET21KM_Ohjelmistotuotanto2_GroupB.Server.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ET21KM_Ohjelmistotuotanto2_GroupB.Server.Models
 {
 	public class Picture
 	{
@@ -11,6 +13,7 @@
 
 
 		//Local Items
+		[Required]
 		public string Image { get; set; }
 
 	}
