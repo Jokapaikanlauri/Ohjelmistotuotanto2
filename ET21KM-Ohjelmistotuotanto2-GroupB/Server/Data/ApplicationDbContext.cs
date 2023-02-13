@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace ET21KM_Ohjelmistotuotanto2_GroupB.Server.Data
 {
-	public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+	public class ApplicationDbContext : ApiAuthorizationDbContext<Traveller>
 	{
 		public ApplicationDbContext(
 			DbContextOptions options,
