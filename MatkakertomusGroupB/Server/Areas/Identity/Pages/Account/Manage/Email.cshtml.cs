@@ -116,9 +116,12 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             if (Input.NewEmail != email)
             {
+                //No need for email change verification, bypass instead
+                /*
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                
                 var callbackUrl = Url.Page(
                     "/Account/ConfirmEmailChange",
                     pageHandler: null,
@@ -128,8 +131,14 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
                     Input.NewEmail,
                     "Confirm your email",
                     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                */
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                 await _userManager.SetEmailAsync(user, Input.NewEmail);
+                await _userManager.SetUserNameAsync(user, Input.NewEmail);
+                await _userManager.UpdateNormalizedUserNameAsync(user);
+
+
+                StatusMessage = "Change completed succesfully.";
                 return RedirectToPage();
             }
 

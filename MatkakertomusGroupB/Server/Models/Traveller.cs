@@ -17,6 +17,11 @@ namespace MatkakertomusGroupB.Server.Models
 		[PersonalData]
 		public string Surname { get; set; }
 
+		[Required]
+		[PersonalData]
+		public string Nickname { get; set; }
+
+
 		[PersonalData]
 		public string? Municipality { get; set; }
 

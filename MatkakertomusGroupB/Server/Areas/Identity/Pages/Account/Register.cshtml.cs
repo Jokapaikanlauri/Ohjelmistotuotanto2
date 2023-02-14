@@ -86,8 +86,8 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account
 
 			[Required]
 			[DataType(DataType.Text)]
-			[Display(Name = "Username")]
-			public string UserName { get; set; }
+			[Display(Name = "Nickname")]
+			public string Nickname { get; set; }
 
 
 			/// <summary>
@@ -137,7 +137,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account
 				// Added in accordance with https://learn.microsoft.com/en-us/aspnet/core/security/authentication/add-user-data?view=aspnetcore-7.0&tabs=netcore-cli
 				user.Forename = Input.Forename;
 				user.Surname = Input.Surname;
-				user.UserName = Input.UserName;
+				user.Nickname = Input.Nickname;
 
 
 				await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

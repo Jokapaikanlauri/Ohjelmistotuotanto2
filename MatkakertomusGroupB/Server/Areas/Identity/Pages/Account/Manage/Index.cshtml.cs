@@ -73,6 +73,11 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 
 			[Required]
 			[DataType(DataType.Text)]
+			[Display(Name = "Surname")]
+			public string Nickname { get; set; }
+
+			[Required]
+			[DataType(DataType.Text)]
 			[Display(Name = "Municipality")]
 			public string Municipality { get; set; }
 
@@ -103,6 +108,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 				// Added in accordance with https://learn.microsoft.com/en-us/aspnet/core/security/authentication/add-user-data?view=aspnetcore-7.0&tabs=netcore-cli
 				Forename = user.Forename,
 				Surname = user.Surname,
+				Nickname = user.Nickname,
 				Municipality = user.Municipality,
 				Description = user.Description,
 				Image = user.Image,
@@ -155,6 +161,10 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 			if (Input.Surname != user.Surname)
 			{
 				user.Surname = Input.Surname;
+			}
+			if (Input.Nickname != user.Nickname)
+			{
+				user.Nickname = Input.Surname;
 			}
 			if (Input.Municipality != user.Municipality)
 			{
