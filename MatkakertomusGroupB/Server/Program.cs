@@ -1,6 +1,7 @@
 using MatkakertomusGroupB.Server.Data;
 using MatkakertomusGroupB.Server.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+//Changed from SQL to SQlite, added relevant NUGET
+//Changed connection string in appsettings.json
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseSqlite(connectionString));
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<Traveller>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -20,6 +25,18 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddAuthentication()
 	.AddIdentityServerJwt();
+
+//Custom options added based on UX
+builder.Services.Configure<IdentityOptions>(options =>
+{
+	options.User.RequireUniqueEmail = true;
+	options.Password.RequireDigit = false;
+	options.Password.RequireNonAlphanumeric = false;
+	options.Password.RequireUppercase = false;
+	//bypass Email Verification
+	options.SignIn.RequireConfirmedAccount = false;
+
+});
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

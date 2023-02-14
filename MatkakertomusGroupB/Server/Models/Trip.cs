@@ -9,21 +9,19 @@ namespace MatkakertomusGroupB.Server.Models
 		public int TripId { get; set; }
 
 		//FK
-		public int TravellerId { get; set; }
+		public int Id { get; set; }
 		public virtual Traveller Traveller { get; set; }
 
 
 		//Local Items
 
-		[Required]
 		[Display(Name = "Starting date")]
 		[DataType(DataType.Date)]
-		public DateTime DatumStart { get; set; }
+		public DateTime? DatumStart { get; set; }
 
-		[Required]
 		[Display(Name = "Ending date")]
 		[DataType(DataType.Date)]
-		public DateTime DatumEnd { get; set; }
+		public DateTime? DatumEnd { get; set; }
 
 		[Required]
 		public Boolean Private { get; set; }

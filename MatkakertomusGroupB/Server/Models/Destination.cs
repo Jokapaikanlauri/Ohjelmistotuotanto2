@@ -14,12 +14,9 @@ namespace MatkakertomusGroupB.Server.Models
 		public string Name { get; set; }
 		[Required]
 		public string Country { get; set; }
-		[Required]
-		public string Municipality { get; set; }
-		[Required]
-		public string Description { get; set; }
-		[Required]
-		public string Image { get; set; }
+		public string? Municipality { get; set; }
+		public string? Description { get; set; }
+		public string? Image { get; set; }
 
 
 		//If this class is FK in other table create ICollection to enable

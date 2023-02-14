@@ -11,7 +11,7 @@ namespace MatkakertomusGroupB.Server.Models
 		//FK
 		public int TripId { get; set; }
 		public virtual Trip Trip { get; set; }
-		
+
 		//FK
 		public int DestinationId { get; set; }
 		public virtual Destination Destination { get; set; }
@@ -20,9 +20,8 @@ namespace MatkakertomusGroupB.Server.Models
 		//Local Items
 		[Required]
 		public string Description { get; set; }
-
 		[Required]
-		[Display(Name = "Date")]
+		[Display(Name = "Datum")]
 		[DataType(DataType.Date)]
 		public DateTime Datum { get; set; }
 
