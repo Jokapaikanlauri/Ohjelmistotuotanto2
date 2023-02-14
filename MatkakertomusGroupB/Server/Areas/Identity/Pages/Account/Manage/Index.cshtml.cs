@@ -74,17 +74,17 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 			[Required]
 			[DataType(DataType.Text)]
 			[Display(Name = "Municipality")]
-			public string? Municipality { get; set; }
+			public string Municipality { get; set; }
 
 			[Required]
 			[DataType(DataType.Text)]
 			[Display(Name = "Description")]
-			public string? Description { get; set; }
+			public string Description { get; set; }
 
 			[Required]
 			[DataType(DataType.Text)]
 			[Display(Name = "Image")]
-			public string? Image { get; set; }
+			public string Image { get; set; }
 
 			[Phone]
 			[Display(Name = "Phone number")]
