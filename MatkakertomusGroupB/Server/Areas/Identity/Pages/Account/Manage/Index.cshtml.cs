@@ -73,7 +73,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 
 			[Required]
 			[DataType(DataType.Text)]
-			[Display(Name = "Surname")]
+			[Display(Name = "Nickname")]
 			public string Nickname { get; set; }
 
 			[Required]
