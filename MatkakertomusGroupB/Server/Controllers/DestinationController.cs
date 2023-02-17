@@ -19,14 +19,16 @@ namespace MatkakertomusGroupB.Server.Controllers
     public class DestinationController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+		private readonly ILogger<DestinationController> _logger;
 
-        public DestinationController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public DestinationController(ApplicationDbContext context, ILogger<DestinationController> logger)
+		{
+			_context = context;
+			_logger = logger;
+		}
 
-        // GET: api/Destination
-        [HttpGet]
+		// GET: api/Destination
+		[HttpGet]
         public async Task<ActionResult<IEnumerable<Destination>>> GetDestinations()
         {
           if (_context.Destinations == null)

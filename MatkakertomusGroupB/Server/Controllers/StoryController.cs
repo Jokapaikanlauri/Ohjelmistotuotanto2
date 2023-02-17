@@ -19,14 +19,16 @@ namespace MatkakertomusGroupB.Server.Controllers
     public class StoryController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+		private readonly ILogger<StoryController> _logger;
 
-        public StoryController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public StoryController(ApplicationDbContext context, ILogger<StoryController> logger)
+		{
+			_context = context;
+			_logger = logger;
+		}
 
-        // GET: api/Story
-        [HttpGet]
+		// GET: api/Story
+		[HttpGet]
         public async Task<ActionResult<IEnumerable<Story>>> GetStories()
         {
           if (_context.Stories == null)

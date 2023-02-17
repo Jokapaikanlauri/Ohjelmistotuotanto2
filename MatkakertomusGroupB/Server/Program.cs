@@ -1,6 +1,7 @@
 using MatkakertomusGroupB.Server.Data;
 using MatkakertomusGroupB.Server.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 //Changed connection string in appsettings.json
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseSqlite(connectionString));
-
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -41,12 +41,20 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+//Added Swagger
+//https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=netcore-cli
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseMigrationsEndPoint();
+	//Added Swagger
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
+    app.UseMigrationsEndPoint();
 	app.UseWebAssemblyDebugging();
 }
 else

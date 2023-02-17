@@ -1,21 +1,26 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
+﻿@using MatkakertomusGroupB.Shared;
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject NavigationManager Navigation
+@inject ILogger<LoginDisplay> logger
+@inject HttpClient Http
 
 <AuthorizeView>
-    <Authorized>
-        <a href="authentication/profile">Hello, @context.User.Identity?.Name!</a>
-        <button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
-    </Authorized>
-    <NotAuthorized>
-        <a href="authentication/register">Register</a>
-        <a href="authentication/login">Log in</a>
-    </NotAuthorized>
+	<Authorized>
+		@{logger.LogInformation("User is Authorized to page");}
+		<a href="authentication/profile">Hello "<NicknameDisplay username="@context.User.Identity?.Name"></NicknameDisplay>" </a>
+		<button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>		
+	</Authorized>
+	<NotAuthorized>
+		<a href="authentication/register">Register</a>
+		<a href="authentication/login">Log in</a>
+	</NotAuthorized>
 </AuthorizeView>
 
-@code{
-    private void BeginLogOut()
-    {
-        Navigation.NavigateToLogout("authentication/logout");
-    }
+@code {
+
+	private void BeginLogOut()
+	{
+		Navigation.NavigateToLogout("authentication/logout");
+	}
 }

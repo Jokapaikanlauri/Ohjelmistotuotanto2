@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatkakertomusGroupB.Server", "MatkakertomusGroupB\Server\MatkakertomusGroupB.Server.csproj", "{72730C00-F66E-426E-9C36-9B02C3426B7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Server", "MatkakertomusGroupB\Server\MatkakertomusGroupB.Server.csproj", "{72730C00-F66E-426E-9C36-9B02C3426B7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatkakertomusGroupB.Client", "MatkakertomusGroupB\Client\MatkakertomusGroupB.Client.csproj", "{2686578E-DE1A-45D7-93E8-61C7FC990D3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Client", "MatkakertomusGroupB\Client\MatkakertomusGroupB.Client.csproj", "{2686578E-DE1A-45D7-93E8-61C7FC990D3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatkakertomusGroupB.Shared", "MatkakertomusGroupB\Shared\MatkakertomusGroupB.Shared.csproj", "{E3923CD7-8DA1-457E-801F-64EB7C956AE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Shared", "MatkakertomusGroupB\Shared\MatkakertomusGroupB.Shared.csproj", "{E3923CD7-8DA1-457E-801F-64EB7C956AE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

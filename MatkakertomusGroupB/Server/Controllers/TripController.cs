@@ -19,14 +19,16 @@ namespace MatkakertomusGroupB.Server.Controllers
     public class TripController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+		private readonly ILogger<TripController> _logger;
 
-        public TripController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public TripController(ApplicationDbContext context, ILogger<TripController> logger)
+		{
+			_context = context;
+			_logger = logger;
+		}
 
-        // GET: api/Trip
-        [HttpGet]
+		// GET: api/Trip
+		[HttpGet]
         public async Task<ActionResult<IEnumerable<Trip>>> GetTrip()
         {
           if (_context.Trip == null)

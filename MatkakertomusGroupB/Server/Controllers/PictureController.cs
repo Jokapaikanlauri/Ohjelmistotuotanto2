@@ -19,14 +19,17 @@ namespace MatkakertomusGroupB.Server.Controllers
     public class PictureController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+		private readonly ILogger<PictureController> _logger;
 
-        public PictureController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+		public PictureController(ApplicationDbContext context, ILogger<PictureController> logger)
+		{
+			_context = context;
+			_logger = logger;
+		}
 
-        // GET: api/Picture
-        [HttpGet]
+
+		// GET: api/Picture
+		[HttpGet]
         public async Task<ActionResult<IEnumerable<Picture>>> GetPictures()
         {
           if (_context.Pictures == null)

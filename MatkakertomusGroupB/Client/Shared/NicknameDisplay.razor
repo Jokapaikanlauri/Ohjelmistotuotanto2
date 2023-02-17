@@ -1,0 +1,31 @@
+﻿@using MatkakertomusGroupB.Shared;
+@inject HttpClient Http
+@inject ILogger<NicknameDisplay> logger
+
+<span>@user</span>
+
+@code {
+	[Parameter]
+	public string userName { get; set; }
+
+	public UserDTO? userNickDTO = new UserDTO();
+	public UserDTO? userNickDTO2 = new UserDTO();
+	public string? user = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		logger.LogInformation("NickNameDisplay Fired");
+		userNickDTO.Username = userName;
+		logger.LogInformation("NickNameDisplay parameter assignment OK");
+
+		var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userNickDTO);
+		logger.LogInformation($"NickNameDisplay POST response:{response}");
+
+		userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+		logger.LogInformation($"NickNameDisplay parsed JSON succesfully");
+
+		user = userNickDTO.Nickname;
+
+		logger.LogInformation($"NickNameDisplay user:{user}");
+	}
+}
