@@ -1,10 +1,12 @@
-﻿@page "/destinations/{userId}"
+﻿@page "/destinations"
+@using MatkakertomusGroupB.Shared.Models;
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using MatkakertomusGroupB.Shared
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
+@inject ILogger<Destinations> logger
 
 <PageTitle>Destinations</PageTitle>
 
@@ -12,30 +14,52 @@
 
 <p>This is a template</p>
 
-@if (false)
-{
-	<p><em>Loading...</em></p>
-}
-else
-{
-	<p>This is a template 2</p>
-	<p>User ID is: @userId</p>
-}
+<div class="main">
+	@if (nickname == null)
+	{
+		<div>
+		<p>Username is: @name</p>
+		<p>User nickname is: @nickname</p>
+		</div>
+	}
+	else
+	{
+		<div>
+		<p><em>Loading...</em></p>
+
+		<p>Username is: @name</p>
+		</div>
+	}
+</div>
 
 @code {
-	[Parameter]
+
 	public string userId { get; set; }
 
+	public UserDTO? userNickDTO = new UserDTO();
+	public UserDTO? userNickDTO2 = new UserDTO();
+	public string? nickname = null;
 
-	private string name = null;
-	protected void Page_Load(object sender, EventArgs e)
-	{
-		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
-
-	}
+	public string? name = null;
 
 	protected override async Task OnInitializedAsync()
 	{
+		logger.LogWarning("Destinations-page-oninitasync name assingment started");
+		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
 
+		logger.LogWarning("Destinations-page-oninitasync Fired");
+		userNickDTO.Username = name;
+		logger.LogInformation("Destinations-page-oninitasync parameter assignment OK");
+
+		//Fetch user data from API
+		var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userNickDTO);
+		logger.LogInformation($"Destinations-page-oninitasync POST response:{response}");
+		//Parse user data from API
+		userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+		logger.LogInformation($"Destinations-page-oninitasync parsed JSON succesfully");
+		nickname = userNickDTO.Nickname;
+		logger.LogInformation($"Destinations-page-oninitasync user:{nickname}");
+
+		this.StateHasChanged();
 	}
 }
