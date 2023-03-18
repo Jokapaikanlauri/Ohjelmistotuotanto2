@@ -8,13 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using MatkakertomusGroupB.Server.Data;
 using MatkakertomusGroupB.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
-using MatkakertomusGroupB.Shared;
 
 namespace MatkakertomusGroupB.Server.Controllers
 {
-	//Remember to add [AllowAnonymous] to methods you want accessible without being authenticated
-	//Pages that require authentication also require the tag [Authorize] (Client side)
-	[Authorize]
+    //Remember to add [AllowAnonymous] to methods you want accessible without being authenticated
+    //Pages that require authentication also require the tag [Authorize] (Client side)
+    [Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class TravellerController : ControllerBase
