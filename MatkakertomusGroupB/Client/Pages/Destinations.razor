@@ -1,0 +1,41 @@
+﻿@page "/destinations/{userId}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+
+<PageTitle>Destinations</PageTitle>
+
+<h1>Destinations</h1>
+
+<p>This is a template</p>
+
+@if (false)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<p>This is a template 2</p>
+	<p>User ID is: @userId</p>
+}
+
+@code {
+	[Parameter]
+	public string userId { get; set; }
+
+
+	private string name = null;
+	protected void Page_Load(object sender, EventArgs e)
+	{
+		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+
+	}
+}

@@ -1,0 +1,45 @@
+﻿@page "/rtr/{page}/"
+@using MatkakertomusGroupB.Shared;
+@inject HttpClient Http
+@inject ILogger<UserRouter> logger
+@inject NavigationManager Nav
+
+<AuthorizeView>
+	<Authorized>
+		<div>Processing Request...</div>
+	</Authorized>
+	<NotAuthorized>
+		<div>Please Return to Main Page And try Again</div>
+	</NotAuthorized>
+</AuthorizeView>
+
+@code {
+	[Parameter]
+	public string userName { get; set; }
+	[Parameter]
+	public string page { get; set; }
+
+	public UserDTO? userDTO = new UserDTO();
+	public UserDTO? userDTO2 = new UserDTO();
+	public int? userId = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		logger.LogInformation("UserRouter Fired");
+		userDTO.Username = userName;
+		logger.LogInformation("UserRouter parameter assignment OK");
+
+		//Fetch user data from API
+		var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+		logger.LogInformation($"UserRouter POST response:{response}");
+
+		//Parse user data from API
+		userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+		logger.LogInformation($"UserRouter parsed JSON succesfully");
+		userId = userDTO.Id;
+		logger.LogInformation($"UserRouter userId:{userId}");
+
+		//Redirect to requested page
+		Nav.NavigateTo($"/{page}/{userId}");
+	}
+}

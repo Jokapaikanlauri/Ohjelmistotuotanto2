@@ -18,14 +18,13 @@
 		userNickDTO.Username = userName;
 		logger.LogInformation("NickNameDisplay parameter assignment OK");
 
+		//Fetch user data from API
 		var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userNickDTO);
 		logger.LogInformation($"NickNameDisplay POST response:{response}");
-
+		//Parse user data from API
 		userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
 		logger.LogInformation($"NickNameDisplay parsed JSON succesfully");
-
 		user = userNickDTO.Nickname;
-
 		logger.LogInformation($"NickNameDisplay user:{user}");
 	}
 }
