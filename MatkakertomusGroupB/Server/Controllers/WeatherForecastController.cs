@@ -1,10 +1,10 @@
-using MatkakertomusGroupB.Shared;
+using MatkakertomusGroupB.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatkakertomusGroupB.Server.Controllers
 {
-	[Authorize]
+    [Authorize]
 	[ApiController]
 	[Route("[controller]")]
 	public class WeatherForecastController : ControllerBase

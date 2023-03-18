@@ -2,7 +2,7 @@
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
 
-namespace MatkakertomusGroupB.Server.Models
+namespace MatkakertomusGroupB.Shared.Models
 {
 	public class Destination
 	{

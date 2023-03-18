@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 
-namespace MatkakertomusGroupB.Server.Models
+namespace MatkakertomusGroupB.Shared.Models
 {
 	public class Story
 	{
