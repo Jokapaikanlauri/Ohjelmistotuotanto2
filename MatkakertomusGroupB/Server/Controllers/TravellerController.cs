@@ -75,6 +75,12 @@ namespace MatkakertomusGroupB.Server.Controllers
 			_logger.LogWarning("HttpPost PostGetId returning NotFound");
 			return NotFound();
 		}
+
+		[HttpGet]
+		public async Task<ActionResult<IEnumerable<Traveller>>> Get()
+		{
+			return await _context.Travellers.ToListAsync();
+		}
 	}
 }
 

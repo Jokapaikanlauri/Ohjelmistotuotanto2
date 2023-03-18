@@ -1,0 +1,42 @@
+﻿@page "/travellerlist"
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+
+
+<PageTitle>Traveller List</PageTitle>
+
+<h1>Traveller List</h1>
+
+<p role="status">Current traveller count: @count</p>
+
+@if (list != null)
+{
+    @foreach (Traveller t in list)
+    {
+        <TravellerItem Traveller="@t">
+        <ul><li>First name: @t.Forename</li>
+        <li>Last name: @t.Surname</li>
+        <li>Nickname: @t.Nickname</li>
+        <li>Email: @t.Email</li>
+        <li>Municipality: @t.Municipality</li>
+        <li>Image: @t.Image</li></ul>
+        </TravellerItem>
+    }
+}
+
+
+@code {
+    private int count = 0;
+
+    private List<Traveller>? list = null;
+    protected override async Task OnInitializedAsync()
+    {
+        list = await Http.GetFromJsonAsync<List<Traveller>>($"/api/traveller");
+        if (list != null) count = list.Count;
+    }
+
+}
