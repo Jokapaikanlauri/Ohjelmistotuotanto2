@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace MatkakertomusGroupB.Server.Models
+namespace MatkakertomusGroupB.Shared.Models
 {
     //Replaces ApplicationUser Class
     //Must extend IdentityUser

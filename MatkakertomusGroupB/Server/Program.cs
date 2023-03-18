@@ -1,5 +1,5 @@
 using MatkakertomusGroupB.Server.Data;
-using MatkakertomusGroupB.Server.Models;
+using MatkakertomusGroupB.Shared.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;

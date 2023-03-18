@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MatkakertomusGroupB.Server.Data;
-using MatkakertomusGroupB.Server.Models;
+using MatkakertomusGroupB.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using MatkakertomusGroupB.Shared;
 

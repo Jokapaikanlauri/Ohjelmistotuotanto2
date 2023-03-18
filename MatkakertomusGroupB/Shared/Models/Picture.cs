@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MatkakertomusGroupB.Server.Models
+namespace MatkakertomusGroupB.Shared.Models
 {
 	public class Picture
 	{
