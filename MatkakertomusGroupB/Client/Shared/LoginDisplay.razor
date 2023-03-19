@@ -31,38 +31,26 @@
 </AuthorizeView>
 
 @code {
-
-	private string? name = null;
 	private string? nickname = null;
-
-	protected override async Task OnInitializedAsync()
-	{
-
-	}
 
 	private async void GetUserNick()
 	{
-		logger.LogInformation($"On init async");
 		try
 		{
-			var resp = await asp.GetAuthenticationStateAsync();
-			if (resp.User != null)
+			//Assing name to variable for future operations
+			var name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+
+			//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+			if (name != null)
 			{
-				//Assing name to variable for future operations
-				name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
-				//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
-				if (name != null)
+				//Fetch user data from API via POST operation
+				var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
+				//Parse user data from API
+				var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+				nickname = userDTO.Nickname;
+				if (nickname != null)
 				{
-					//Fetch user data from API via POST operation
-					var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
-					//Parse user data from API
-					var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-					nickname = userDTO.Nickname;
-					logger.LogInformation($"nickname: {nickname}");
-					if (nickname != null)
-					{
-						StateHasChanged();
-					}
+					StateHasChanged();
 				}
 			}
 		}
