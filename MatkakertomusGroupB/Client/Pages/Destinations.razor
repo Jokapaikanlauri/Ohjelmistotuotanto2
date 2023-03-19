@@ -1,0 +1,89 @@
+﻿@page "/destinations"
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject ILogger<Destinations> logger
+
+<PageTitle>Destinations</PageTitle>
+
+<h1>Destinations</h1>
+
+<p>This is a template</p>
+
+<AuthorizeView>
+	<Authorized>
+		<div class="main">
+			@if (nickname != null)
+			{
+				<div>
+					<p>Username is: @name</p>
+					<p>User nickname is: @nickname</p>
+
+					@if (userId != null)
+					{
+						<p>UserId is: @userId</p>
+					}
+					else
+					{
+						<button class="btn btn-warning" @onclick="GetUserId">GET THE USER ID PLEASE</button>
+					}
+				</div>
+			}
+			else
+			{
+				<div>
+					<p><em>Loading...</em></p>
+
+					<p>Username is: @name</p>
+				</div>
+			}
+		</div>
+	</Authorized>
+	<NotAuthorized>
+		<div>You are a public user.</div>
+	</NotAuthorized>
+</AuthorizeView>
+
+
+
+
+@code {
+	//private UserDTO? userDTO = new UserDTO();
+	//private UserDTO? userDTO2 = new UserDTO();
+	private string? name = null;
+	private string? nickname = null;
+	private string? userId = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		//Assing name to variable for future operations
+		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+		
+		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			nickname = userDTO.Nickname;
+		}
+	}
+
+	private async Task GetUserId()
+	{
+		logger.LogInformation($"I'm a template logging message");
+
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			userId = userDTO.Id;
+		}
+	}
+}
