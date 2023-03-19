@@ -1,15 +1,28 @@
 ﻿@using MatkakertomusGroupB.Shared;
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared.Models
 @inject NavigationManager Navigation
 @inject ILogger<LoginDisplay> logger
 @inject HttpClient Http
+@inject AuthenticationStateProvider asp
 
 <AuthorizeView>
 	<Authorized>
-		@{logger.LogInformation("User is Authorized to page");}
-		<a href="authentication/profile">Hello "<NicknameDisplay username="@context.User.Identity?.Name"></NicknameDisplay>" </a>
-		<button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>		
+		@{
+			logger.LogInformation("User is Authorized to page");
+		}
+		<!--<a href="authentication/profile">Hello "<NicknameDisplay username="@context.User.Identity?.Name"></NicknameDisplay>" </a>-->
+		@if (nickname != null)
+		{
+			<span>Hello @nickname</span>
+		}
+		else
+		{
+			<span>Loading...</span>
+			GetUserNick();
+		}
+		<button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
 	</Authorized>
 	<NotAuthorized>
 		<a href="authentication/register">Register</a>
@@ -18,6 +31,46 @@
 </AuthorizeView>
 
 @code {
+
+	private string? name = null;
+	private string? nickname = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+
+	}
+
+	private async void GetUserNick()
+	{
+		logger.LogInformation($"On init async");
+		try
+		{
+			var resp = await asp.GetAuthenticationStateAsync();
+			if (resp.User != null)
+			{
+				//Assing name to variable for future operations
+				name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+				//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+				if (name != null)
+				{
+					//Fetch user data from API via POST operation
+					var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
+					//Parse user data from API
+					var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+					nickname = userDTO.Nickname;
+					logger.LogInformation($"nickname: {nickname}");
+					if (nickname != null)
+					{
+						StateHasChanged();
+					}
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			logger.LogWarning(ex.ToString());
+		}
+	}
 
 	private void BeginLogOut()
 	{

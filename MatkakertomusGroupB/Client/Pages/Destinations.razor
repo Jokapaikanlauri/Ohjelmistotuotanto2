@@ -3,7 +3,6 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using MatkakertomusGroupB.Shared
-@attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
@@ -14,52 +13,77 @@
 
 <p>This is a template</p>
 
-<div class="main">
-	@if (nickname == null)
-	{
-		<div>
-		<p>Username is: @name</p>
-		<p>User nickname is: @nickname</p>
-		</div>
-	}
-	else
-	{
-		<div>
-		<p><em>Loading...</em></p>
+<AuthorizeView>
+	<Authorized>
+		<div class="main">
+			@if (nickname != null)
+			{
+				<div>
+					<p>Username is: @name</p>
+					<p>User nickname is: @nickname</p>
 
-		<p>Username is: @name</p>
+					@if (userId != null)
+					{
+						<p>UserId is: @userId</p>
+					}
+					else
+					{
+						<button  @onclick="GetUserId">GET THE USER ID PLEASE</button>
+					}
+				</div>
+			}
+			else
+			{
+				<div>
+					<p><em>Loading...</em></p>
+
+					<p>Username is: @name</p>
+				</div>
+			}
 		</div>
-	}
-</div>
+	</Authorized>
+	<NotAuthorized>
+		<div>You are a public user.</div>
+	</NotAuthorized>
+</AuthorizeView>
+
+
+
 
 @code {
-
-	public string userId { get; set; }
-
-	public UserDTO? userNickDTO = new UserDTO();
-	public UserDTO? userNickDTO2 = new UserDTO();
-	public string? nickname = null;
-
-	public string? name = null;
+	//private UserDTO? userDTO = new UserDTO();
+	//private UserDTO? userDTO2 = new UserDTO();
+	private string? name = null;
+	private string? nickname = null;
+	private string? userId = null;
 
 	protected override async Task OnInitializedAsync()
 	{
-		logger.LogWarning("Destinations-page-oninitasync name assingment started");
+		//Assing name to variable for future operations
 		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+		
+		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			nickname = userDTO.Nickname;
+		}
+	}
 
-		logger.LogWarning("Destinations-page-oninitasync Fired");
-		userNickDTO.Username = name;
-		logger.LogInformation("Destinations-page-oninitasync parameter assignment OK");
+	private async Task GetUserId()
+	{
+		logger.LogInformation($"I'm a template logging message");
 
-		//Fetch user data from API
-		var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userNickDTO);
-		logger.LogInformation($"Destinations-page-oninitasync POST response:{response}");
-		//Parse user data from API
-		userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-		logger.LogInformation($"Destinations-page-oninitasync parsed JSON succesfully");
-		nickname = userNickDTO.Nickname;
-		logger.LogInformation($"Destinations-page-oninitasync user:{nickname}");
-
-		this.StateHasChanged();
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			userId = userDTO.Id;
+		}
 	}
 }
