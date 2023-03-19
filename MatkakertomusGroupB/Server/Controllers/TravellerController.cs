@@ -32,20 +32,15 @@ namespace MatkakertomusGroupB.Server.Controllers
 		[HttpPost]
 		public async Task<ActionResult<UserDTO>> PostGetNick(UserDTO userDTOInput)
 		{
-			_logger.LogInformation($"HttpPost PostGetNick Username = {userDTOInput.Username}");
 			if (userDTOInput != null)
 			{
 				var traveller = await _context.Users.FirstAsync(x => x.UserName == userDTOInput.Username);
 				userDTOInput.Nickname = traveller.Nickname.ToString();
-
-				_logger.LogInformation($"HttpPost PostGetNick nickname = {userDTOInput.Nickname}");
 				if (userDTOInput.Nickname != null)
 				{
-					_logger.LogInformation("Ejecting user nickname embedded in userDTOInput");
 					return userDTOInput;
 				}
 			}
-			_logger.LogWarning("HttpPost PostGetNick returning NotFound");
 			return NotFound();
 		}
 
@@ -54,15 +49,12 @@ namespace MatkakertomusGroupB.Server.Controllers
 		[HttpPost]
 		public async Task<ActionResult<UserDTO>> PostGetId(UserDTO userDTOInput)
 		{
-			_logger.LogInformation($"HttpPost PostGetId Username = {userDTOInput.Username}");
-
 			if (userDTOInput != null)
 			{
 				var user = await _context.Users.FirstAsync(x => x.UserName == userDTOInput.Username);
 				userDTOInput.Id = user.Id;
 				return userDTOInput;
 			}
-			_logger.LogWarning("HttpPost PostGetId returning NotFound");
 			return NotFound();
 		}
 
