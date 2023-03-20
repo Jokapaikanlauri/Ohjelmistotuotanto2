@@ -11,27 +11,36 @@
 <PageTitle>Home Page</PageTitle>
 
 
-
 <AuthorizeView>
     <Authorized>
-        <h1>Welcome to the Matkakertomus website @name!</h1>
+		<div class="divi">
+        <h1>Matkakertomus homepage @nickname!</h1>
+		
+		</div>
+		<div>
+			<p id="teksti">This website is made for you to connect with other people interested in travelling. Here you can enjoy the same passion with others or respark your inner traveler.</p>
+			<h2>Recent trips</h2>
+			<!--Tähän tulee uusimmat lisätyt julkiset reissut feedimuodossa kuvan ja otsikon kera.-->
+		</div>
     </Authorized>
+
 	<NotAuthorized>
+		<div class="divi">
 		<h1>Welcome to the Matkakertomus website!</h1>
-		<h2>Please <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin">log in</a> or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin">register</a> an account.</h2>
+		</div>
+
+		<p id="notlogged">Please make sure to <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin" title="Login sivulle">log in</a>
+			or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin" title="Rekisteröinti sivulle">register</a> an account.</p>
+
+		<p id="teksti">This website is made for you to connect with other people interested in travelling. Here you can enjoy the same passion with others or respark your inner traveler.</p>
 	</NotAuthorized>
 </AuthorizeView>
-
-
-
-
 
 @code {
 	//private UserDTO? userDTO = new UserDTO();
 	//private UserDTO? userDTO2 = new UserDTO();
 	private string? name = null;
 	private string? nickname = null;
-	private string? userId = null;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -46,20 +55,6 @@
 			//Parse user data from API
 			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
 			nickname = userDTO.Nickname;
-		}
-	}
-
-	private async Task GetUserId()
-	{
-		logger.LogInformation($"I'm a template logging message");
-
-		if (name != null)
-		{
-			//Fetch user data from API via POST operation
-			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
-			//Parse user data from API
-			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-			userId = userDTO.Id;
 		}
 	}
 }

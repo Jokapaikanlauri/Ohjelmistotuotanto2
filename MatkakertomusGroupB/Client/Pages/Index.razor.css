@@ -1,0 +1,9 @@
+﻿#teksti{
+    margin-top:2em;
+}
+.divi {
+    border-bottom: 1px solid lightgrey;
+}
+#notlogged{
+    font-style:italic;
+}
