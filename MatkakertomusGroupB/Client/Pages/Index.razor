@@ -1,9 +1,65 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject ILogger<Destinations> logger
 
-<h1>Hello, world!</h1>
+<PageTitle>Home Page</PageTitle>
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+<AuthorizeView>
+    <Authorized>
+        <h1>Welcome to the Matkakertomus website @name!</h1>
+    </Authorized>
+	<NotAuthorized>
+		<h1>Welcome to the Matkakertomus website!</h1>
+		<h2>Please <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin">log in</a> or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin">register</a> an account.</h2>
+	</NotAuthorized>
+</AuthorizeView>
+
+
+
+
+
+@code {
+	//private UserDTO? userDTO = new UserDTO();
+	//private UserDTO? userDTO2 = new UserDTO();
+	private string? name = null;
+	private string? nickname = null;
+	private string? userId = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		//Assing name to variable for future operations
+		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+
+		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			nickname = userDTO.Nickname;
+		}
+	}
+
+	private async Task GetUserId()
+	{
+		logger.LogInformation($"I'm a template logging message");
+
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			userId = userDTO.Id;
+		}
+	}
+}
