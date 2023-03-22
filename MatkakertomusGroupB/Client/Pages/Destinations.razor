@@ -7,46 +7,57 @@
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
 
+
+
 <PageTitle>Destinations</PageTitle>
 
-<head>
-	<link href="Pages/Index.razor.css" />
-</head>
+
 
 <h1>Destinations</h1>
-
-<p>This is a template</p>
+<!--Tee tähän forms add buttonin taakse ja lisätyt matkakohteet näytetään tällä sivulla, poista ominaisuus
+	toimii vain jos matkakohde on käyttäjän lisäämä
+-->
 
 <AuthorizeView>
 	<Authorized>
-		<div class="main">
-			@if (nickname != null)
-			{
-				<div>
-					<p>Username is: @name</p>
-					<p>User nickname is: @nickname</p>
-
-					@if (userId != null)
-					{
-						<p>UserId is: @userId</p>
-					}
-					else
-					{
-						<button class="btn btn-warning" @onclick="GetUserId">GET THE USER ID PLEASE</button>
-					}
+		<head>
+			<link href="Pages/Destinations.razor.css" />
+		</head>
+		<div class="left">
+			<h2>List of travels:</h2>
+		</div>
+		<div class="right">
+			<form id="addDestination" method="post">
+				<div class="addHeader">
+				<h4>Add a new destination</h4>
 				</div>
-			}
-			else
-			{
-				<div>
-					<p><em>Loading...</em></p>
+				<div class="addDetails">
 
-					<p>Username is: @name</p>
+					<label>Name</label>
+					<br />
+					<input type="text" placeholder="Name.."/>
+					<br />
+					<label>Country</label>
+					<br />
+					<input type="text" placeholder="Country.." />
+					<br />
+					<label>Municipality</label>
+					<br />
+					<input type="text" placeholder="Municipality.." />
+					<br />
+					<label>Description</label>
+					<br />
+					<input type="text" placeholder="Description.." />
+					<br />
+					<button type="submit">Add</button>
 				</div>
-			}
+			</form>
 		</div>
 	</Authorized>
 	<NotAuthorized>
+		<!--
+			Tässä näytetään muiden lisäämät matkakohteet
+		-->
 		<div>You are a public user.</div>
 	</NotAuthorized>
 </AuthorizeView>
@@ -65,7 +76,7 @@
 	{
 		//Assing name to variable for future operations
 		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
-		
+
 		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
 		if (name != null)
 		{

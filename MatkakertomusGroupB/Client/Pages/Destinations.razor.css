@@ -1,0 +1,24 @@
+﻿.left {
+    float: left;
+    width: 75%;
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding-left:4px;
+}
+.right {
+    float: right;
+    width: 20%;
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.addDetails{
+   
+}
+
+.addHeader {
+    background-color: dimgrey;
+    border-radius: 10px;
+    text-align:center;
+}
