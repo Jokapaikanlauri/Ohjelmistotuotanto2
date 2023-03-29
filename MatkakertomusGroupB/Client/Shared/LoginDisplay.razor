@@ -12,7 +12,6 @@
 		@{
 			logger.LogInformation("User is Authorized to page");
 		}
-		<!--<a href="authentication/profile">Hello "<NicknameDisplay username="@context.User.Identity?.Name"></NicknameDisplay>" </a>-->
 		@if (nickname != null)
 		{
 			<span>Hello @nickname</span>
@@ -39,8 +38,6 @@
 		{
 			//Assing name to variable for future operations
 			var name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
-
-			//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
 			if (name != null)
 			{
 				//Fetch user data from API via POST operation
