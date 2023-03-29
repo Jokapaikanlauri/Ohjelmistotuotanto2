@@ -1,9 +1,60 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject ILogger<Destinations> logger
 
-<h1>Hello, world!</h1>
+<PageTitle>Home Page</PageTitle>
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<AuthorizeView>
+    <Authorized>
+		<div class="divi">
+        <h1>Matkakertomus homepage @nickname!</h1>
+		
+		</div>
+		<div>
+			<p id="teksti">This website is made for you to connect with other people interested in travelling. Here you can enjoy the same passion with others or respark your inner traveler.</p>
+			<h2>Recent trips</h2>
+			<!--Tähän tulee uusimmat lisätyt julkiset reissut feedimuodossa kuvan ja otsikon kera.-->
+		</div>
+    </Authorized>
+
+	<NotAuthorized>
+		<div class="divi">
+		<h1>Welcome to the Matkakertomus website!</h1>
+		</div>
+
+		<p id="notlogged">Please make sure to <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin" title="Login sivulle">log in</a>
+			or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin" title="Rekisteröinti sivulle">register</a> an account.</p>
+
+		<p id="teksti">This website is made for you to connect with other people interested in travelling. Here you can enjoy the same passion with others or respark your inner traveler.</p>
+	</NotAuthorized>
+</AuthorizeView>
+
+@code {
+	//private UserDTO? userDTO = new UserDTO();
+	//private UserDTO? userDTO2 = new UserDTO();
+	private string? name = null;
+	private string? nickname = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		//Assing name to variable for future operations
+		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+
+		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			nickname = userDTO.Nickname;
+		}
+	}
+}
