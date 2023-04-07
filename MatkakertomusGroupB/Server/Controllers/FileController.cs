@@ -18,16 +18,17 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<List<UploadResult>>> UploadFile(List<IFormFile> files)
         {
+            // This part is for filename validation and setting
             List<UploadResult> uploadResults = new List<UploadResult>();
             foreach (var file in files)
             {
-                // This part is just a bunch of jargon for filename validation and setting
                 var uploadResult = new UploadResult();
-                string trustedFileNameForFileStorage;
-                var untrustedFileName = file.Name;
+                // We set a random string for storing the file locally
+                string trustedFileNameForFileStorage = Path.GetRandomFileName(); 
+                // We set the original filename for filename display
+                var untrustedFileName = file.FileName;
                 uploadResult.FileName = untrustedFileName;
                 var trustedFileNameForDisplay = WebUtility.HtmlEncode(untrustedFileName);
-                trustedFileNameForFileStorage = Path.GetRandomFileName();
                 
                 // Here we set the path in where we will upload pictures and in this case they will be
                 // uploaded to the solution server root path in a folder named Uploaded

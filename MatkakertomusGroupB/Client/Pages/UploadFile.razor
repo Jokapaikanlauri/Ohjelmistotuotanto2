@@ -60,6 +60,9 @@
         }
     }
 
+
+    // Function that will provide the safe storagename for the original filename and return it
+    // This is for testing purposes and the storagename should not be shown to client.
     private string? GetStoredFileName(string fileName)
     {
         var uploadResult = uploadResults.SingleOrDefault(f => f.FileName == fileName);
