@@ -19,6 +19,7 @@ namespace MatkakertomusGroupB.Server.Controllers
         public async Task<ActionResult<List<UploadResult>>> UploadFile(List<IFormFile> files)
         {
             // This part is for filename validation and setting
+            
             List<UploadResult> uploadResults = new List<UploadResult>();
             foreach (var file in files)
             {
