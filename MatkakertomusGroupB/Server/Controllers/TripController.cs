@@ -27,7 +27,8 @@ namespace MatkakertomusGroupB.Server.Controllers
 			_logger = logger;
 		}
 
-		// GET: api/Trip
+		// GET: api/Trip 
+        // this gets all the public trips
 		[HttpGet]
         public async Task<ActionResult<IEnumerable<Trip>>> GetTrip()
         {
@@ -35,30 +36,50 @@ namespace MatkakertomusGroupB.Server.Controllers
           {
               return NotFound();
           }
-            return await _context.Trip.ToListAsync();
+            return await _context.Trip.Where(x => x.Private == false).ToListAsync();
         }
 
-        // GET: api/Trip/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Trip>> GetTrip(int id)
-        {
-          if (_context.Trip == null)
-          {
-              return NotFound();
-          }
-            var trip = await _context.Trip.FindAsync(id);
+		// GET: api/Trip/5
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Trip>> GetTrip(int id)
+		{
+			if (_context.Trip == null)
+			{
+				return NotFound();
+			}
+			var trip = await _context.Trip.FindAsync(id);
 
-            if (trip == null)
-            {
-                return NotFound();
-            }
+			if (trip == null)
+			{
+				return NotFound();
+			}
 
-            return trip;
-        }
+			return trip;
+		}
 
-        // PUT: api/Trip/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+		// GET: api/Trip/traveller/idString
+        // Get all trips with traveller id
+		[HttpGet("/traveller/{id}")]
+		public async Task<ActionResult<IEnumerable<Trip>>> GetTravellerTrip(string id)
+		{
+			if (_context.Trip == null)
+			{
+				return NotFound();
+			}
+
+			List<Trip> list = await _context.Trip.Where(x => x.Traveller.Id == id).ToListAsync();
+
+			if (list == null)
+			{
+				return NotFound();
+			}
+
+			return list;
+		}
+
+		// PUT: api/Trip/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
         public async Task<IActionResult> PutTrip(int id, Trip trip)
         {
             if (id != trip.Id)
