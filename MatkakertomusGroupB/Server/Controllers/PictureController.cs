@@ -43,10 +43,10 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Picture>> GetPicture(int id)
         {
-          if (_context.Pictures == null)
-          {
-              return NotFound();
-          }
+            if (_context.Pictures == null)
+            {
+                return NotFound();
+            }
             var picture = await _context.Pictures.FindAsync(id);
 
             if (picture == null)
@@ -55,6 +55,26 @@ namespace MatkakertomusGroupB.Server.Controllers
             }
 
             return picture;
+        }
+
+        // Get pictures by story id
+        // GET: api/Picture/5
+        [HttpGet("/story/{id}")]
+        public async Task<ActionResult<IEnumerable<Picture>>> GetStoryPictures(int id)
+        {
+            if (_context.Pictures == null)
+            {
+                return NotFound();
+            }
+            List<Picture>? list = null;
+            list = await _context.Pictures.Where(x => x.StoryId == id).ToListAsync();
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+
+            return list;
         }
 
         // PUT: api/Picture/5

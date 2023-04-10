@@ -1,0 +1,38 @@
+﻿@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+
+<p role="status">Current picture count: @pictures</p>
+
+@if (list != null)
+{
+    @foreach (Picture p in list)
+    {
+        <PictureItem Picture="@p">
+            <ul>
+                <li>@p.Image</li>
+            </ul>
+        </PictureItem>
+        <br />
+    }
+} 
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private int pictures = 0;
+    private List<Picture>? list = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Get list stories for a Trip
+        list = await Http.GetFromJsonAsync<List<Picture>>($"/api/story/trip/{id}");
+        if (list != null) pictures = list.Count;
+    }
+}

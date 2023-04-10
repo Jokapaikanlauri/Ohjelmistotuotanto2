@@ -56,6 +56,26 @@ namespace MatkakertomusGroupB.Server.Controllers
             return story;
         }
 
+        // GET: api/Story/trip/5
+        // Get storylist with trip id
+        [HttpGet("/trip/{id}")]
+        public async Task<ActionResult<IEnumerable<Story>>> GetTripStoryList(int id)
+        {
+            if (_context.Stories == null)
+            {
+                return NotFound();
+            }
+            List<Story>? list = null;
+            list = await _context.Stories.Where(x => x.TripId == id).ToListAsync();
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+
+            return list;
+        }
+
         // PUT: api/Story/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
