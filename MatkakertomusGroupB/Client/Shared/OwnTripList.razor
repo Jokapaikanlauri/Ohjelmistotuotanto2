@@ -18,7 +18,7 @@
                 <li>Trip start: @t.DatumStart</li>
                 <li>Trip end: @t.DatumEnd</li>
                 <li>Trip stories: @t.Stories</li>
-                <TripStoryList id="@t.TripId" />
+                <TripStoryList tripId="@t.TripId" />
             </ul>
         </TripItem>
         <br />
@@ -26,7 +26,7 @@
 } 
 @code {
     [Parameter]
-    public string? userId { get; set; }
+    public string? id { get; set; }
 
     private int trips = 0;
     private List<Trip>? list = null;
@@ -36,7 +36,7 @@
     {
         
         //Get list of all own trips with user id
-        list = await Http.GetFromJsonAsync<List<Trip>>($"/api/trip/traveller/{userId}");
+        list = await Http.GetFromJsonAsync<List<Trip>>($"/api/trip/traveller/{id}");
         if (list != null) trips = list.Count;
         
     }

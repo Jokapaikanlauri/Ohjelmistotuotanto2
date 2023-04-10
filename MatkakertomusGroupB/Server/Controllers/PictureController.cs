@@ -59,7 +59,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 
         // Get pictures by story id
         // GET: api/Picture/5
-        [HttpGet("/story/{id}")]
+        [HttpGet("story/{id}")]
         public async Task<ActionResult<IEnumerable<Picture>>> GetStoryPictures(int id)
         {
             if (_context.Pictures == null)

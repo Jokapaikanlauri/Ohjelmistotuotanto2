@@ -59,7 +59,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 
 		// GET: api/Trip/traveller/idString
         // Get all trips with traveller id
-		[HttpGet("/traveller/{id}")]
+		[HttpGet("traveller/{id}")]
 		public async Task<ActionResult<IEnumerable<Trip>>> GetTravellerTrip(string id)
 		{
 			if (_context.Trip == null)

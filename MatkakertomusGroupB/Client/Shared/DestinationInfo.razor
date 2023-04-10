@@ -16,7 +16,7 @@
 
 @code {
     [Parameter]
-    public int id { get; set; }
+    public int destinationId { get; set; }
 
     private Destination? d = null;
 
@@ -24,6 +24,6 @@
     protected override async Task OnInitializedAsync()
     {
         //Get destination by id
-        d = await Http.GetFromJsonAsync<Destination>($"/api/destination/{id}");
+        d = await Http.GetFromJsonAsync<Destination>($"/api/destination/{destinationId}");
     }
 }
