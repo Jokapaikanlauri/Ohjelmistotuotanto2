@@ -364,5 +364,3 @@ FodyWeavers.xsd
 
 # Custom
 **/Local_Db_backups
-*.db-shm
-*.db-wal
