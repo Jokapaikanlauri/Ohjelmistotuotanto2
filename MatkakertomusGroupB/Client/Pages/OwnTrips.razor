@@ -32,7 +32,10 @@
     }
 </div>
 
-<OwnTripList/>
+@if (userId != null)
+{
+    <OwnTripList userId="@userId" />
+}
 
 
 @code {
@@ -42,6 +45,7 @@
     public string? nickname = null;
 
     public string? name = null;
+    public string? userId = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,5 +59,29 @@
         //Parse user data from API
         userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
         nickname = userNickDTO.Nickname;
+        
+        if (name != null)
+        {
+            //Fetch user data from API via POST operation
+            var res = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+            //Parse user data from API
+            var userDTO = await res.Content.ReadFromJsonAsync<UserDTO>();
+            userId = userDTO.Id;
+        }
     }
+
+    /*private async Task GetUserId()
+    {
+        logger.LogInformation($"I'm a template logging message");
+
+        if (name != null)
+        {
+            //Fetch user data from API via POST operation
+            var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+            //Parse user data from API
+            var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+            userId = userDTO.Id;
+        }
+        if (userId != null) StateHasChanged();
+    }*/
 }
