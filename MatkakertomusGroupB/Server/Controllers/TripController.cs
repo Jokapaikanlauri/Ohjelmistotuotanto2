@@ -82,7 +82,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 		[HttpPut("{id}")]
         public async Task<IActionResult> PutTrip(int id, Trip trip)
         {
-            if (id != trip.Id)
+            if (id != trip.TripId)
             {
                 return BadRequest();
             }
@@ -120,7 +120,7 @@ namespace MatkakertomusGroupB.Server.Controllers
             _context.Trip.Add(trip);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTrip", new { id = trip.Id }, trip);
+            return CreatedAtAction("GetTrip", new { id = trip.TripId }, trip);
         }
 
         // DELETE: api/Trip/5
@@ -145,7 +145,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 
         private bool TripExists(int id)
         {
-            return (_context.Trip?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Trip?.Any(e => e.TripId == id)).GetValueOrDefault();
         }
     }
 }
