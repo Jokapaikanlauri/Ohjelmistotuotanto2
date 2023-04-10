@@ -9,9 +9,7 @@ namespace MatkakertomusGroupB.Shared.Models
 		public int TripId { get; set; }
 
 		//FK
-		public int Id { get; set; }
 		public virtual Traveller Traveller { get; set; }
-
 
 		//Local Items
 
