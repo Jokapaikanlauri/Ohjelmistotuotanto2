@@ -23,7 +23,7 @@
 
 @code {
     [Parameter]
-    public int id { get; set; }
+    public int storyId { get; set; }
 
     private int pictures = 0;
     private List<Picture>? list = null;
@@ -32,7 +32,7 @@
     protected override async Task OnInitializedAsync()
     {
         //Get list stories for a Trip
-        list = await Http.GetFromJsonAsync<List<Picture>>($"/api/story/trip/{id}");
+        list = await Http.GetFromJsonAsync<List<Picture>>($"/api/story/trip/{storyId}");
         if (list != null) pictures = list.Count;
     }
 }

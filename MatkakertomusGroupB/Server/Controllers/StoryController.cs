@@ -58,7 +58,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 
         // GET: api/Story/trip/5
         // Get storylist with trip id
-        [HttpGet("/trip/{id}")]
+        [HttpGet("trip/{id}")]
         public async Task<ActionResult<IEnumerable<Story>>> GetTripStoryList(int id)
         {
             if (_context.Stories == null)

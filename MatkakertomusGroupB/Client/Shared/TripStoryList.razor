@@ -15,9 +15,9 @@
         <StoryItem Story="@s">
             <ul>
                 <li>Date: @s.Datum</li>
-                <DestinationInfo id=@s.DestinationId />
+                <DestinationInfo destinationId=@s.DestinationId />
                 <li>Story: @s.Description</li>
-                <StoryPictures id=@s.StoryId />
+                <StoryPictures storyId=@s.StoryId />
             </ul>
         </StoryItem>
         <br />
@@ -26,7 +26,7 @@
 
 @code {
     [Parameter]
-    public int id { get; set; }
+    public int tripId { get; set; }
 
     private int stories = 0;
     private List<Story>? list = null;
@@ -35,7 +35,7 @@
     protected override async Task OnInitializedAsync()
     {
         //Get list stories for a Trip
-        list = await Http.GetFromJsonAsync<List<Story>>($"/api/story/trip/{id}");
+        list = await Http.GetFromJsonAsync<List<Story>>($"/api/story/trip/{tripId}");
         if (list != null) stories = list.Count;
     }
 }
