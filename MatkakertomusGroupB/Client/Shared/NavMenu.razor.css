@@ -32,8 +32,8 @@
     }
 
     .nav-item ::deep a {
-        color: red;
-        text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black;
+        color: darkgreen;
+        text-shadow: 0 0 1px white, 0 0 1px white, 0 0 1px white, 0 0 1px white;
         border-radius: 4px;
         height: 3rem;
         display: flex;
