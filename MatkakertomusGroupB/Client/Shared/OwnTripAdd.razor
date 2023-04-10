@@ -1,0 +1,45 @@
+﻿@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+
+
+<h1>Add new trip</h1>
+
+<NewTrip>
+    <label>Start date:</label>
+    <br />
+    <InputDate @bind-Value="trip.DatumStart"/>
+    <br />
+    <label>End date:</label>
+    <br />
+    <InputDate @bind-Value="trip.DatumEnd"/>
+    <br />
+    <label>Check box if private: </label>
+    <InputCheckbox @bind-Value="trip.Private"/>
+    <br />
+    <button @onclick="()=>PostTrip()">Add trip</button>
+</NewTrip>
+<hr />
+<br />
+
+
+
+@code {
+    [Parameter]
+    public string? id { get; set; }
+
+    public Trip trip = new();
+
+
+    async Task PostTrip()
+    {
+        
+        //post a new trip
+        await Http.PostAsJsonAsync<Trip>($"/api/trip", trip);
+        
+    }
+}
