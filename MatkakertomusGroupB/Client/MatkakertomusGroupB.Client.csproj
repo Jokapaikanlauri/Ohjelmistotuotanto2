@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Shared\MatkakertomusGroupB.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Photos\" />
+  </ItemGroup>
+
 </Project>
