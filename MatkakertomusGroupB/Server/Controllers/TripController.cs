@@ -67,7 +67,9 @@ namespace MatkakertomusGroupB.Server.Controllers
 				return NotFound();
 			}
 
-			List<Trip> list = await _context.Trip.Where(x => x.TravellerId == id).ToListAsync();
+            List<Trip>? list = null;
+            // TODO when the db has been fixd
+			// List<Trip> list = await _context.Trip.Where(x => x.TravellerId == id).ToListAsync();
 
 			if (list == null)
 			{
