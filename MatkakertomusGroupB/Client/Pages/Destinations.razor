@@ -36,11 +36,18 @@
                     <li>Municipality: @d.Municipality</li>
                     <li>Description: @d.Description</li>
                     <li>Image: @d.Image</li>
+                    @if (@d.Stories == null)
+                {
+                    <button type="checkbox">Delete</button>
+                }
                 </ul>
+                
             </DestinationItem>
             <br />
         }
     }
+
+    
 </div>
 
 <AuthorizeView>
@@ -97,6 +104,4 @@
             userId = userDTO.Id;
         }
     }
-
-
 }
