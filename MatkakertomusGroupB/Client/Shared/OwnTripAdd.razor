@@ -10,20 +10,20 @@
 <h1>Add new trip</h1>
 
 <NewTrip>
-    <EditForm Model="@trip" OnValidSubmit="@Save">
+    <EditForm Model="@tDTO" OnValidSubmit="@Save">
         <DataAnnotationsValidator />
         <ValidationSummary />
         
         <label>Start date:</label>
         <br />
-        <InputDate @bind-Value="trip.DatumStart" />
+        <InputDate @bind-Value="tDTO.DatumStart" />
         <br />
         <label>End date:</label>
         <br />
-        <InputDate @bind-Value="trip.DatumEnd" />
+        <InputDate @bind-Value="tDTO.DatumEnd" />
         <br />
         <label>Check box if private: </label>
-        <InputCheckbox @bind-Value="trip.Private" />
+        <InputCheckbox @bind-Value="tDTO.Private" />
         <br />
         <button type="submit" class="btn btn-success">Add trip</button>
     </EditForm>
@@ -49,17 +49,15 @@
     [Parameter]
     public string? id { get; set; }
 
-    public Traveller traveller = new();
-    public Trip trip = new();
+    public TripDTO tDTO = new();
     public bool added = false;
     public bool failed = false;
 
     async Task Save()
     {
-        traveller.Id = id;
-        trip.Traveller = traveller;
+        tDTO.TravellerId = id;
         //post a new trip
-        var res = await Http.PostAsJsonAsync<Trip>($"/api/trip", trip);
+        var res = await Http.PostAsJsonAsync<TripDTO>($"/api/trip", tDTO);
         if (res.IsSuccessStatusCode)
         {
             added = true;

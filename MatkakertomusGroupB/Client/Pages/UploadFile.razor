@@ -1,6 +1,8 @@
 ﻿@page "/upload"
 @using System.Net.Http.Headers
 @using MatkakertomusGroupB.Shared.Models;
+@using System.Text;
+@using System.Drawing;
 @inject HttpClient Http
 
 
@@ -11,61 +13,96 @@
 <!--This is how you upload multiple files-->
 <InputFile OnChange="@OnInputFileChange" multiple />
 
-<!--This is just for testing (or confirmation) purposes, it shows you the uploaded filenames and stored filenames-->
-@if (fileNames.Count > 0)
+<!--This is just for testing (or confirmation) purposes, it 
+shows you the uploaded filenames and stored filenames-->
+@if(loadedFiles.Count > 0)
 {
     <ul>
-        @foreach (var fileName in fileNames)
+        @foreach (var file in loadedFiles)
         {
             <li>
-                File: @fileName
-                <br>
-                <span>
-                    Stored File Name: @GetStoredFileName(fileName)
-                </span>
+                <ul>
+                    <li>Name: @file.Name</li>
+                    <li>Last modified: @file.LastModified.ToString()</li>
+                    <li>Size (bytes): @file.Size</li>
+                    <li>Content type: @file.ContentType</li>
+                </ul>
             </li>
         }
     </ul>
 }
 
 @code {
+    //[Parameter]
+    //public int id { get; set; }
+    public int id = 1;
     private int maxAllowedFiles = 3;
-    private long maxFileSize = 1024 * 1024 * 8; // 8Mt
+    private long maxFileSize = 1024 * 1024 * 15; // 15Mt
     private List<string> fileNames = new();
-    private List<UploadResult> uploadResults = new();
+    private List<IBrowserFile> loadedFiles = new();
+
+
 
     // Function that creates a streamcontent that uploads the files
-    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    private async Task OnInputFileChange(InputFileChangeEventArgs args)
     {
-        using var content = new MultipartFormDataContent();
+        string base64String = "";
 
-        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        try
         {
-            var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
-
-            fileNames.Add(file.Name);
-            content.Add(
-                content: fileContent,
-                name: "\"files\"",
-                fileName: file.Name);
+            var files = args.GetMultipleFiles();
+            foreach (var file in files)
+            {
+                await using MemoryStream fs = new MemoryStream();
+                await file.OpenReadStream(maxAllowedSize: 1048576).CopyToAsync(fs);
+                byte[] somBytes = GetBytes(fs);
+                base64String = Convert.ToBase64String(somBytes, 0, somBytes.Length);
+                System.Diagnostics.Debug.Print("Image 64: " + base64String + Environment.NewLine);
+                PictureDTO pdto = new PictureDTO();
+                pdto.Image = base64String;
+                pdto.StoryId = id;
+                await Http.PostAsJsonAsync("api/Picture/" + id, pdto);
+            }
         }
 
-        var response = await Http.PostAsync("api/File", content);
-        var newUploadResults = await response.Content.ReadFromJsonAsync<List<UploadResult>>();
-
-        if(newUploadResults is not null)
+        catch (Exception e)
         {
-            uploadResults = uploadResults.Concat(newUploadResults).ToList();
+            System.Diagnostics.Debug.Print("ERROR: " + e.Message + Environment.NewLine);
         }
+
+        // var newUploadResults = await res.Content.ReadFromJsonAsync<List<UploadResult>>();
+    }
+
+    public static byte[] GetBytes(Stream stream)
+    {
+        var bytes = new byte[stream.Length];
+        stream.Seek(0, SeekOrigin.Begin);
+        stream.ReadAsync(bytes, 0, bytes.Length);
+        stream.Dispose();
+        return bytes;
+    }
+    /*
+    public Image LoadImage()
+    {
+        //data:image/gif;base64,
+        //this image is a single pixel (black)
+        byte[] bytes = Convert.FromBase64String("R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==");
+
+        Image image;
+        using (MemoryStream ms = new MemoryStream(bytes))
+        {
+            image = Image.FromStream(ms);
+        }
+
+        return image;
     }
 
 
     // Function that will provide the safe storagename for the original filename and return it
     // This is for testing purposes and the storagename should not be shown to client.
-    private string? GetStoredFileName(string fileName)
+    /*private string? GetStoredFileName(string fileName)
     {
-        var uploadResult = uploadResults.SingleOrDefault(f => f.FileName == fileName);
+        var uploadResult = loadedFiles.SingleOrDefault(f => f.FileName == fileName);
 
         if (uploadResult is not null)
         {
@@ -73,5 +110,5 @@
         }
 
         return "File not found.";
-    }
+    }*/
 }

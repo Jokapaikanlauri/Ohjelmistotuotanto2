@@ -19,23 +19,23 @@ namespace MatkakertomusGroupB.Server.Controllers
     public class PictureController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-		private readonly ILogger<PictureController> _logger;
+        private readonly ILogger<PictureController> _logger;
 
-		public PictureController(ApplicationDbContext context, ILogger<PictureController> logger)
-		{
-			_context = context;
-			_logger = logger;
-		}
+        public PictureController(ApplicationDbContext context, ILogger<PictureController> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
 
 
-		// GET: api/Picture
-		[HttpGet]
+        // GET: api/Picture
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Picture>>> GetPictures()
         {
-          if (_context.Pictures == null)
-          {
-              return NotFound();
-          }
+            if (_context.Pictures == null)
+            {
+                return NotFound();
+            }
             return await _context.Pictures.ToListAsync();
         }
 
@@ -110,13 +110,17 @@ namespace MatkakertomusGroupB.Server.Controllers
 
         // POST: api/Picture
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Picture>> PostPicture(Picture picture)
+        [HttpPost("{id}")]
+        public async Task<ActionResult<PictureDTO>> PostPicture(int id, PictureDTO pictureDTO)
         {
-          if (_context.Pictures == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Pictures'  is null.");
-          }
+            Picture picture = new Picture();
+            picture.Image = pictureDTO.Image;
+            picture.StoryId = id;
+
+            if (_context.Pictures == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Pictures'  is null.");
+            }
             _context.Pictures.Add(picture);
             await _context.SaveChangesAsync();
 
