@@ -1,0 +1,79 @@
+﻿@page "/storypicupload"
+@using System.Net.Http.Headers
+@using MatkakertomusGroupB.Shared.Models;
+@inject HttpClient Http
+
+
+<PageTitle>Upload story pictures</PageTitle>
+
+<h1>Upload pictures to your story</h1>
+
+<!--This is how you upload multiple files-->
+<InputFile OnChange="@OnInputFileChange" multiple />
+
+<!--This is just for testing (or confirmation) purposes, it shows you the uploaded filenames and stored filenames-->
+@if (fileNames.Count > 0)
+{
+    <ul>
+        @foreach (var fileName in fileNames)
+        {
+            <li>
+                File: @fileName
+                <br>
+                <span>
+                    Stored File Name: @GetStoredFileName(fileName)
+                </span>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    private int maxAllowedFiles = 3;
+    private long maxFileSize = 1024 * 1024 * 8; // 8Mt
+    private List<string> fileNames = new();
+    private List<UploadResult> uploadResults = new();
+
+    // Function that creates a streamcontent that uploads the files
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        using var content = new MultipartFormDataContent();
+
+        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        {
+            var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+
+            fileNames.Add(file.Name);
+            content.Add(
+                content: fileContent,
+                name: "\"files\"",
+                fileName: file.Name);
+        }
+
+        var response = await Http.PostAsync("api/File", content);
+        var newUploadResults = await response.Content.ReadFromJsonAsync<List<UploadResult>>();
+
+        if (newUploadResults is not null)
+        {
+            uploadResults = uploadResults.Concat(newUploadResults).ToList();
+        }
+    }
+
+
+    // Function that will provide the safe storagename for the original filename and return it
+    // This is for testing purposes and the storagename should not be shown to client.
+    private string? GetStoredFileName(string fileName)
+    {
+        var uploadResult = uploadResults.SingleOrDefault(f => f.FileName == fileName);
+
+        if (uploadResult is not null)
+        {
+            return uploadResult.StoredFileName;
+        }
+
+        return "File not found.";
+    }
+}

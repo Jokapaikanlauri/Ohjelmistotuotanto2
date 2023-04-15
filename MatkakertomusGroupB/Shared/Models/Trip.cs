@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 
 namespace MatkakertomusGroupB.Shared.Models
@@ -6,9 +7,12 @@ namespace MatkakertomusGroupB.Shared.Models
 	public class Trip
 	{
 		//PK
+		[Key]
 		public int TripId { get; set; }
 
 		//FK
+		[ForeignKey("Traveller")]
+        public string TravellerId { get; set; }
 		public virtual Traveller Traveller { get; set; }
 
 		//Local Items
