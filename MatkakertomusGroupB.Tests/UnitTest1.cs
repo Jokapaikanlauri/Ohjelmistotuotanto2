@@ -54,7 +54,7 @@ namespace MatkakertomusGroupB.Tests
 				// Create Chrome options
 				var chromeOptions = new ChromeOptions();
 
-				// Set the "ignore-certificate-errors" flag
+				// Set the "ignore-certificate-errors" flag to bypass the SSL cert failure
 				chromeOptions.AddArgument("--ignore-certificate-errors");
 
 				// Create a new Selenium WebDriver
@@ -81,18 +81,66 @@ namespace MatkakertomusGroupB.Tests
 			_webServerProcess.Kill();
 		}
 
-		[Test]
-		public void Test()
+		[Test, Order(1), Description("Test description here")]
+		public void PageTitle()
 		{
+			//Navigate to specifi URL
 			_webDriver.Navigate().GoToUrl(_baseUrl);
 
+			//Wait until a specific element is found(timeout defined in global ImplicitWait
+			_webDriver.FindElement(By.Id("index-razor"));
+			//Or wait a specific time
+			//Thread.Sleep(5000);
+
+
+
+
+			/*
 			// Wait for an element with ID "myButton" to be clickable
+			//https://www.selenium.dev/selenium/docs/api/dotnet/html/M_OpenQA_Selenium_Support_UI_ExpectedConditions_ElementToBeClickable.htm
+            
+			
 			var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-			var myButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("myButton")));
+			//var myButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("myButton")));
+
+			var myButton = wait.Until(ExpectedConditions.precenseOfElementLocated(By.Id("LoginDisplay")));
+			*/
 
 			// Check that the page title contains "Home Page"
 			var pageTitle = _webDriver.Title;
-			Assert.True(pageTitle.Contains("Home Page"), $"Expected page title to contain \"Home Page\", but actual title is \"{pageTitle}\"");
+			string expected = "Home Page";
+			Assert.True(pageTitle.Contains(expected), $"Expected page title to contain \"{expected}\", but actual title is \"{pageTitle}\"");
+		}
+
+		[Test, Order(2)]
+		public void LogIn()
+		{
+			//Navigate to specifi URL
+			_webDriver.Navigate().GoToUrl(_baseUrl);
+
+			//Wait until a specific element is found(timeout defined in global ImplicitWait
+			_webDriver.FindElement(By.Id("LoginDisplay-razor"));
+			//Or wait a specific time
+			//Thread.Sleep(5000);
+
+			_webDriver.FindElement(By.PartialLinkText("Log in")).Click();
+
+			Thread.Sleep(5000);
+			/*
+			// Wait for an element with ID "myButton" to be clickable
+			//https://www.selenium.dev/selenium/docs/api/dotnet/html/M_OpenQA_Selenium_Support_UI_ExpectedConditions_ElementToBeClickable.htm
+            
+			
+			var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+			//var myButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("myButton")));
+
+			var myButton = wait.Until(ExpectedConditions.precenseOfElementLocated(By.Id("LoginDisplay")));
+			*/
+
+			// Check that the page title contains "Home Page"
+			var pageTitle = _webDriver.Title;
+			string expected = "Home Page";
+			Assert.True(pageTitle.Contains(expected), $"Expected page title to contain \"{expected}\", but actual title is \"{pageTitle}\"");
 		}
 
 
