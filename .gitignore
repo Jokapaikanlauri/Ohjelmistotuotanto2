@@ -366,3 +366,4 @@ FodyWeavers.xsd
 **/Local_Db_backups
 /MatkakertomusGroupB/Server/app.db-wal
 /MatkakertomusGroupB/Server/app.db-shm
+/MatkakertomusGroupB/Server/app.db
