@@ -13,7 +13,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 {
     //Remember to add [AllowAnonymous] to methods you want accessible without being authenticated
     //Pages that require authentication also require the tag [Authorize] (Client side)
-    [Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TripController : ControllerBase
