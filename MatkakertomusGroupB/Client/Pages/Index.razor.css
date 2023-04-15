@@ -3,7 +3,12 @@
 }
 .divi {
     border-bottom: 1px solid lightgrey;
+    width:60%;
 }
 #notlogged{
     font-style:italic;
+}
+#kuva {
+    
+    max-width: 60%;
 }

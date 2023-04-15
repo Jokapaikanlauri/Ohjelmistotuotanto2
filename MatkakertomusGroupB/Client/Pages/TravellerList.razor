@@ -18,13 +18,15 @@
     @foreach (Traveller t in list)
     {
         <TravellerItem Traveller="@t">
-        <ul><li>First name: @t.Forename</li>
-        <li>Last name: @t.Surname</li>
-        <li>Nickname: @t.Nickname</li>
-        <li>Email: @t.Email</li>
-        <li>Municipality: @t.Municipality</li>
-        <li>Image: @t.Image</li></ul>
+            <ul>
+                <li>First name: @t.Forename</li>
+                <li>Last name: @t.Surname</li>
+                <li>Nickname: @t.Nickname</li>
+                <li>Municipality: @t.Municipality</li>
+                <li>Image: @t.Image</li>
+            </ul>
         </TravellerItem>
+        <br />
     }
 }
 

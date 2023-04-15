@@ -1,0 +1,59 @@
+﻿@page "/grouptrips"
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject ILogger<Destinations> logger
+
+<PageTitle>Group trips</PageTitle>
+
+<h1>Group trips</h1>
+
+<div class="main">
+    @if (nickname != null)
+    {
+        <div>
+            <p>Username is: @name</p>
+            <p>User nickname is: @nickname</p>
+        </div>
+    }
+    else
+    {
+        <div>
+            <p><em>Loading...</em></p>
+
+            <p>Username is: @name</p>
+        </div>
+    }
+</div>
+
+<GroupTripList />
+
+
+
+@code {
+
+    public UserDTO? userNickDTO = new UserDTO();
+    public UserDTO? userNickDTO2 = new UserDTO();
+    public string? nickname = null;
+
+    public string? name = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Assing name to DTO for POST operation
+        name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+        userNickDTO.Username = name;
+
+        //Fetch user data from API via POST operation
+        var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userNickDTO);
+
+        //Parse user data from API
+        userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+        nickname = userNickDTO.Nickname;
+
+    }
+}

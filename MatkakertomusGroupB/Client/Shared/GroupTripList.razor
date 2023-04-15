@@ -1,0 +1,39 @@
+﻿@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+
+
+<p role="status">Current trip count: @trips</p>
+
+@if (list != null)
+{
+    @foreach (Trip t in list)
+    {
+        <TripItem Trip="@t">
+            <ul>
+                <li>Trip start: @t.DatumStart</li>
+                <li>Trip end: @t.DatumEnd</li>
+                <li>Trip stories: @t.Stories</li>
+                <TripStoryList tripId=@t.TripId />
+            </ul>
+        </TripItem>
+        <hr />
+        <br />
+    }
+} 
+@code {
+    private int trips = 0;
+    private List<Trip>? list = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Get list of all public trips
+        list = await Http.GetFromJsonAsync<List<Trip>>($"/api/trip/");
+        if (list != null) trips = list.Count;
+    }
+}

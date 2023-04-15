@@ -11,35 +11,28 @@
 <PageTitle>Home Page</PageTitle>
 
 
-<div id="index-razor">
-	<AuthorizeView>
-		<Authorized>
-			<div class="divi">
-				<h1>Matkakertomus homepage @name!</h1>
+<AuthorizeView>
+	<Authorized>
+		<div class="divi">
+			<h1>Home page</h1>
+		</div>
+		<div>
+			<p id="teksti">This website is made for you to connect with other people interested in travelling. Enjoy your passion with others or respark your inner traveler.</p>
+		</div>
+	</Authorized>
 
-			</div>
-			<div>
-				<p id="teksti">This website is made for you to connect with other people interested in travelling. Here you can enjoy the same passion with others or respark your inner traveler.</p>
-				<h2>Recent trips</h2>
-				<!--Tähän tulee uusimmat lisätyt julkiset reissut feedimuodossa kuvan ja otsikon kera.-->
-			</div>
-		</Authorized>
-
-		<NotAuthorized>
-			<div class="divi">
-				<h1>Welcome to the Matkakertomus website!</h1>
-			</div>
-
-			<p id="notlogged">
-				Please make sure to <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin" title="Login sivulle">log in</a>
-				or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin" title="Rekisteröinti sivulle">register</a> an account.
-			</p>
-
-			<p id="teksti">This website is made for you to connect with other people interested in travelling. Here you can enjoy the same passion with others or respark your inner traveler.</p>
-		</NotAuthorized>
-	</AuthorizeView>
-</div>
-
+	<NotAuthorized>
+		<div class="divi">
+			<h1>Welcome to the Matkakertomus website!</h1>
+		</div>
+		<p id="notlogged">
+			Please make sure to <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin" title="Login sivulle">log in</a>
+			or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin" title="Rekisteröinti sivulle">register</a> an account.
+		</p>
+		<p id="teksti">This website is made for you to connect with other people interested in travelling. Enjoy your passion with others or respark your inner traveler.</p>
+	</NotAuthorized>
+</AuthorizeView>
+<img id="kuva" src="/travel.jpg"/>
 @code {
 	//private UserDTO? userDTO = new UserDTO();
 	//private UserDTO? userDTO2 = new UserDTO();

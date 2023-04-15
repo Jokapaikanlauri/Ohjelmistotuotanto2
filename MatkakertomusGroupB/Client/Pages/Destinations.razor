@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using MatkakertomusGroupB.Shared
+
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
@@ -12,93 +13,90 @@
 <PageTitle>Destinations</PageTitle>
 
 
-
+<head>
+    <link href="Pages/Destinations.razor.css" />
+</head>
 <h1>Destinations</h1>
 <!--Tee tähän forms add buttonin taakse ja lisätyt matkakohteet näytetään tällä sivulla, poista ominaisuus
-	toimii vain jos matkakohde on käyttäjän lisäämä
+    toimii vain jos matkakohde on käyttäjän lisäämä
 -->
 
-<AuthorizeView>
-	<Authorized>
-		<head>
-			<link href="Pages/Destinations.razor.css" />
-		</head>
-		<div class="left">
-			<h2>List of travels:</h2>
-		</div>
-		<div class="right">
-			<form id="addDestination" method="post">
-				<div class="addHeader">
-				<h4>Add a new destination</h4>
-				</div>
-				<div class="addDetails">
+<div class="left">
+    <h2>List of travels:</h2>
+    <br />
 
-					<label>Name</label>
-					<br />
-					<input type="text" placeholder="Name.."/>
-					<br />
-					<label>Country</label>
-					<br />
-					<input type="text" placeholder="Country.." />
-					<br />
-					<label>Municipality</label>
-					<br />
-					<input type="text" placeholder="Municipality.." />
-					<br />
-					<label>Description</label>
-					<br />
-					<input type="text" placeholder="Description.." />
-					<br />
-					<button type="submit">Add</button>
-				</div>
-			</form>
-		</div>
-	</Authorized>
-	<NotAuthorized>
-		<!--
-			Tässä näytetään muiden lisäämät matkakohteet
-		-->
-		<div>You are a public user.</div>
-	</NotAuthorized>
+    @if (list != null)
+    {
+        @foreach (Destination d in list)
+        {
+            <DestinationItem Destination="@d">
+                <ul>
+                    <li>Name: @d.Name</li>
+                    <li>Country: @d.Country</li>
+                    <li>Municipality: @d.Municipality</li>
+                    <li>Description: @d.Description</li>
+                    <li>Image: @d.Image</li>
+                </ul>
+            </DestinationItem>
+            <br />
+        }
+    }
+</div>
+
+<AuthorizeView>
+    <Authorized>
+        <div class="right">
+            <DestinationAdd id="@userId" />
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div>You are a public user.</div>
+    </NotAuthorized>
 </AuthorizeView>
 
 
 
 
 @code {
-	//private UserDTO? userDTO = new UserDTO();
-	//private UserDTO? userDTO2 = new UserDTO();
-	private string? name = null;
-	private string? nickname = null;
-	private string? userId = null;
+    //private UserDTO? userDTO = new UserDTO();
+    //private UserDTO? userDTO2 = new UserDTO();
+    private string? name = null;
+    private string? nickname = null;
+    private string? userId = null;
+    private List<Destination>? list = null;
 
-	protected override async Task OnInitializedAsync()
-	{
-		//Assing name to variable for future operations
-		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
 
-		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
-		if (name != null)
-		{
-			//Fetch user data from API via POST operation
-			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
-			//Parse user data from API
-			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-			nickname = userDTO.Nickname;
-		}
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        //Assing name to variable for future operations
+        name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
 
-	private async Task GetUserId()
-	{
-		logger.LogInformation($"I'm a template logging message");
+        list = await Http.GetFromJsonAsync<List<Destination>>($"/api/destination");
 
-		if (name != null)
-		{
-			//Fetch user data from API via POST operation
-			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
-			//Parse user data from API
-			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-			userId = userDTO.Id;
-		}
-	}
+        //var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+        if (name != null)
+        {
+            //Fetch user data from API via POST operation
+            var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
+            //Parse user data from API
+            var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+            nickname = userDTO.Nickname;
+        }
+    }
+
+    private async Task GetUserId()
+    {
+        logger.LogInformation($"I'm a template logging message");
+
+        if (name != null)
+        {
+            //Fetch user data from API via POST operation
+            var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+            //Parse user data from API
+            var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+            userId = userDTO.Id;
+        }
+    }
+
+
 }

@@ -19,33 +19,34 @@ namespace MatkakertomusGroupB.Server.Controllers
     public class TripController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-		private readonly ILogger<TripController> _logger;
+        private readonly ILogger<TripController> _logger;
 
-		public TripController(ApplicationDbContext context, ILogger<TripController> logger)
-		{
-			_context = context;
-			_logger = logger;
-		}
+        public TripController(ApplicationDbContext context, ILogger<TripController> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
 
-		// GET: api/Trip
-		[HttpGet]
+        // GET: api/Trip 
+        // this gets all the public trips
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Trip>>> GetTrip()
         {
-          if (_context.Trip == null)
-          {
-              return NotFound();
-          }
-            return await _context.Trip.ToListAsync();
+            if (_context.Trip == null)
+            {
+                return NotFound();
+            }
+            return await _context.Trip.Where(x => x.Private == false).ToListAsync();
         }
 
         // GET: api/Trip/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Trip>> GetTrip(int id)
         {
-          if (_context.Trip == null)
-          {
-              return NotFound();
-          }
+            if (_context.Trip == null)
+            {
+                return NotFound();
+            }
             var trip = await _context.Trip.FindAsync(id);
 
             if (trip == null)
@@ -56,12 +57,32 @@ namespace MatkakertomusGroupB.Server.Controllers
             return trip;
         }
 
+        // GET: api/Trip/traveller/idString
+        // Get all trips with traveller id
+        [HttpGet("traveller/{id}")]
+        public async Task<ActionResult<IEnumerable<Trip>>> GetTravellerTrip(string id)
+        {
+            if (_context.Trip == null)
+            {
+                return NotFound();
+            }
+
+            List<Trip> list = await _context.Trip.Where(x => x.Traveller.Id == id).ToListAsync();
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+
+            return list;
+        }
+
         // PUT: api/Trip/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTrip(int id, Trip trip)
         {
-            if (id != trip.Id)
+            if (id != trip.TripId)
             {
                 return BadRequest();
             }
@@ -90,16 +111,28 @@ namespace MatkakertomusGroupB.Server.Controllers
         // POST: api/Trip
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Trip>> PostTrip(Trip trip)
+        public async Task<ActionResult<Trip>> PostTrip(TripDTO tripDTO)
         {
-          if (_context.Trip == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Trip'  is null.");
-          }
+            if (_context.Trip == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Trip'  is null.");
+            }
+
+            //Convert DTO to Trip
+            Trip trip = new Trip
+            {
+                TravellerId = tripDTO.TravellerId,
+                DatumStart = tripDTO.DatumStart,
+                DatumEnd = tripDTO.DatumEnd,
+                Private = tripDTO.Private
+            };
+
+            //Add trip
             _context.Trip.Add(trip);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTrip", new { id = trip.Id }, trip);
+            return CreatedAtAction("GetTrip", new { id = trip.TripId }, trip);
         }
 
         // DELETE: api/Trip/5
@@ -124,7 +157,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 
         private bool TripExists(int id)
         {
-            return (_context.Trip?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Trip?.Any(e => e.TripId == id)).GetValueOrDefault();
         }
     }
 }

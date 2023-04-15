@@ -7,7 +7,7 @@ namespace MatkakertomusGroupB.Shared.Models
 	public class Destination
 	{
 		//PK
-		public int DestinationId { get; set; }
+		public int? DestinationId { get; set; }
 
 		//Local Items
 		[Required]

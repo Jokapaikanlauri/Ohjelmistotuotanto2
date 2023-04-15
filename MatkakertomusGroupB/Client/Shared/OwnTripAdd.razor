@@ -1,0 +1,74 @@
+﻿@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+
+
+<h1>Add new trip</h1>
+
+<NewTrip>
+    <EditForm Model="@trip" OnValidSubmit="@Save">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        
+        <label>Start date:</label>
+        <br />
+        <InputDate @bind-Value="trip.DatumStart" />
+        <br />
+        <label>End date:</label>
+        <br />
+        <InputDate @bind-Value="trip.DatumEnd" />
+        <br />
+        <label>Check box if private: </label>
+        <InputCheckbox @bind-Value="trip.Private" />
+        <br />
+        <button type="submit" class="btn btn-success">Add trip</button>
+    </EditForm>
+</NewTrip>
+<hr />
+<br />
+
+@if (added)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        A new trip was created successfully!
+    </div>
+}
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        This is a failed alert—check it out!
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string? id { get; set; }
+
+    public Traveller traveller = new();
+    public Trip trip = new();
+    public bool added = false;
+    public bool failed = false;
+
+    async Task Save()
+    {
+        traveller.Id = id;
+        trip.Traveller = traveller;
+        //post a new trip
+        var res = await Http.PostAsJsonAsync<Trip>($"/api/trip", trip);
+        if (res.IsSuccessStatusCode)
+        {
+            added = true;
+            Console.WriteLine(res);
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+    }
+}

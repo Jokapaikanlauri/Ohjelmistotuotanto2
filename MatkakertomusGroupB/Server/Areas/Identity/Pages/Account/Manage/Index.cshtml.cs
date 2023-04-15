@@ -111,7 +111,10 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 				Nickname = user.Nickname,
 				Municipality = user.Municipality,
 				Description = user.Description,
-				Image = user.Image,
+				// Add required translations to get an image object that can be refferred in the .cshtml, 
+				// Also remember to add required image => binary translation in OnPostAsync()
+				Image = "I'm a Teapot",
+				//Image = user.Image,
 				PhoneNumber = phoneNumber
 			};
 		}
