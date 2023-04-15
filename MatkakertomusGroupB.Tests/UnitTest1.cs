@@ -67,8 +67,8 @@ namespace MatkakertomusGroupB.Tests
 				Assert.Fail();
 			}
 
-			//Optional delay, waits, for application get loaded before performing tests
-			_webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(120);
+			//Global Implicit wait before failing (waits for element to be found)
+			_webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
 		}
 
 		/// <summary>
@@ -125,22 +125,22 @@ namespace MatkakertomusGroupB.Tests
 
 			_webDriver.FindElement(By.PartialLinkText("Log in")).Click();
 
+
+			//https://www.browserstack.com/guide/sendkeys-in-selenium
+			//On the login page fill out the form and proceed
+			_webDriver.FindElement(By.Id("Input_Email")).SendKeys("Chad@Chadistan.com");
+			_webDriver.FindElement(By.Id("Input_Password")).SendKeys("Chad@Chadistan.com");
+			_webDriver.FindElement(By.Id("login-submit")).Click();
+
 			Thread.Sleep(5000);
-			/*
-			// Wait for an element with ID "myButton" to be clickable
-			//https://www.selenium.dev/selenium/docs/api/dotnet/html/M_OpenQA_Selenium_Support_UI_ExpectedConditions_ElementToBeClickable.htm
-            
-			
-			var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-			//var myButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("myButton")));
 
-			var myButton = wait.Until(ExpectedConditions.precenseOfElementLocated(By.Id("LoginDisplay")));
-			*/
+			//Get nickname
+			string loginInsides = _webDriver.FindElement(By.Id("LoginDisplay-razor")).Text.ToString();
+			string expected = "Dude";
 
-			// Check that the page title contains "Home Page"
-			var pageTitle = _webDriver.Title;
-			string expected = "Home Page";
-			Assert.True(pageTitle.Contains(expected), $"Expected page title to contain \"{expected}\", but actual title is \"{pageTitle}\"");
+			Assert.True(loginInsides.Contains(expected), $"Expected login box to contain nickname \"{expected}\", but it wasn't found: \"{loginInsides}\"");
+
+			Thread.Sleep(5000);
 		}
 
 
