@@ -90,15 +90,25 @@ namespace MatkakertomusGroupB.Server.Controllers
         // POST: api/Destination
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Destination>> PostDestination(Destination destination)
+        public async Task<ActionResult<Destination>> PostDestination(DestinationDTO destinationDTO)
         {
           if (_context.Destinations == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Destinations'  is null.");
           }
-            _context.Destinations.Add(destination);
-            await _context.SaveChangesAsync();
 
+            Destination destination = new Destination
+            {
+                Name = destinationDTO.Name,
+                Country = destinationDTO.Country,
+                Municipality = destinationDTO.Municipality,
+                Description = destinationDTO.Description,
+                Image = destinationDTO.Image
+            };
+            _context.Destinations.Add(destination);
+            
+            await _context.SaveChangesAsync();
+            
             return CreatedAtAction("GetDestination", new { id = destination.DestinationId }, destination);
         }
 

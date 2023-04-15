@@ -44,17 +44,32 @@
 
 @code {
     [Parameter]
-    public string id { get; set; }
+    public string? id { get; set; }
 
-    public Destination destination = new();
+    public DestinationDTO destination = new();
     private int maxAllowedFiles = 3;
     private long maxFileSize = 1024 * 1024 * 8; // 8Mt
     private List<string> fileNames = new();
     private List<UploadResult> uploadResults = new();
+    public bool added = false;
+    public bool failed = false;
+
 
     async Task addDestination()
     {
-        await Http.PostAsJsonAsync<Destination>($"/api/destination", destination);
+
+        var res = await Http.PostAsJsonAsync<DestinationDTO>($"/api/destination", destination);
+        if (res.IsSuccessStatusCode)
+        {
+            added = true;
+            Console.WriteLine(res);
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+
     }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
