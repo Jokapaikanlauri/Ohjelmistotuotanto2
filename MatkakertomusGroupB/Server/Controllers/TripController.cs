@@ -67,7 +67,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 				return NotFound();
 			}
 
-			List<Trip> list = await _context.Trip.Where(x => x.Traveller.Id == id).ToListAsync();
+			List<Trip> list = await _context.Trip.Where(x => x.TravellerId == id).ToListAsync();
 
 			if (list == null)
 			{
