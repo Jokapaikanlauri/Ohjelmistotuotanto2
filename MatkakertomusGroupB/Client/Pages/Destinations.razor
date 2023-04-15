@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using MatkakertomusGroupB.Shared
+
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
@@ -18,40 +19,38 @@
 	toimii vain jos matkakohde on käyttäjän lisäämä
 -->
 
+<div class="left">
+			<h2>List of travels:</h2>
+			<br />
+
+			@if (list != null)
+{
+			@foreach (Destination d in list)
+			{
+				<DestinationItem Destination="@d">
+					<ul>
+							<li>First name: @d.Name</li>
+							<li>Last name: @d.Country</li>
+							
+							<li>Municipality: @d.Municipality</li>
+							<li>Nickname: @d.Description</li>
+							<li>Image: @d.Image</li>
+					</ul>
+				</DestinationItem>
+				<br />
+    }
+}
+</div>
+
 <AuthorizeView>
 	<Authorized>
 		<head>
 			<link href="Pages/Destinations.razor.css" />
 		</head>
-		<div class="left">
-			<h2>List of travels:</h2>
-		</div>
-		<div class="right">
-			<form id="addDestination" method="post">
-				<div class="addHeader">
-				<h4>Add a new destination</h4>
-				</div>
-				<div class="addDetails">
 
-					<label>Name</label>
-					<br />
-					<input type="text" placeholder="Name.."/>
-					<br />
-					<label>Country</label>
-					<br />
-					<input type="text" placeholder="Country.." />
-					<br />
-					<label>Municipality</label>
-					<br />
-					<input type="text" placeholder="Municipality.." />
-					<br />
-					<label>Description</label>
-					<br />
-					<input type="text" placeholder="Description.." />
-					<br />
-					<button type="submit">Add</button>
-				</div>
-			</form>
+		
+		<div class="right">
+			<DestinationAdd id="@userId"/>
 		</div>
 	</Authorized>
 	<NotAuthorized>
@@ -71,11 +70,15 @@
 	private string? name = null;
 	private string? nickname = null;
 	private string? userId = null;
+	private List<Destination>? list = null;
+	
 
 	protected override async Task OnInitializedAsync()
 	{
 		//Assing name to variable for future operations
 		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+
+		list = await Http.GetFromJsonAsync<List<Destination>>($"/api/destination");
 
 		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
 		if (name != null)
@@ -101,4 +104,6 @@
 			userId = userDTO.Id;
 		}
 	}
+
+
 }
