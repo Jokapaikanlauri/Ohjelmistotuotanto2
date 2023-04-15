@@ -19,69 +19,69 @@ namespace MatkakertomusGroupB.Server.Controllers
     public class TripController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-		private readonly ILogger<TripController> _logger;
+        private readonly ILogger<TripController> _logger;
 
-		public TripController(ApplicationDbContext context, ILogger<TripController> logger)
-		{
-			_context = context;
-			_logger = logger;
-		}
+        public TripController(ApplicationDbContext context, ILogger<TripController> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
 
-		// GET: api/Trip 
+        // GET: api/Trip 
         // this gets all the public trips
-		[HttpGet]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Trip>>> GetTrip()
         {
-          if (_context.Trip == null)
-          {
-              return NotFound();
-          }
+            if (_context.Trip == null)
+            {
+                return NotFound();
+            }
             return await _context.Trip.Where(x => x.Private == false).ToListAsync();
         }
 
-		// GET: api/Trip/5
-		[HttpGet("{id}")]
-		public async Task<ActionResult<Trip>> GetTrip(int id)
-		{
-			if (_context.Trip == null)
-			{
-				return NotFound();
-			}
-			var trip = await _context.Trip.FindAsync(id);
+        // GET: api/Trip/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Trip>> GetTrip(int id)
+        {
+            if (_context.Trip == null)
+            {
+                return NotFound();
+            }
+            var trip = await _context.Trip.FindAsync(id);
 
-			if (trip == null)
-			{
-				return NotFound();
-			}
+            if (trip == null)
+            {
+                return NotFound();
+            }
 
-			return trip;
-		}
+            return trip;
+        }
 
-		// GET: api/Trip/traveller/idString
+        // GET: api/Trip/traveller/idString
         // Get all trips with traveller id
-		[HttpGet("traveller/{id}")]
-		public async Task<ActionResult<IEnumerable<Trip>>> GetTravellerTrip(string id)
-		{
-			if (_context.Trip == null)
-			{
-				return NotFound();
-			}
+        [HttpGet("traveller/{id}")]
+        public async Task<ActionResult<IEnumerable<Trip>>> GetTravellerTrip(string id)
+        {
+            if (_context.Trip == null)
+            {
+                return NotFound();
+            }
 
             List<Trip>? list = null;
             // TODO when the db has been fixd
-			// List<Trip> list = await _context.Trip.Where(x => x.TravellerId == id).ToListAsync();
+            // List<Trip> list = await _context.Trip.Where(x => x.TravellerId == id).ToListAsync();
 
-			if (list == null)
-			{
-				return NotFound();
-			}
+            if (list == null)
+            {
+                return NotFound();
+            }
 
-			return list;
-		}
+            return list;
+        }
 
-		// PUT: api/Trip/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPut("{id}")]
+        // PUT: api/Trip/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutTrip(int id, Trip trip)
         {
             if (id != trip.TripId)
@@ -115,10 +115,10 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Trip>> PostTrip(Trip trip)
         {
-          if (_context.Trip == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Trip'  is null.");
-          }
+            if (_context.Trip == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Trip'  is null.");
+            }
             _context.Trip.Add(trip);
             await _context.SaveChangesAsync();
 
