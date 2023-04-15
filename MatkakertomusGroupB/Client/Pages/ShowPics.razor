@@ -1,0 +1,31 @@
+﻿@page "/showpics"
+
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject ILogger<Destinations> logger
+
+<h3>ShowPics</h3>
+
+@if(pics != null)
+{
+    foreach(Picture p in pics)
+    {
+        <img src="data:image/png;base64,@p.Image" />
+    }
+}
+
+@code {
+    public List<Picture>? pics;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        //Fetch user data from API via POST operation
+        pics = await Http.GetFromJsonAsync<List<Picture>>($"/api/picture");
+
+    }
+}

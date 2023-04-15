@@ -22,6 +22,7 @@ shows you the uploaded filenames and stored filenames-->
         {
             <li>
                 <ul>
+                    <li>This file has been uploaded: </li>
                     <li>Name: @file.Name</li>
                     <li>Last modified: @file.LastModified.ToString()</li>
                     <li>Size (bytes): @file.Size</li>
@@ -41,8 +42,6 @@ shows you the uploaded filenames and stored filenames-->
     private List<string> fileNames = new();
     private List<IBrowserFile> loadedFiles = new();
 
-
-
     // Function that creates a streamcontent that uploads the files
     private async Task OnInputFileChange(InputFileChangeEventArgs args)
     {
@@ -50,17 +49,37 @@ shows you the uploaded filenames and stored filenames-->
 
         try
         {
+            // here we will loop all the files that have been selected for upload
+            // this won't be necessary for traveller and destination, they only have one picture each
             var files = args.GetMultipleFiles();
             foreach (var file in files)
             {
+                // this shows the uploaded file info
+                loadedFiles.Add(file);
+
+                // abbreviation fs for memorystream
                 await using MemoryStream fs = new MemoryStream();
+
+                // we'll open readstreamer for each individual file
                 await file.OpenReadStream(maxAllowedSize: 1048576).CopyToAsync(fs);
+
+                // this will call GetBytes function to convert the streamed file into bytes
                 byte[] somBytes = GetBytes(fs);
+
+                // here we finally convert the returned bytes to base64string
                 base64String = Convert.ToBase64String(somBytes, 0, somBytes.Length);
+
+                // copypaste diagnostics from example, not necessary
                 System.Diagnostics.Debug.Print("Image 64: " + base64String + Environment.NewLine);
+
+                // create new dto object to transfer data to API
                 PictureDTO pdto = new PictureDTO();
                 pdto.Image = base64String;
+                // storyid has been hardcoded for testing purposes here
                 pdto.StoryId = id;
+
+                // post the dto to API, this again will not be needed for destination nor traveller
+                // for they will save the base64 encoded string in their own tables
                 await Http.PostAsJsonAsync("api/Picture/" + id, pdto);
             }
         }
@@ -73,6 +92,7 @@ shows you the uploaded filenames and stored filenames-->
         // var newUploadResults = await res.Content.ReadFromJsonAsync<List<UploadResult>>();
     }
 
+    // this function will convert the file into bytes
     public static byte[] GetBytes(Stream stream)
     {
         var bytes = new byte[stream.Length];
@@ -81,6 +101,8 @@ shows you the uploaded filenames and stored filenames-->
         stream.Dispose();
         return bytes;
     }
+
+
     /*
     public Image LoadImage()
     {
