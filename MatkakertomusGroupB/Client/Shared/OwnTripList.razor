@@ -11,7 +11,7 @@
 
 @if (list != null)
 {
-    @foreach (Trip t in list)
+    @foreach (Trip t in list) 
     {
         <TripItem Trip="@t">
             <ul>
@@ -21,6 +21,7 @@
                 <TripStoryList tripId="@t.TripId" />
             </ul>
         </TripItem>
+        <hr />
         <br />
     }
 } 

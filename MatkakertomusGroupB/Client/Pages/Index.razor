@@ -12,26 +12,23 @@
 
 
 <AuthorizeView>
-    <Authorized>
+	<Authorized>
 		<div class="divi">
-        <h1>Matkakertomus homepage @name!</h1>
-		
+			<h1>Matkakertomus homepage</h1>
 		</div>
 		<div>
 			<p id="teksti">This website is made for you to connect with other people interested in travelling. Here you can enjoy the same passion with others or respark your inner traveler.</p>
-			<h2>Recent trips</h2>
-			<!--Tähän tulee uusimmat lisätyt julkiset reissut feedimuodossa kuvan ja otsikon kera.-->
 		</div>
-    </Authorized>
+	</Authorized>
 
 	<NotAuthorized>
 		<div class="divi">
-		<h1>Welcome to the Matkakertomus website!</h1>
+			<h1>Welcome to the Matkakertomus website!</h1>
 		</div>
-
-		<p id="notlogged">Please make sure to <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin" title="Login sivulle">log in</a>
-			or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin" title="Rekisteröinti sivulle">register</a> an account.</p>
-
+		<p id="notlogged">
+			Please make sure to <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin" title="Login sivulle">log in</a>
+			or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin" title="Rekisteröinti sivulle">register</a> an account.
+		</p>
 		<p id="teksti">This website is made for you to connect with other people interested in travelling. Here you can enjoy the same passion with others or respark your inner traveler.</p>
 	</NotAuthorized>
 </AuthorizeView>
