@@ -83,7 +83,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 		[Test, Order(1), Description("Test description here")]
-		public void PublicUser()
+		public void Public()
 		{
 			//Navigate to specifi URL
 			_webDriver.Navigate().GoToUrl(_baseUrl);
