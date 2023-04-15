@@ -5,8 +5,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>MatkakertomusGroupB.Server-e5c193dc-f1f9-43ee-8213-5ba72954b99e</UserSecretsId>
-	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	<PreserveCompilationContext>true</PreserveCompilationContext>
 
 
 </PropertyGroup>
