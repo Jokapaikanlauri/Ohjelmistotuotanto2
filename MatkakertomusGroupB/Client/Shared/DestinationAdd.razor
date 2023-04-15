@@ -6,9 +6,10 @@
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
-
-<h3>Add new destination</h3>
-
+<head>
+    <link href="Pages/Destinations.razor.css" />
+</head>
+<div class="right">
 <NewDestination>
     <div class="addHeader">
         <h4>Add a new destination</h4>
@@ -34,10 +35,12 @@
         <label>Image</label>
         <InputFile OnChange="@OnInputFileChange" multiple />
         <br />
+        <br />
+
         <button @onclick="()=>addDestination()">Add</button>
     </div>
 </NewDestination>
-
+</div>
 
 @code {
     [Parameter]
