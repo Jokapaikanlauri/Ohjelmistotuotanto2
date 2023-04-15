@@ -1,18 +1,15 @@
 ﻿@page "/upload"
 @using System.Net.Http.Headers
 @using MatkakertomusGroupB.Shared.Models;
-@using System.IO;
 @inject HttpClient Http
 
 
-<PageTitle>Upload pictures to your story</PageTitle>
+<PageTitle>Upload story pictures</PageTitle>
 
-<h4>Choose max 3 pictures to add to your story.</h4>
-<p>You can add pictures multiple times.</p>
+<h1>Upload pictures to your story</h1>
 
 <!--This is how you upload multiple files-->
-<InputFile OnChange="HandleFileSelection" multiple />
-<button @onclick="SaveImages" class="btn btn-success">Add images</button>
+<InputFile OnChange="@OnInputFileChange" multiple />
 
 <!--This is just for testing (or confirmation) purposes, it shows you the uploaded filenames and stored filenames-->
 @if (fileNames.Count > 0)
@@ -32,23 +29,20 @@
 }
 
 @code {
+    [Parameter]
+    public int id { get; set; }
     private int maxAllowedFiles = 3;
     private long maxFileSize = 1024 * 1024 * 8; // 8Mt
     private List<string> fileNames = new();
     private List<UploadResult> uploadResults = new();
-    IFileListEntry file = null;
 
     // Function that creates a streamcontent that uploads the files
-    public async Task HandleFileSelection(IFileListEntry[] images)
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         using var content = new MultipartFormDataContent();
 
         foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
         {
-            using (var ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms)
-            }
             var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
             fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
 
