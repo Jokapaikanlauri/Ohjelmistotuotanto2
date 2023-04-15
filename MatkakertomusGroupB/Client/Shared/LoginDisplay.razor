@@ -15,7 +15,8 @@
 		}
 		@if (nickname != null)
 		{
-			<a href="authentication/profile"><span class="oi oi-cog" aria-hidden="true"></span> Hello @nickname</a>
+
+			<a id="nick-display" href="authentication/profile"><span class="oi oi-cog" aria-hidden="true"></span> Hello @nickname</a>
 		}
 		else
 		{
@@ -23,7 +24,7 @@
 			GetUserNick();
 		}
 		
-		<button class="nav-link btn btn-link" @onclick="BeginLogOut"><span class="oi oi-account-logout" aria-hidden="true"></span> Log out</button>
+		<button id="logout_button" class="nav-link btn btn-link" @onclick="BeginLogOut"><span class="oi oi-account-logout" aria-hidden="true"></span> Log out</button>
 	</Authorized>
 	<NotAuthorized>
 		<a href="authentication/register"><span class="oi oi-pencil" aria-hidden="true"></span> Register</a>

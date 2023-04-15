@@ -41,9 +41,10 @@ namespace MatkakertomusGroupB.Tests
 			{
 				// Start the web server
 				_webServerProcess = Process.Start("dotnet", $"run --project {webProjectPath}\\MatkakertomusGroupB.Server.csproj");
+				
 				// Output for debug
-				Console.WriteLine("dotnet");
-				Console.WriteLine($"run --project {webProjectPath}\\MatkakertomusGroupB.Server.csproj");
+				//Console.WriteLine("dotnet");
+				//Console.WriteLine($"run --project {webProjectPath}\\MatkakertomusGroupB.Server.csproj");
 
 				// Wait for the server to start up
 				Thread.Sleep(5000);
@@ -82,7 +83,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 		[Test, Order(1), Description("Test description here")]
-		public void PageTitle()
+		public void PublicUser()
 		{
 			//Navigate to specifi URL
 			_webDriver.Navigate().GoToUrl(_baseUrl);
@@ -113,18 +114,15 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 		[Test, Order(2)]
-		public void LogIn()
+		public void LogIn_LogOut()
 		{
 			//Navigate to specifi URL
 			_webDriver.Navigate().GoToUrl(_baseUrl);
 
 			//Wait until a specific element is found(timeout defined in global ImplicitWait
-			_webDriver.FindElement(By.Id("LoginDisplay-razor"));
+			_webDriver.FindElement(By.PartialLinkText("Log in")).Click();
 			//Or wait a specific time
 			//Thread.Sleep(5000);
-
-			_webDriver.FindElement(By.PartialLinkText("Log in")).Click();
-
 
 			//https://www.browserstack.com/guide/sendkeys-in-selenium
 			//On the login page fill out the form and proceed
@@ -132,15 +130,29 @@ namespace MatkakertomusGroupB.Tests
 			_webDriver.FindElement(By.Id("Input_Password")).SendKeys("Chad@Chadistan.com");
 			_webDriver.FindElement(By.Id("login-submit")).Click();
 
-			Thread.Sleep(5000);
+			//Thread.Sleep(1000);
 
 			//Get nickname
-			string loginInsides = _webDriver.FindElement(By.Id("LoginDisplay-razor")).Text.ToString();
+			string loginInsides = _webDriver.FindElement(By.Id("nick-display")).Text.ToString();
 			string expected = "Dude";
 
-			Assert.True(loginInsides.Contains(expected), $"Expected login box to contain nickname \"{expected}\", but it wasn't found: \"{loginInsides}\"");
+			//Thread.Sleep(1000);
 
-			Thread.Sleep(5000);
+			Assert.True(loginInsides.Contains(expected), $"Expected login box to contain nickname \"{expected}\", but it wasn't found: \"{loginInsides}\"");
+			Assert.False(loginInsides.Contains("login"), $"Expected login box to not \"login\", but it was found: \"{loginInsides}\"");
+
+			//Thread.Sleep(1000);
+
+			_webDriver.FindElement(By.Id("logout_button")).Click();
+			Thread.Sleep(1000);
+			//The whole bucket, logged out notfication hardcoded elsewhere
+			string pageContent = _webDriver.FindElement(By.Id("app")).Text.ToString();
+			expected = "You are logged out";
+
+
+			Thread.Sleep(2000);
+			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found: \"{loginInsides}\"");
+
 		}
 
 
