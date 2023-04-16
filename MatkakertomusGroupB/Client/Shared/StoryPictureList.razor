@@ -10,16 +10,18 @@
 
 @if (list != null)
 {
-    @foreach (Picture p in list)
-    {
-        <PictureItem Picture="@p">
-            <ul>
-                <li>@p.Image</li>
-            </ul>
-        </PictureItem>
-        <br />
-    }
-} 
+    <ul>
+        @foreach (Picture p in list)
+        {
+            <li>
+                <PictureItem Picture="@p">
+                    <img src="data:image/png;base64,@p.Image" />
+                </PictureItem>
+            </li>
+            <br />
+        }
+    </ul>
+}
 
 @code {
     [Parameter]
@@ -28,11 +30,10 @@
     private int pictures = 0;
     private List<Picture>? list = null;
 
-
     protected override async Task OnInitializedAsync()
     {
-        //Get list stories for a Trip
-        list = await Http.GetFromJsonAsync<List<Picture>>($"/api/story/trip/{storyId}");
+        //Get list of pictures for a story
+        list = await Http.GetFromJsonAsync<List<Picture>>($"/api/picture/story/{storyId}");
         if (list != null) pictures = list.Count;
     }
 }

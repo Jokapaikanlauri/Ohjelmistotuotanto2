@@ -8,22 +8,25 @@
 @inject NavigationManager nav
 
 
-<p role="status">Current trip count: @trips</p>
+<h5>Current trip count: @trips</h5>
 
 @if (list != null)
 {
-    @foreach (Trip t in list) 
+    @foreach (TripDTO t in list) 
     {
-        <TripItem Trip="@t">
+        <TripItem TripDTO="@t">
             <ul>
                 <li>Trip start: @t.DatumStart</li>
                 <li>Trip end: @t.DatumEnd</li>
-                <li>Trip stories: @t.Stories</li>
                 <br/>
                 <li>
-                    <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit</button>
+                    <button class="btn btn-success" @onclick=@ShowStories>Show or hide trip stories</button>
+                    <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit trip</button>
                 </li>
-                <TripStoryList tripId="@t.TripId" />
+                @if (this.showStories)
+                {
+                    <TripStoryList tripId="@t.TripId" />
+                }
             </ul>
         </TripItem>
         <hr />
@@ -35,15 +38,19 @@
     public string? id { get; set; }
 
     private int trips = 0;
-    private List<Trip>? list = null;
-
+    private List<TripDTO>? list = null;
+    public bool showStories = false;
 
     protected override async Task OnInitializedAsync()
     {
-        
         //Get list of all own trips with user id
-        list = await Http.GetFromJsonAsync<List<Trip>>($"/api/trip/traveller/{id}");
+        list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/traveller/{id}");
         if (list != null) trips = list.Count;
-        
+    }
+
+    void ShowStories()
+    {
+        if (!showStories) showStories = true;
+        else showStories = false;
     }
 }

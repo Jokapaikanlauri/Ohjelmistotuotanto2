@@ -29,6 +29,7 @@
             <label>Check box if private: </label>
             <InputCheckbox @bind-Value="tDTO.Private" />
             <br />
+            <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
             <button type="submit" class="btn btn-success">Edit trip</button>
             <button class="btn btn-danger" @onclick="@Delete">Delete</button>
             <br />
@@ -83,6 +84,20 @@
 
     async Task Delete()
     {
+        List<Story> storyList = await Http.GetFromJsonAsync<List<Story>>($"/api/story/trip/{TripId}");
+        foreach (Story story in storyList)
+        {
+            var picres = await Http.DeleteAsync($"/api/picture/story/{story.StoryId}");
+            if (picres.IsSuccessStatusCode)
+            {
+                Console.WriteLine(picres);
+            }
+            else
+            {
+                failed = true;
+                Console.WriteLine(picres);
+            }
+        }
         var res = await Http.DeleteAsync($"/api/trip/{TripId}");
         if (res.IsSuccessStatusCode)
         {

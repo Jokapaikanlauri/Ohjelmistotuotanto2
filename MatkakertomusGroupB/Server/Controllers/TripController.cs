@@ -30,18 +30,18 @@ namespace MatkakertomusGroupB.Server.Controllers
         // GET: api/Trip 
         // this gets all the public trips
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Trip>>> GetTrip()
+        public async Task<ActionResult<IEnumerable<TripDTO>>> GetTrip()
         {
             if (_context.Trip == null)
             {
                 return NotFound();
             }
-            return await _context.Trip.Where(x => x.Private == false).ToListAsync();
+            return TripListToTripDTOList(await _context.Trip.Where(x => x.Private == false).ToListAsync());
         }
 
         // GET: api/Trip/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Trip>> GetTrip(int id)
+        public async Task<ActionResult<TripDTO>> GetTrip(int id)
         {
             if (_context.Trip == null)
             {
@@ -54,13 +54,13 @@ namespace MatkakertomusGroupB.Server.Controllers
                 return NotFound();
             }
 
-            return trip;
+            return TripToTripDTO(trip);
         }
 
         // GET: api/Trip/traveller/idString
         // Get all trips with traveller id
         [HttpGet("traveller/{id}")]
-        public async Task<ActionResult<IEnumerable<Trip>>> GetTravellerTrip(string id)
+        public async Task<ActionResult<IEnumerable<TripDTO>>> GetTravellerTrip(string id)
         {
             if (_context.Trip == null)
             {
@@ -74,7 +74,7 @@ namespace MatkakertomusGroupB.Server.Controllers
                 return NotFound();
             }
 
-            return list;
+            return TripListToTripDTOList(list);
         }
 
         // PUT: api/Trip/5
@@ -85,13 +85,11 @@ namespace MatkakertomusGroupB.Server.Controllers
 
             //Convert DTO to Trip
             Trip trip = TripDTOtoTrip(tripDTO);
-            trip.TripId = id;
 
             if (id != trip.TripId)
             {
                 return BadRequest();
             }
-
 
             _context.Entry(trip).State = EntityState.Modified;
 
@@ -117,7 +115,7 @@ namespace MatkakertomusGroupB.Server.Controllers
         // POST: api/Trip
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Trip>> PostTrip(TripDTO tripDTO)
+        public async Task<ActionResult<TripDTO>> PostTrip(TripDTO tripDTO)
         {
             if (_context.Trip == null)
             {
@@ -155,16 +153,43 @@ namespace MatkakertomusGroupB.Server.Controllers
             return NoContent();
         }
 
+        private List<Trip> TripDTOListToTripList(List<TripDTO> tripDTOList)
+        {
+            List<Trip> tripList = new List<Trip>();
+            foreach (TripDTO tripDTO in tripDTOList) tripList.Add(TripDTOtoTrip(tripDTO));
+
+            return tripList;
+        }
+
+        private List<TripDTO> TripListToTripDTOList(List<Trip> tripList)
+        {
+            List<TripDTO> tripDTOList = new List<TripDTO>();
+            foreach (Trip trip in tripList) tripDTOList.Add(TripToTripDTO(trip));
+
+            return tripDTOList;
+        }
+
+        private TripDTO TripToTripDTO(Trip trip)
+        {
+            TripDTO tripDTO = new TripDTO();
+            tripDTO.TripId = trip.TripId;
+            tripDTO.TravellerId = trip.TravellerId;
+            tripDTO.DatumStart = trip.DatumStart;
+            tripDTO.DatumEnd = trip.DatumEnd;
+            tripDTO.Private = trip.Private;
+
+            return tripDTO;
+        }
+
         private Trip TripDTOtoTrip(TripDTO tripDTO)
         {
-            //Convert DTO to Trip
-            Trip trip = new Trip
-            {
-                TravellerId = tripDTO.TravellerId,
-                DatumStart = tripDTO.DatumStart,
-                DatumEnd = tripDTO.DatumEnd,
-                Private = tripDTO.Private
-            };
+            Trip trip = new Trip();
+            if(tripDTO.TripId != null) trip.TripId = Convert.ToInt32(tripDTO.TripId);
+            trip.TravellerId = tripDTO.TravellerId;
+            trip.DatumStart = tripDTO.DatumStart;
+            trip.DatumEnd = tripDTO.DatumEnd;
+            trip.Private = tripDTO.Private;
+
             return trip;
         }
 
