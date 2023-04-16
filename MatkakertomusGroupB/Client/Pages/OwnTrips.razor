@@ -12,23 +12,7 @@
 
 <h1>Own trips</h1>
 
-<div class="main">
-    @if (nickname != null)
-    {
-        <div>
-            <p>Username is: @name</p>
-            <p>User nickname is: @nickname</p>
-        </div>
-    }
-    else
-    {
-        <div>
-            <p><em>Loading...</em></p>
-
-            <p>Username is: @name</p>
-        </div>
-    }
-</div>
+<TravellerInfo userNickDTO="@userNickDTO" name="@name" />
 
 <OwnTripAdd id="@userId" />
 
@@ -39,9 +23,8 @@
 
 
 @code {
-
+    
     public UserDTO? userNickDTO = new UserDTO();
-    public UserDTO? userNickDTO2 = new UserDTO();
     public string? nickname = null;
 
     public string? name = null;
@@ -69,7 +52,7 @@
             userId = userDTO.Id;
         }
     }
-
+    
     /*private async Task GetUserId()
     {
         logger.LogInformation($"I'm a template logging message");

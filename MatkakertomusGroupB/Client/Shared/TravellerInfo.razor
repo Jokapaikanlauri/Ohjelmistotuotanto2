@@ -1,0 +1,33 @@
+﻿@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+
+
+<div class="main">
+    @if (userNickDTO != null)
+    {
+        <div>
+            <p>Username is: @userNickDTO.Username</p>
+            <p>User nickname is: @userNickDTO.Nickname</p>
+        </div>
+    }
+    else
+    {
+        <div>
+            <p><em>Loading...</em></p>
+
+            <p>Username is: @name</p>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public UserDTO? userNickDTO { get; set; }
+    [Parameter]
+    public string? name { get; set; }
+}

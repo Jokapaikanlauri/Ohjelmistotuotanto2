@@ -1,4 +1,7 @@
-﻿using MatkakertomusGroupB.Shared.Models;
+﻿/*
+ * THIS NEVER WENT TO PRODUCTION
+ * 
+using MatkakertomusGroupB.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -156,3 +159,4 @@ namespace MatkakertomusGroupB.Server.Controllers
         }
     }
 }
+*/
