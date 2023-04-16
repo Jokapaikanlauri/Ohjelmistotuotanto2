@@ -11,6 +11,7 @@
 <div class="left">
     <br />
     <h4>Add new story to trip</h4>
+    <br/>
     <NewStory>
         <EditForm Model="@sDTO" OnValidSubmit="@Save">
             <DataAnnotationsValidator />
@@ -83,10 +84,13 @@
         sDTO.TripId = tripId;
         //post a new story
         var res = await Http.PostAsJsonAsync<StoryDTO>($"/api/story", sDTO);
+        sDTO = await res.Content.ReadFromJsonAsync<StoryDTO>();
+
         if (res.IsSuccessStatusCode)
         {
             added = true;
             Console.WriteLine(res);
+            if (sDTO.StoryId != null) nav.NavigateTo($"/story/edit/{sDTO.StoryId}");
         }
         else
         {

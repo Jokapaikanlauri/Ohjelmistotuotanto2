@@ -1,17 +1,17 @@
 ﻿.left {
     float: left;
-    width: 78%;
+    width: 58%;
     background-color: lightgrey;
     border-radius: 10px;
-    padding-left: 4px;
+    padding: 10px;
 }
 
-::deep .right {
+.right {
     float: right;
-    width: 20%;
+    width: 40%;
     background-color: lightgrey;
     border-radius: 10px;
-    padding: 20px;
+    padding: 10px;
 }
 
 .addHeader {

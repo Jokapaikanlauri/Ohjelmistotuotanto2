@@ -39,12 +39,14 @@
             <br /> <br />
             <label>Tell your story: </label> <br />
             <InputTextArea @bind-Value="sDTO.Description" style="width:97%" />
+            <br />
+            <p>NOTE: Deleting the story will also delete all the pictures attached to it!!!</p>
             <br /><br />
             @if (sDTO.TripId != null)
             {
-                <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip stories</button>
+                <button class="btn btn-success" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
             }
-            <button type="submit" class="btn btn-success">Edit story</button>
+            <button type="submit" class="btn btn-warning">Edit story</button>
             <button class="btn btn-danger" @onclick="@Delete">Delete</button>
             <br/><br/>
             <PictureUpload id="@StoryId" />
@@ -116,7 +118,7 @@
         if (res.IsSuccessStatusCode)
         {
             Console.WriteLine(res);
-            nav.NavigateTo($"/trips");
+            nav.NavigateTo($"/trip/edit/{sDTO.TripId}");
         }
         else
         {
