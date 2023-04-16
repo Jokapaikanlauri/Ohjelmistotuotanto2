@@ -5,6 +5,7 @@
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
+@inject NavigationManager nav
 
 
 <p role="status">Current trip count: @trips</p>
@@ -18,6 +19,10 @@
                 <li>Trip start: @t.DatumStart</li>
                 <li>Trip end: @t.DatumEnd</li>
                 <li>Trip stories: @t.Stories</li>
+                <br/>
+                <li>
+                    <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit</button>
+                </li>
                 <TripStoryList tripId="@t.TripId" />
             </ul>
         </TripItem>
