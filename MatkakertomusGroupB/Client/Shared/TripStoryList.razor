@@ -6,7 +6,8 @@
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 
-<p role="status">Current story count: @stories</p>
+<br />
+<h6>Current story count: @stories</h6>
 
 @if (list != null)
 {
@@ -20,13 +21,12 @@
                 <StoryPictureList storyId=@s.StoryId />
             </ul>
         </StoryItem>
-        <br />
     }
 } 
 
 @code {
     [Parameter]
-    public int tripId { get; set; }
+    public int? tripId { get; set; }
 
     private int stories = 0;
     private List<Story>? list = null;

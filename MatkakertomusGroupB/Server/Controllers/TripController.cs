@@ -155,6 +155,34 @@ namespace MatkakertomusGroupB.Server.Controllers
             return NoContent();
         }
 
+        private List<Trip> TripDTOListToTripList (List<TripDTO> tripDTOList) 
+        {
+            List<Trip> tripList = new List<Trip>();
+            foreach (TripDTO tripDTO in tripDTOList) tripList.Add(TripDTOtoTrip(tripDTO));
+
+            return tripList;
+        }
+
+        private List<TripDTO> TripListToTripDTOList (List<Trip> tripList)
+        {
+            List<TripDTO> tripDTOList = new List<TripDTO>();
+            foreach (Trip trip in tripList) tripDTOList.Add(TripToTripDTO(trip));
+
+            return tripDTOList;
+        }
+
+        private TripDTO TripToTripDTO (Trip trip)
+        {
+            TripDTO tripDTO = new TripDTO();
+            tripDTO.TripId = trip.TripId;
+            tripDTO.TravellerId = trip.TravellerId;
+            tripDTO.DatumStart = trip.DatumStart;
+            tripDTO.DatumEnd = trip.DatumEnd;
+            tripDTO.Private = trip.Private;
+
+            return tripDTO;
+        }
+
         private Trip TripDTOtoTrip(TripDTO tripDTO)
         {
             //Convert DTO to Trip

@@ -58,9 +58,9 @@ namespace MatkakertomusGroupB.Server.Controllers
         }
 
         // Get pictures by story id
-        // GET: api/Picture/story/5
+        // GET: api/Picture/s5
         [HttpGet("story/{id}")]
-        public async Task<ActionResult<IEnumerable<Picture>>> GetStoryPictures(int id)
+        public async Task<ActionResult<IEnumerable<PictureDTO>>> GetStoryPictures(int id)
         {
             if (_context.Pictures == null)
             {
@@ -172,6 +172,42 @@ namespace MatkakertomusGroupB.Server.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        public List<Picture> PictureDTOListToPictureList(List<PictureDTO> pictureDTOList) 
+        {
+            List<Picture> pictureList = new List<Picture>();
+            foreach (PictureDTO pictureDTO in pictureDTOList) pictureList.Add(PictureDTOToPicture(pictureDTO));
+            
+            return pictureList;
+        }
+
+        public List<PictureDTO> PictureListToPictureDTOList(List<Picture> pictureList) 
+        {
+            List<PictureDTO> pictureDTOList = new List<PictureDTO>();
+            foreach(Picture picture in pictureList) pictureDTOList.Add(PictureToPictureDTO(picture));
+
+            return pictureDTOList;
+        }
+
+        public Picture PictureDTOToPicture(PictureDTO pictureDTO)
+        {
+            Picture picture = new Picture();
+            if (pictureDTO.PictureId != null) picture.PictureId = Convert.ToInt32(pictureDTO.PictureId);
+            if (pictureDTO.StoryId != null) picture.StoryId = Convert.ToInt32(pictureDTO.StoryId);
+            pictureDTO.Image = picture.Image;
+
+            return picture;
+        }
+
+        public PictureDTO PictureToPictureDTO(Picture picture)
+        {
+            PictureDTO pictureDTO = new PictureDTO();
+            pictureDTO.PictureId = picture.PictureId;
+            pictureDTO.StoryId = picture.StoryId;
+            pictureDTO.Image = picture.Image;
+
+            return pictureDTO;
         }
 
 

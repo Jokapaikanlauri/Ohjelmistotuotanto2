@@ -19,33 +19,33 @@ namespace MatkakertomusGroupB.Server.Controllers
     public class StoryController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-		private readonly ILogger<StoryController> _logger;
+        private readonly ILogger<StoryController> _logger;
 
-		public StoryController(ApplicationDbContext context, ILogger<StoryController> logger)
-		{
-			_context = context;
-			_logger = logger;
-		}
-
-		// GET: api/Story
-		[HttpGet]
-        public async Task<ActionResult<IEnumerable<Story>>> GetStories()
+        public StoryController(ApplicationDbContext context, ILogger<StoryController> logger)
         {
-          if (_context.Stories == null)
-          {
-              return NotFound();
-          }
-            return await _context.Stories.ToListAsync();
+            _context = context;
+            _logger = logger;
+        }
+
+        // GET: api/Story
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StoryDTO>>> GetStories()
+        {
+            if (_context.Stories == null)
+            {
+                return NotFound();
+            }
+            return StoryListToStoryDTOList(await _context.Stories.ToListAsync());
         }
 
         // GET: api/Story/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Story>> GetStory(int id)
+        public async Task<ActionResult<StoryDTO>> GetStory(int id)
         {
-          if (_context.Stories == null)
-          {
-              return NotFound();
-          }
+            if (_context.Stories == null)
+            {
+                return NotFound();
+            }
             var story = await _context.Stories.FindAsync(id);
 
             if (story == null)
@@ -53,13 +53,13 @@ namespace MatkakertomusGroupB.Server.Controllers
                 return NotFound();
             }
 
-            return story;
+            return StoryToStoryDTO(story);
         }
 
         // GET: api/Story/trip/5
         // Get storylist with trip id
         [HttpGet("trip/{id}")]
-        public async Task<ActionResult<IEnumerable<Story>>> GetTripStoryList(int id)
+        public async Task<ActionResult<IEnumerable<StoryDTO>>> GetTripStoryList(int id)
         {
             if (_context.Stories == null)
             {
@@ -73,18 +73,19 @@ namespace MatkakertomusGroupB.Server.Controllers
                 return NotFound();
             }
 
-            return list;
+            return StoryListToStoryDTOList(list);
         }
 
         // PUT: api/Story/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStory(int id, Story story)
+        public async Task<IActionResult> PutStory(int id, StoryDTO storyDTO)
         {
-            if (id != story.StoryId)
+            if (id != storyDTO.StoryId)
             {
                 return BadRequest();
             }
+            Story story = StoryDTOToStory(storyDTO);
 
             _context.Entry(story).State = EntityState.Modified;
 
@@ -110,12 +111,13 @@ namespace MatkakertomusGroupB.Server.Controllers
         // POST: api/Story
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Story>> PostStory(Story story)
+        public async Task<ActionResult<StoryDTO>> PostStory(StoryDTO storyDTO)
         {
-          if (_context.Stories == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Stories'  is null.");
-          }
+            if (_context.Stories == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Stories'  is null.");
+            }
+            Story story = StoryDTOToStory(storyDTO);
             _context.Stories.Add(story);
             await _context.SaveChangesAsync();
 
@@ -140,6 +142,44 @@ namespace MatkakertomusGroupB.Server.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        public List<Story> StoryDTOListToStoryList(List<StoryDTO> storyDTOList)
+        {
+            List<Story> storyList = new();
+            foreach (StoryDTO storyDTO in storyDTOList) storyList.Add(StoryDTOToStory(storyDTO));
+            return storyList;
+        }
+
+        public List<StoryDTO> StoryListToStoryDTOList(List<Story> storyList)
+        {
+            List<StoryDTO> storyDTOList = new();
+            foreach (Story story in storyList) storyDTOList.Add(StoryToStoryDTO(story));
+            return storyDTOList;
+        }
+
+        public Story StoryDTOToStory(StoryDTO storyDTO)
+        {
+            Story story = new Story();
+            story.StoryId = storyDTO.StoryId;
+            story.TripId = storyDTO.TripId;
+            story.DestinationId = storyDTO.DestinationId;
+            story.Description = storyDTO.Description;
+            story.Datum = storyDTO.Datum;
+
+            return story;
+        }
+
+        public StoryDTO StoryToStoryDTO(Story story)
+        {
+            StoryDTO storyDTO = new StoryDTO();
+            storyDTO.StoryId = story.StoryId;
+            storyDTO.TripId = story.TripId;
+            storyDTO.DestinationId = story.DestinationId;
+            storyDTO.Description = story.Description;
+            storyDTO.Datum = story.Datum;
+
+            return storyDTO;
         }
 
         private bool StoryExists(int id)
