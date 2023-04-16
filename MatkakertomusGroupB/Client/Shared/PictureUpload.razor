@@ -5,8 +5,12 @@
 @inject HttpClient Http
 
 
+<PageTitle>Upload story pictures</PageTitle>
 
-<h6>Upload pictures</h6>
+<h4>Upload pictures to your story</h4>
+<br />
+<p>Select up to 3 images to upload to your story.</p>
+<p>You can upload pictures to the story multiple times.</p>
 
 <!--This is how you upload multiple files-->
 <InputFile OnChange="@OnInputFileChange" multiple />
@@ -30,10 +34,16 @@ shows you the uploaded filenames and stored filenames-->
         }
     </ul>
 }
+@if (tooManyFiles)
+{
+    <h4>Upload max 3 files at a time.</h4>
+}
 
 @code {
     [Parameter]
-    public int id { get; set; }
+    public int? id { get; set; }
+
+    private bool tooManyFiles = false;
     private int maxAllowedFiles = 3;
     private long maxFileSize = 1024 * 1024 * 15; // 15Mt
     private List<string> fileNames = new();
@@ -48,36 +58,41 @@ shows you the uploaded filenames and stored filenames-->
             // here we will loop all the files that have been selected for upload
             // this won't be necessary for traveller and destination, they only have one picture each
             var files = args.GetMultipleFiles();
-            foreach (var file in files)
+            tooManyFiles = false;
+            if (args.FileCount < 4)
             {
-                // this shows the uploaded file info
-                loadedFiles.Add(file);
+                foreach (var file in files)
+                {
+                    // this shows the uploaded file info
+                    loadedFiles.Add(file);
 
-                // abbreviation fs for memorystream
-                await using MemoryStream fs = new MemoryStream();
+                    // abbreviation fs for memorystream
+                    await using MemoryStream fs = new MemoryStream();
 
-                // we'll open readstreamer for each individual file
-                await file.OpenReadStream(maxAllowedSize: 1048576).CopyToAsync(fs);
+                    // we'll open readstreamer for each individual file
+                    await file.OpenReadStream(maxAllowedSize: 1048576).CopyToAsync(fs);
 
-                // this will call GetBytes function to convert the streamed file into bytes
-                byte[] somBytes = GetBytes(fs);
+                    // this will call GetBytes function to convert the streamed file into bytes
+                    byte[] somBytes = GetBytes(fs);
 
-                // here we finally convert the returned bytes to base64string
-                base64String = Convert.ToBase64String(somBytes, 0, somBytes.Length);
+                    // here we finally convert the returned bytes to base64string
+                    base64String = Convert.ToBase64String(somBytes, 0, somBytes.Length);
 
-                // copypaste diagnostics from example, not necessary
-                System.Diagnostics.Debug.Print("Image 64: " + base64String + Environment.NewLine);
+                    // copypaste diagnostics from example, not necessary
+                    System.Diagnostics.Debug.Print("Image 64: " + base64String + Environment.NewLine);
 
-                // create new dto object to transfer data to API
-                PictureDTO pdto = new PictureDTO();
-                pdto.Image = base64String;
-                // storyid has been hardcoded for testing purposes here
-                pdto.StoryId = id;
+                    // create new dto object to transfer data to API
+                    PictureDTO pdto = new PictureDTO();
+                    pdto.Image = base64String;
+                    // storyid has been hardcoded for testing purposes here
+                    if (id != null) pdto.StoryId = Convert.ToInt32(id);
 
-                // post the dto to API, this again will not be needed for destination nor traveller
-                // for they will save the base64 encoded string in their own tables
-                await Http.PostAsJsonAsync("api/Picture/" + id, pdto);
+                    // post the dto to API, this again will not be needed for destination nor traveller
+                    // for they will save the base64 encoded string in their own tables
+                    await Http.PostAsJsonAsync("api/Picture/" + id, pdto);
+                }
             }
+            else tooManyFiles = true;
         }
 
         catch (Exception e)

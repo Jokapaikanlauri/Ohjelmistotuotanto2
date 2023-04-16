@@ -5,21 +5,28 @@
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
+@inject NavigationManager nav
 
 <br />
 <h6>Current story count: @stories</h6>
 
 @if (list != null)
 {
-    @foreach (Story s in list)
+    @foreach (StoryDTO s in list)
     {
         <StoryItem Story="@s">
             <ul>
                 <li>Date: @s.Datum.ToString("yyyy-MM-dd")</li>
                 <DestinationInfo destinationId=@s.DestinationId />
                 <li>Story: @s.Description</li>
-                <StoryPictureList storyId=@s.StoryId />
+                <button class="btn btn-success" @onclick=@ShowPictures>Show or hide trip pictures</button>
+                <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit trip</button>
+                @if (showPictures)
+                {
+                    <StoryPictureList storyId=@s.StoryId />                    
+                }
             </ul>
+            <br/>
         </StoryItem>
     }
 } 
@@ -29,13 +36,21 @@
     public int? tripId { get; set; }
 
     private int stories = 0;
-    private List<Story>? list = null;
+    private List<StoryDTO>? list = null;
+    private bool showPictures = false;
 
 
     protected override async Task OnInitializedAsync()
     {
         //Get list stories for a Trip
-        list = await Http.GetFromJsonAsync<List<Story>>($"/api/story/trip/{tripId}");
+        list = await Http.GetFromJsonAsync<List<StoryDTO>>($"/api/story/trip/{tripId}");
         if (list != null) stories = list.Count;
     }
+
+    void ShowPictures()
+    {
+        if (!showPictures) showPictures = true;
+        else showPictures = false;
+    }
+
 }

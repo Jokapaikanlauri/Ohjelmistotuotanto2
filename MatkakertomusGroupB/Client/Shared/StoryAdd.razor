@@ -27,7 +27,7 @@
             {
                 @foreach (DestinationDTO d in destinations) 
                 {
-                    <option value="@d.DestinationId">@d.Name</option>
+                    <option selected value="@d.DestinationId">@d.Name</option>
                 }
             }
             </InputSelect>
@@ -39,15 +39,11 @@
             <label>Tell your story: </label> <br />
             <InputTextArea @bind-Value="sDTO.Description" style="width:97%" />
             <br /><br />
-            <button type="submit" class="btn btn-success">Add trip</button>
+            <button type="submit" class="btn btn-success">Add story to your trip</button>
         </EditForm>
     </NewStory>
-    <p>Once you have added the story, you can add pictures below.</p>
-    <p>You can add as many pictures as you want, but only add 3 pictures at a time.</p>
-    @if (sDTO.StoryId != null)
-    {
-        <PictureUpload @id="@sDTO.StoryId" />
-    }
+    <p>Once you have added the story, you can add pictures.</p>
+
     @if (added)
     {
         <div class="alert alert-success fade-in" role="alert">
@@ -65,9 +61,9 @@
 
 @code {
     [Parameter]
-    public int? tripId { get; set; }
+    public int tripId { get; set; }
     public List<DestinationDTO>? destinations = null;
-    public StoryDTO? sDTO = new();
+    public StoryDTO sDTO = new();
     public bool added = false;
     public bool failed = false;
 
@@ -76,10 +72,14 @@
         //Get list of all destinations
         destinations = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination");
         sDTO.Datum = DateTime.Now;
+        DestinationDTO dest = destinations.Last<DestinationDTO>();
+        if (dest.DestinationId != null) sDTO.DestinationId = Convert.ToInt32(dest.DestinationId);
     }
 
     async Task Save()
     {
+        failed = false;
+        added = false;
         sDTO.TripId = tripId;
         //post a new story
         var res = await Http.PostAsJsonAsync<StoryDTO>($"/api/story", sDTO);

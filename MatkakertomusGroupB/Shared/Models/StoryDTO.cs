@@ -14,10 +14,10 @@ namespace MatkakertomusGroupB.Shared.Models
         public int? StoryId { get; set; }
 
         //FK
-        public int? TripId { get; set; }
+        public int TripId { get; set; }
 
         //FK
-        public int? DestinationId { get; set; }
+        public int DestinationId { get; set; }
 
 
         //Local Items
