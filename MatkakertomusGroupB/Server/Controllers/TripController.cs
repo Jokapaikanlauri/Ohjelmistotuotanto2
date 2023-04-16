@@ -80,12 +80,18 @@ namespace MatkakertomusGroupB.Server.Controllers
         // PUT: api/Trip/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTrip(int id, Trip trip)
+        public async Task<IActionResult> PutTrip(int id, TripDTO tripDTO)
         {
+
+            //Convert DTO to Trip
+            Trip trip = TripDTOtoTrip(tripDTO);
+            trip.TripId = id;
+
             if (id != trip.TripId)
             {
                 return BadRequest();
             }
+
 
             _context.Entry(trip).State = EntityState.Modified;
 
@@ -119,13 +125,7 @@ namespace MatkakertomusGroupB.Server.Controllers
             }
 
             //Convert DTO to Trip
-            Trip trip = new Trip
-            {
-                TravellerId = tripDTO.TravellerId,
-                DatumStart = tripDTO.DatumStart,
-                DatumEnd = tripDTO.DatumEnd,
-                Private = tripDTO.Private
-            };
+            Trip trip = TripDTOtoTrip(tripDTO);
 
             //Add trip
             _context.Trip.Add(trip);
@@ -153,6 +153,19 @@ namespace MatkakertomusGroupB.Server.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private Trip TripDTOtoTrip(TripDTO tripDTO)
+        {
+            //Convert DTO to Trip
+            Trip trip = new Trip
+            {
+                TravellerId = tripDTO.TravellerId,
+                DatumStart = tripDTO.DatumStart,
+                DatumEnd = tripDTO.DatumEnd,
+                Private = tripDTO.Private
+            };
+            return trip;
         }
 
         private bool TripExists(int id)

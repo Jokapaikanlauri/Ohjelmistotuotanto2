@@ -1,0 +1,98 @@
+﻿@page "/trip/edit/{TripId:int}"
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject NavigationManager nav
+
+
+<h3>Edit trip</h3>
+
+@if (@tDTO != null)
+{
+    <EditTrip>
+        <EditForm Model="@tDTO" OnValidSubmit="@Save">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <label>Start date:</label>
+            <br />
+            <InputDate @bind-Value="tDTO.DatumStart" />
+            <br />
+            <label>End date:</label>
+            <br />
+            <InputDate @bind-Value="tDTO.DatumEnd" />
+            <br />
+            <label>Check box if private: </label>
+            <InputCheckbox @bind-Value="tDTO.Private" />
+            <br />
+            <button type="submit" class="btn btn-success">Edit trip</button>
+            <button class="btn btn-danger" @onclick="@Delete">Delete</button>
+            <br />
+            <p>Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
+        </EditForm>
+    </EditTrip>
+}
+@if (edited)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        Trip was edited successfully!
+    </div>
+}
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        This is a failed alert—check it out!
+    </div>
+}
+@code {
+    [Parameter]
+    public int TripId { get; set; }
+
+    public TripDTO? tDTO = new();
+    public bool edited = false;
+    public bool failed = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Get the trip to edit
+        tDTO = await Http.GetFromJsonAsync<TripDTO>($"/api/trip/{TripId}");
+    }
+
+    async Task Save()
+    {
+        tDTO.TripId = TripId;
+        //post a new trip
+        var res = await Http.PutAsJsonAsync<TripDTO>($"/api/trip/{TripId}", tDTO);
+        if (res.IsSuccessStatusCode)
+        {
+            edited = true;
+            Console.WriteLine(res);
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+        StateHasChanged();
+    }
+
+    async Task Delete()
+    {
+        var res = await Http.DeleteAsync($"/api/trip/{TripId}");
+        if (res.IsSuccessStatusCode)
+        {
+            Console.WriteLine(res);
+            nav.NavigateTo($"/trips");
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+    }
+}
