@@ -27,7 +27,8 @@ namespace MatkakertomusGroupB.Server.Controllers
 			_logger = logger;
 		}
 
-		// GET: api/Destination
+        // GET: api/Destination
+        [AllowAnonymous]
 		[HttpGet]
         public async Task<ActionResult<IEnumerable<Destination>>> GetDestinations()
         {
@@ -38,6 +39,7 @@ namespace MatkakertomusGroupB.Server.Controllers
             return await _context.Destinations.ToListAsync();
         }
 
+        [AllowAnonymous]
         // GET: api/Destination/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Destination>> GetDestination(int id)

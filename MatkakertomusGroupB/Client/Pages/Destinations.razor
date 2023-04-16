@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using MatkakertomusGroupB.Shared
-
+@inject IHttpClientFactory ClientFactory
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
@@ -21,7 +21,11 @@
     toimii vain jos matkakohde on käyttäjän lisäämä
 -->
 
-<div class="left">
+
+
+<AuthorizeView>
+    <Authorized>
+        <div class="left">
     <h2>List of travels:</h2>
     <br />
 
@@ -47,14 +51,32 @@
         }
     }
 </div>
-
-<AuthorizeView>
-    <Authorized>
         <div class="right">
             <DestinationAdd id="@userId" />
         </div>
     </Authorized>
     <NotAuthorized>
+        <div class="left">
+    <h2>List of travels:</h2>
+    <br />
+
+    @if (list != null)
+    {
+        @foreach (Destination d in list)
+        {
+            <DestinationItem Destination="@d">
+                <ul>
+                    <li>Name: @d.Name</li>
+                    <li>Country: @d.Country</li>
+                    <li>Municipality: @d.Municipality</li>
+                    <li>Description: @d.Description</li>
+                    <li>Image: @d.Image</li>
+                </ul>
+            </DestinationItem>
+            <br />
+        }
+    }
+</div>
         <div>You are a public user.</div>
     </NotAuthorized>
 </AuthorizeView>
@@ -76,7 +98,8 @@
         //Assing name to variable for future operations
         name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
 
-        list = await Http.GetFromJsonAsync<List<Destination>>($"/api/destination");
+        var client = ClientFactory.CreateClient("public");
+        list = await client.GetFromJsonAsync<List<Destination>>($"/api/destination");
 
         //var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
         if (name != null)
