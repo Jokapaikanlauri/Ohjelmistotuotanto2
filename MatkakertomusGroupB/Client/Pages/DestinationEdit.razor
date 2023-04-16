@@ -43,10 +43,16 @@
             <label>Image</label>
             <InputFile OnChange="@OnInputFileChange" style="max-width:100%" multiple />
             <br />
+
+            @if (dDTO.Image != null)
+            {
+                <img src="data:image/png;base64,@dDTO.Image" style="max-width:40%" />
+
+            }
             <br />
             <br />
 
-            <button type="submit" class="btn btn-success" >Save edit</button>
+            <button type="submit" class="btn btn-success">Save edit</button>
             <button class="btn btn-danger" @onclick="@Delete">Delete</button>
             <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/destinations")'>Back to destinations</button>
             
@@ -78,11 +84,14 @@
     public int DestinationId { get; set; }
 
     public DestinationDTO? dDTO = new();
+
+    private List<string> fileNames = new();
+    private List<IBrowserFile> loadedFiles = new();
+
     public int id = 1;
     private int maxAllowedFiles = 3;
     private long maxFileSize = 1024 * 1024 * 15; // 15Mt
-    private List<string> fileNames = new();
-    private List<IBrowserFile> loadedFiles = new();
+
     public bool edited = false;
     public bool failed = false;
     public bool deleted = false;
@@ -137,9 +146,6 @@
             var files = args.GetMultipleFiles();
             foreach (var file in files)
             {
-                // this shows the uploaded file info
-                loadedFiles.Add(file);
-
                 // abbreviation fs for memorystream
                 await using MemoryStream fs = new MemoryStream();
 
@@ -151,20 +157,9 @@
 
                 // here we finally convert the returned bytes to base64string
                 base64String = Convert.ToBase64String(somBytes, 0, somBytes.Length);
-
-                // copypaste diagnostics from example, not necessary
-                System.Diagnostics.Debug.Print("Image 64: " + base64String + Environment.NewLine);
-
-                // create new dto object to transfer data to API
-                PictureDTO pdto = new PictureDTO();
-                pdto.Image = base64String;
-                // storyid has been hardcoded for testing purposes here
-                pdto.StoryId = id;
-
-                // post the dto to API, this again will not be needed for destination nor traveller
-                // for they will save the base64 encoded string in their own tables
-                await Http.PostAsJsonAsync("api/Picture/" + id, pdto);
+                dDTO.Image = base64String;
             }
+
         }
 
         catch (Exception e)
