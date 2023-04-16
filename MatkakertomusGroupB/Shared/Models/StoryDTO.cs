@@ -23,5 +23,20 @@ namespace MatkakertomusGroupB.Shared.Models
         //Local Items
         public string Description { get; set; }
         public DateTime Datum { get; set; }
+
+        public override string? ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(StoryId.ToString());
+            sb.Append(',');
+            sb.Append(TripId.ToString());
+            sb.Append(',');
+            sb.Append(DestinationId.ToString());
+            sb.Append(',');
+            sb.Append(Description);
+            sb.Append(',');
+            sb.Append(Datum.ToString());
+            return sb.ToString();
+        }
     }
 }

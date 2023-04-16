@@ -174,7 +174,7 @@ namespace MatkakertomusGroupB.Server.Controllers
             return NoContent();
         }
 
-        public List<Picture> PictureDTOListToPictureList(List<PictureDTO> pictureDTOList) 
+        private List<Picture> PictureDTOListToPictureList(List<PictureDTO> pictureDTOList) 
         {
             List<Picture> pictureList = new List<Picture>();
             foreach (PictureDTO pictureDTO in pictureDTOList) pictureList.Add(PictureDTOToPicture(pictureDTO));
@@ -182,7 +182,7 @@ namespace MatkakertomusGroupB.Server.Controllers
             return pictureList;
         }
 
-        public List<PictureDTO> PictureListToPictureDTOList(List<Picture> pictureList) 
+        private List<PictureDTO> PictureListToPictureDTOList(List<Picture> pictureList) 
         {
             List<PictureDTO> pictureDTOList = new List<PictureDTO>();
             foreach(Picture picture in pictureList) pictureDTOList.Add(PictureToPictureDTO(picture));
@@ -190,7 +190,7 @@ namespace MatkakertomusGroupB.Server.Controllers
             return pictureDTOList;
         }
 
-        public Picture PictureDTOToPicture(PictureDTO pictureDTO)
+        private Picture PictureDTOToPicture(PictureDTO pictureDTO)
         {
             Picture picture = new Picture();
             if (pictureDTO.PictureId != null) picture.PictureId = Convert.ToInt32(pictureDTO.PictureId);
@@ -200,7 +200,7 @@ namespace MatkakertomusGroupB.Server.Controllers
             return picture;
         }
 
-        public PictureDTO PictureToPictureDTO(Picture picture)
+        private PictureDTO PictureToPictureDTO(Picture picture)
         {
             PictureDTO pictureDTO = new PictureDTO();
             pictureDTO.PictureId = picture.PictureId;

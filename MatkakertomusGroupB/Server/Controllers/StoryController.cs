@@ -145,21 +145,21 @@ namespace MatkakertomusGroupB.Server.Controllers
             return NoContent();
         }
 
-        public List<Story> StoryDTOListToStoryList(List<StoryDTO> storyDTOList)
+        private List<Story> StoryDTOListToStoryList(List<StoryDTO> storyDTOList)
         {
             List<Story> storyList = new();
             foreach (StoryDTO storyDTO in storyDTOList) storyList.Add(StoryDTOToStory(storyDTO));
             return storyList;
         }
 
-        public List<StoryDTO> StoryListToStoryDTOList(List<Story> storyList)
+        private List<StoryDTO> StoryListToStoryDTOList(List<Story> storyList)
         {
             List<StoryDTO> storyDTOList = new();
             foreach (Story story in storyList) storyDTOList.Add(StoryToStoryDTO(story));
             return storyDTOList;
         }
 
-        public Story StoryDTOToStory(StoryDTO storyDTO)
+        private Story StoryDTOToStory(StoryDTO storyDTO)
         {
             Story story = new Story();
             if (storyDTO.StoryId != null) story.StoryId = Convert.ToInt32(storyDTO.StoryId);
@@ -171,7 +171,7 @@ namespace MatkakertomusGroupB.Server.Controllers
             return story;
         }
 
-        public StoryDTO StoryToStoryDTO(Story story)
+        private StoryDTO StoryToStoryDTO(Story story)
         {
             StoryDTO storyDTO = new StoryDTO();
             storyDTO.StoryId = story.StoryId;
