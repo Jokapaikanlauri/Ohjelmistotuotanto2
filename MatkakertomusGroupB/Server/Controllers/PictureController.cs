@@ -74,7 +74,7 @@ namespace MatkakertomusGroupB.Server.Controllers
                 return NotFound();
             }
 
-            return list;
+            return PictureListToPictureDTOList(list);
         }
 
         // PUT: api/Picture/5

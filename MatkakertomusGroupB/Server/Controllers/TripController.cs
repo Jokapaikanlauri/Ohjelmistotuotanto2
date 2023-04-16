@@ -30,13 +30,13 @@ namespace MatkakertomusGroupB.Server.Controllers
         // GET: api/Trip 
         // this gets all the public trips
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Trip>>> GetTrip()
+        public async Task<ActionResult<IEnumerable<TripDTO>>> GetTrip()
         {
             if (_context.Trip == null)
             {
                 return NotFound();
             }
-            return await _context.Trip.Where(x => x.Private == false).ToListAsync();
+            return TripListToTripDTOList(await _context.Trip.Where(x => x.Private == false).ToListAsync());
         }
 
         // GET: api/Trip/5

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MatkakertomusGroupB.Server.Data;
 using MatkakertomusGroupB.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace MatkakertomusGroupB.Server.Controllers
 {
@@ -161,9 +162,9 @@ namespace MatkakertomusGroupB.Server.Controllers
         public Story StoryDTOToStory(StoryDTO storyDTO)
         {
             Story story = new Story();
-            story.StoryId = storyDTO.StoryId;
-            story.TripId = storyDTO.TripId;
-            story.DestinationId = storyDTO.DestinationId;
+            if (storyDTO.StoryId != null) story.StoryId = Convert.ToInt32(storyDTO.StoryId);
+            if (storyDTO.TripId != null) story.TripId = Convert.ToInt32(storyDTO.TripId);
+            if (storyDTO.DestinationId != null) story.DestinationId = Convert.ToInt32(storyDTO.DestinationId);
             story.Description = storyDTO.Description;
             story.Datum = storyDTO.Datum;
 
