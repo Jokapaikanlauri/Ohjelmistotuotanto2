@@ -87,11 +87,13 @@
 
     private List<string> fileNames = new();
     private List<IBrowserFile> loadedFiles = new();
+    public List<DestinationDTO>? search = null;
 
     public int id = 1;
     private int maxAllowedFiles = 3;
     private long maxFileSize = 1024 * 1024 * 15; // 15Mt
 
+    public bool nameExists = false;
     public bool edited = false;
     public bool failed = false;
     public bool deleted = false;

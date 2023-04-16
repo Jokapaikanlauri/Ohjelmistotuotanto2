@@ -61,7 +61,12 @@
         Destination was added successfully!
     </div>
 }
-
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        It's not a destination if it does not have a name!
+    </div>
+}
 @if (nameExists)
 {
     <div class="alert alert-danger fade-in" role="alert">
@@ -111,6 +116,7 @@
         }
         else
         {
+
             failed = true;
             Console.WriteLine(res);
         }

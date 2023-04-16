@@ -11,11 +11,10 @@
 
 
 <PageTitle>Destinations</PageTitle>
-
-
 <head>
-    <link href="Pages/Destinations.razor.css" />
+<link rel="icon" type="image/x-icon" href="globe.png" />
 </head>
+
 <h1>Destinations</h1>
 <!--Tee tähän forms add buttonin taakse ja lisätyt matkakohteet näytetään tällä sivulla, poista ominaisuus
     toimii vain jos matkakohde on käyttäjän lisäämä
@@ -104,8 +103,6 @@
     private string? userId = null;
     private List<Destination>? list = null;
     public List<Picture>? pics;
-
-
 
 
     protected override async Task OnInitializedAsync()
