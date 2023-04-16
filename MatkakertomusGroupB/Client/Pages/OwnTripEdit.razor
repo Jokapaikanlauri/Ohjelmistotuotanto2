@@ -29,6 +29,7 @@
             <label>Check box if private: </label>
             <InputCheckbox @bind-Value="tDTO.Private" />
             <br />
+            <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
             <button type="submit" class="btn btn-success">Edit trip</button>
             <button class="btn btn-danger" @onclick="@Delete">Delete</button>
             <br />
