@@ -59,13 +59,14 @@ namespace MatkakertomusGroupB.Server.Controllers
         // PUT: api/Destination/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDestination(int id, Destination destination)
+        public async Task<IActionResult> PutDestination(int id, DestinationDTO destinationDTO)
         {
-            if (id != destination.DestinationId)
+            Destination destination = DestinationDTOtoDestination(destinationDTO);
+            if (id != destinationDTO.DestinationId)
             {
                 return BadRequest();
             }
-
+            
             _context.Entry(destination).State = EntityState.Modified;
 
             try
@@ -92,19 +93,13 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Destination>> PostDestination(DestinationDTO destinationDTO)
         {
-          if (_context.Destinations == null)
+           Destination destination = DestinationDTOtoDestination(destinationDTO);
+            if (_context.Destinations == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Destinations'  is null.");
           }
 
-            Destination destination = new Destination
-            {
-                Name = destinationDTO.Name,
-                Country = destinationDTO.Country,
-                Municipality = destinationDTO.Municipality,
-                Description = destinationDTO.Description,
-                Image = destinationDTO.Image
-            };
+
             _context.Destinations.Add(destination);
             
             await _context.SaveChangesAsync();
@@ -131,7 +126,20 @@ namespace MatkakertomusGroupB.Server.Controllers
 
             return NoContent();
         }
-
+        private Destination DestinationDTOtoDestination(DestinationDTO destinationDTO)
+        {
+           
+            Destination destination= new Destination
+            {
+                DestinationId = destinationDTO.DestinationId,
+                Name = destinationDTO.Name,
+                Country = destinationDTO.Country,
+                Municipality = destinationDTO.Municipality,
+                Description = destinationDTO.Description,
+                Image = destinationDTO.Image
+            };
+            return destination;
+        }
         private bool DestinationExists(int id)
         {
             return (_context.Destinations?.Any(e => e.DestinationId == id)).GetValueOrDefault();

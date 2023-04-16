@@ -21,22 +21,22 @@
                 <ValidationSummary />
         <label>Name</label>
         <br />
-        <InputText @bind-Value="destination.Name" placeholder="Name.." />
+                <InputText @bind-Value="destination.Name" placeholder="Name.." style="max-width:100%" />
         <br />
         <label>Country</label>
         <br />
-        <InputText @bind-Value="destination.Country" placeholder="Country.." />
+                <InputText @bind-Value="destination.Country" placeholder="Country.." style="max-width:100%" />
         <br />
         <label>Municipality</label>
         <br />
-        <InputText @bind-Value="destination.Municipality" placeholder="Municipality.." />
+                <InputText @bind-Value="destination.Municipality" placeholder="Municipality.." style="max-width:100%" />
         <br />
         <label>Description</label>
         <br />
-        <InputText @bind-Value="destination.Description" placeholder="Description.." />
+                <InputTextArea @bind-Value="destination.Description" placeholder="Description.." style="max-width:100%" />
         <br />
         <label>Image</label>
-        <InputFile OnChange="@OnInputFileChange" multiple />
+                <InputFile OnChange="@OnInputFileChange" style="max-width:100%" multiple />
         <br />
         <br />
 

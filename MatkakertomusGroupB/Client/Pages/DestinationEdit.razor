@@ -1,0 +1,119 @@
+﻿@page "/destination/edit/{DestinationId:int}"
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject NavigationManager nav
+
+<h3>Destination Edit</h3>
+
+@if (@dDTO != null)
+{
+    <EditDestination>
+        <EditForm Model="@dDTO" OnValidSubmit="@Save">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <label>Name</label>
+            <br />
+            <InputText @bind-Value="dDTO.Name" placeholder="Name.." />
+            <br />
+            <br />
+            <label>Country</label>
+            <br />
+            <InputText @bind-Value="dDTO.Country" placeholder="Country.." />
+            <br />
+            <br />
+            <label>Municipality</label>
+            <br />
+            <InputText @bind-Value="dDTO.Municipality" placeholder="Municipality.." />
+            <br />
+            <br />
+            <label>Description</label>
+            <br />
+            <InputTextArea @bind-Value="dDTO.Description" placeholder="Description.." style="width:20%"/>
+            <br />
+            <br />
+
+            <label>Image</label>
+
+            <br />
+            <br />
+
+            <button type="submit" class="btn btn-success" >Save edit</button>
+            <button class="btn btn-danger" @onclick="@Delete">Delete</button>
+        </EditForm>
+    </EditDestination>
+} 
+
+@if (edited)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        Destination was edited successfully!
+    </div>
+}
+@if (deleted)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        Destination was deleted successfully!
+    </div>
+}
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        Unexpected error while editing!
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int DestinationId { get; set; }
+
+    public DestinationDTO? dDTO = new();
+
+    public bool edited = false;
+    public bool failed = false;
+    public bool deleted = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        dDTO = await Http.GetFromJsonAsync<DestinationDTO>($"/api/destination/{DestinationId}");
+    }
+
+    async Task Save()
+    {
+        dDTO.DestinationId = DestinationId;
+        var res = await Http.PutAsJsonAsync<DestinationDTO>($"/api/destination/{DestinationId}", dDTO);
+        if (res.IsSuccessStatusCode)
+        {
+            edited = true;
+            Console.WriteLine(res);
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+        StateHasChanged();
+    }
+
+    async Task Delete()
+    {
+        var res = await Http.DeleteAsync($"/api/destination/{DestinationId}");
+        if (res.IsSuccessStatusCode)
+        {
+            Console.WriteLine(res);
+            nav.NavigateTo($"/destinations");
+            deleted = true;
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+    }
+}

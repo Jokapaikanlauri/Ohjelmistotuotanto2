@@ -7,7 +7,7 @@
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
-
+@inject NavigationManager nav
 
 
 <PageTitle>Destinations</PageTitle>
@@ -36,18 +36,16 @@
                     <li>Municipality: @d.Municipality</li>
                     <li>Description: @d.Description</li>
                     <li>Image: @d.Image</li>
+
                     @if (@d.Stories == null)
                     {
-                        <button type="checkbox" class="btn btn-danger">Delete</button>
+                        <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>Edit</button>
                     }
                 </ul>
-
             </DestinationItem>
             <br />
         }
     }
-
-
 </div>
 
 <AuthorizeView>
