@@ -16,6 +16,9 @@
     </div>
     <div class="addDetails">
 
+        <EditForm Model="@destination" OnValidSubmit="@addDestination">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
         <label>Name</label>
         <br />
         <InputText @bind-Value="destination.Name" placeholder="Name.." />
@@ -37,7 +40,8 @@
         <br />
         <br />
 
-        <button @onclick="()=>addDestination()">Add</button>
+        <button type="submit" class="btn btn-success">Add</button>
+        </EditForm>
     </div>
 </NewDestination>
 </div>
