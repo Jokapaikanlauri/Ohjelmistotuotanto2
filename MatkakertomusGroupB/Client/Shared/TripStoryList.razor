@@ -15,7 +15,7 @@
     {
         <StoryItem Story="@s">
             <ul>
-                <li>Date: @s.Datum</li>
+                <li>Date: @s.Datum.ToString("yyyy-MM-dd")</li>
                 <DestinationInfo destinationId=@s.DestinationId />
                 <li>Story: @s.Description</li>
                 <StoryPictureList storyId=@s.StoryId />

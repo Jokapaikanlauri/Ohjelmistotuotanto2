@@ -30,19 +30,19 @@ namespace MatkakertomusGroupB.Server.Controllers
         // GET: api/Destination
         [AllowAnonymous]
 		[HttpGet]
-        public async Task<ActionResult<IEnumerable<Destination>>> GetDestinations()
+        public async Task<ActionResult<IEnumerable<DestinationDTO>>> GetDestinations()
         {
           if (_context.Destinations == null)
           {
               return NotFound();
           }
-            return await _context.Destinations.ToListAsync();
+            return DestinationListToDestinationDTOList(await _context.Destinations.ToListAsync());
         }
 
         [AllowAnonymous]
         // GET: api/Destination/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Destination>> GetDestination(int id)
+        public async Task<ActionResult<DestinationDTO>> GetDestination(int id)
         {
           if (_context.Destinations == null)
           {
@@ -55,7 +55,7 @@ namespace MatkakertomusGroupB.Server.Controllers
                 return NotFound();
             }
 
-            return destination;
+            return DestinationToDestinationDTO(destination);
         }
 
         // PUT: api/Destination/5
@@ -63,7 +63,7 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDestination(int id, DestinationDTO destinationDTO)
         {
-            Destination destination = DestinationDTOtoDestination(destinationDTO);
+            Destination destination = DestinationDTOToDestination(destinationDTO);
             if (id != destinationDTO.DestinationId)
             {
                 return BadRequest();
@@ -95,7 +95,7 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Destination>> PostDestination(DestinationDTO destinationDTO)
         {
-           Destination destination = DestinationDTOtoDestination(destinationDTO);
+           Destination destination = DestinationDTOToDestination(destinationDTO);
             if (_context.Destinations == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Destinations'  is null.");
@@ -128,7 +128,23 @@ namespace MatkakertomusGroupB.Server.Controllers
 
             return NoContent();
         }
-        private Destination DestinationDTOtoDestination(DestinationDTO destinationDTO)
+
+        private List<Destination> DestinationDTOListToDestinationList(List<DestinationDTO> destinationDTOList)
+        {
+            List<Destination> destinationList = new List<Destination>();
+            foreach (DestinationDTO destinationDTO in destinationDTOList) destinationList.Add(DestinationDTOToDestination(destinationDTO));
+
+            return destinationList; 
+        }
+        private List<DestinationDTO> DestinationListToDestinationDTOList(List<Destination> destinationList)
+        {
+            List<DestinationDTO> destinationDTOList = new List<DestinationDTO>();
+            foreach (Destination destination in destinationList) destinationDTOList.Add(DestinationToDestinationDTO(destination));
+
+            return destinationDTOList;
+        }
+
+        private Destination DestinationDTOToDestination(DestinationDTO destinationDTO)
         {
            
             Destination destination= new Destination
@@ -141,6 +157,19 @@ namespace MatkakertomusGroupB.Server.Controllers
                 Image = destinationDTO.Image
             };
             return destination;
+        }
+
+        private DestinationDTO DestinationToDestinationDTO(Destination destination)
+        {
+            DestinationDTO destinationDTO = new DestinationDTO();
+            destinationDTO.DestinationId = destination.DestinationId;
+            destinationDTO.Name = destination.Name;
+            destinationDTO.Country = destination.Country;
+            destinationDTO.Description = destination.Description;
+            destinationDTO.Image = destination.Image;
+            destinationDTO.Municipality = destination.Municipality;
+
+            return destinationDTO;
         }
         private bool DestinationExists(int id)
         {

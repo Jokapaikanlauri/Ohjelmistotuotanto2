@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\OwnTrips.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\OwnTrips.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\travel.jpg" />
   </ItemGroup>
 
