@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using System.Text.RegularExpressions;
 using AngleSharp.Dom;
+using NUnit.Framework;
 
 namespace MatkakertomusGroupB.Tests
 {
@@ -83,7 +84,7 @@ namespace MatkakertomusGroupB.Tests
 			_webServerProcess.Kill();
 		}
 
-		[Test, Order(1), Description("Test description here")]
+		[Test, Order(1), Description("Test public user controls")]
 		public void Public_User()
 		{
 			//Navigate to specific URL
@@ -210,17 +211,15 @@ namespace MatkakertomusGroupB.Tests
             Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu destinations link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
             //Group Trips
-            actual = _webDriver.FindElement(By.PartialLinkText("Trips")).GetAttribute("href").ToString();
-            expected = "trips";
-            Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+            actual = _webDriver.FindElement(By.PartialLinkText("Group Trips")).GetAttribute("href").ToString();
+            expected = "grouptrips";
+            Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu group trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
             //Own Trips
-            /*
             actual = _webDriver.FindElement(By.PartialLinkText("My Trips")).GetAttribute("href").ToString();
-            expected = "mytrips";
+            expected = "trips";
             Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-			*/
-
+			
             //My Information
             actual = _webDriver.FindElement(By.PartialLinkText("My Information")).GetAttribute("href").ToString();
             expected = "authentication/profile";
@@ -232,10 +231,10 @@ namespace MatkakertomusGroupB.Tests
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu travellers link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
 
-			//Verify that nav menu has only 5 links
+			//Verify that nav menu has only 6 links
 			var navmenuHTML = _webDriver.FindElement(By.Id("navmenu-auth")).GetAttribute("innerHTML");
             int regexMatches = Regex.Matches(navmenuHTML, "<a href").Count();
-            Assert.True(regexMatches == 5, $"Expected nav menu to contain 5 links, but it contained {regexMatches} links.");
+            Assert.True(regexMatches == 6, $"Expected nav menu to contain 6 links, but it contained {regexMatches} links.");
 
 
 
