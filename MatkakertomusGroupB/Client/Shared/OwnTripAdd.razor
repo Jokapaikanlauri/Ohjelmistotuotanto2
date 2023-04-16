@@ -5,6 +5,7 @@
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
+@inject NavigationManager nav
 
 <div class="right">
     <h4>Add new trip</h4>
@@ -62,6 +63,7 @@
         {
             added = true;
             Console.WriteLine(res);
+
         }
         else
         {

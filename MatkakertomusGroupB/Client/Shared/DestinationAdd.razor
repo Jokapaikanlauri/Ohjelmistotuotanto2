@@ -61,6 +61,19 @@
         Destination was added successfully!
     </div>
 }
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        It's not a destination if it does not have a name!
+    </div>
+}
+@if (nameExists)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        Destination with this name already exists!
+    </div>
+}
+
 @code {
     [Parameter]
     public string? id { get; set; }
@@ -70,16 +83,29 @@
     private List<string> fileNames = new();
     private List<UploadResult> uploadResults = new();
     private List<IBrowserFile> loadedFiles = new();
+    public List<DestinationDTO>? search = null;
+
 
     public int i = 1;
     private int maxAllowedFiles = 1;
     private long maxFileSize = 1024 * 1024 * 8; // 8Mt
 
+    public bool nameExists = false;
     public bool added = false;
     public bool failed = false;
 
     async Task addDestination()
     {
+        search = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination/");
+
+        foreach (DestinationDTO d in search)
+        {
+            if(d.Name == destination.Name)
+            {
+                nameExists = true;
+                return;
+            }
+        }
 
         var res = await Http.PostAsJsonAsync<DestinationDTO>($"/api/destination", destination);
         if (res.IsSuccessStatusCode)
@@ -90,6 +116,7 @@
         }
         else
         {
+
             failed = true;
             Console.WriteLine(res);
         }
