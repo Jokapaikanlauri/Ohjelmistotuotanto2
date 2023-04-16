@@ -5,6 +5,8 @@ using WebDriverManager;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System.Diagnostics;
 using OpenQA.Selenium.Support.UI;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace MatkakertomusGroupB.Tests
 {
@@ -19,13 +21,9 @@ namespace MatkakertomusGroupB.Tests
 	public class Tests
 	{
 		private IWebDriver _webDriver;
-		private string _baseUrl { get; set; } = "https://localhost:7012";
-		//private CustomWebApplicationFactory<Program> _factory;
-		//private HttpClient _client;
-
-		private IWebDriver driver;
 		private Process _webServerProcess;
-
+		private string _baseUrl { get; set; } = "https://localhost:7012";
+		
 
 		[SetUp]
 		public void SetUp()
@@ -83,16 +81,37 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 		[Test, Order(1), Description("Test description here")]
-		public void Public()
+		public void Public_User()
 		{
 			//Navigate to specifi URL
 			_webDriver.Navigate().GoToUrl(_baseUrl);
 
+
+			//Test the Welcome page contents
 			//Wait until a specific element is found(timeout defined in global ImplicitWait
-			_webDriver.FindElement(By.Id("index-razor"));
+			_webDriver.FindElement(By.Id("index-razor-public"));
 			//Or wait a specific time
 			//Thread.Sleep(5000);
 
+			//Index must contain a welcome text
+			string indexText = _webDriver.FindElement(By.Id("index-razor-public")).Text.ToString();
+			string expected = "Welcome";
+			Assert.True(indexText.Contains(expected), $"Expected index to contain \"{expected}\", but it wasn't found: \"{indexText}\"");
+
+			//Index must contain a welcoming picture
+			var welcomepic = _webDriver.FindElement(By.Id("kuva"));
+			Assert.AreEqual(true, welcomepic.Displayed);
+
+
+
+
+
+
+			//Test that Login and Logout exits
+			//Test Nav menu contents
+
+			//Test Destinations browsing
+			//destinations-list-auth
 
 
 
@@ -108,9 +127,9 @@ namespace MatkakertomusGroupB.Tests
 			*/
 
 			// Check that the page title contains "Home Page"
-			var pageTitle = _webDriver.Title;
+			/*var pageTitle = _webDriver.Title;
 			string expected = "Home Page";
-			Assert.True(pageTitle.Contains(expected), $"Expected page title to contain \"{expected}\", but actual title is \"{pageTitle}\"");
+			Assert.True(pageTitle.Contains(expected), $"Expected page title to contain \"{expected}\", but actual title is \"{pageTitle}\"");*/
 		}
 
 		[Test, Order(2)]
@@ -133,40 +152,27 @@ namespace MatkakertomusGroupB.Tests
 			//Thread.Sleep(1000);
 
 			//Get nickname
-			string loginInsides = _webDriver.FindElement(By.Id("nick-display")).Text.ToString();
+			string loginDisplayHTML = _webDriver.FindElement(By.Id("nick-display")).GetAttribute("innerHTML");
 			string expected = "Dude";
 
 			//Thread.Sleep(1000);
 
-			Assert.True(loginInsides.Contains(expected), $"Expected login box to contain nickname \"{expected}\", but it wasn't found: \"{loginInsides}\"");
-			Assert.False(loginInsides.Contains("login"), $"Expected login box to not \"login\", but it was found: \"{loginInsides}\"");
+			Assert.True(loginDisplayHTML.Contains(expected), $"Expected login box to contain nickname \"{expected}\", but it wasn't found: \"{loginDisplayHTML}\"");
+			Assert.False(loginDisplayHTML.Contains("login"), $"Expected login box to not \"login\", but it was found: \"{loginDisplayHTML}\"");
 
 			//Thread.Sleep(1000);
 
 			_webDriver.FindElement(By.Id("logout_button")).Click();
+
 			Thread.Sleep(1000);
 			//The whole bucket, logged out notfication hardcoded elsewhere
 			string pageContent = _webDriver.FindElement(By.Id("app")).Text.ToString();
-			expected = "You are logged out";
+			expected = "You are logged out.";
 
 
 			Thread.Sleep(2000);
-			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found: \"{loginInsides}\"");
+			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found: \"{pageContent}\"");
 
 		}
-
-
-		/*
-		[SetUp]
-		public void Setup()
-		{
-		}
-
-		[Test]
-		public void Test1()
-		{
-			Assert.Pass();
-		}
-		*/
 	}
 }

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Client"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Shared", "MatkakertomusGroupB\Shared\MatkakertomusGroupB.Shared.csproj", "{E3923CD7-8DA1-457E-801F-64EB7C956AE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatkakertomusGroupB.Tests", "MatkakertomusGroupB.Tests\MatkakertomusGroupB.Tests.csproj", "{9D7E6DE7-1A96-41A8-A01E-854364038D3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Tests", "MatkakertomusGroupB.Tests\MatkakertomusGroupB.Tests.csproj", "{9D7E6DE7-1A96-41A8-A01E-854364038D3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

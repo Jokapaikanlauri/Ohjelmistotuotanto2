@@ -13,7 +13,7 @@
 <div id="index-razor">
 	<AuthorizeView>
 		<Authorized>
-			<div class="divi">
+			<div id="index-razor-auth" class="divi">
 				<h1>Home page</h1>
 			</div>
 			<div>
@@ -22,7 +22,7 @@
 		</Authorized>
 
 		<NotAuthorized>
-			<div class="divi">
+			<div id="index-razor-public" class="divi">
 				<h1>Welcome to the Matkakertomus website!</h1>
 			</div>
 			<p id="notlogged">
@@ -58,4 +58,4 @@
 			nickname = userDTO.Nickname;
 		}
 	}
-	}
+}

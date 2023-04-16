@@ -11,10 +11,11 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MatkakertomusGroupB.Server.Controllers
 {
-    //Remember to add [AllowAnonymous] to methods you want accessible without being authenticated
-    //Pages that require authentication also require the tag [Authorize] (Client side)
-    [Authorize]
-    [Route("api/[controller]")]
+	//Remember to add [AllowAnonymous] to methods you want accessible without being authenticated
+	//Pages that require authentication also require the tag [Authorize] (Client side)
+	[Authorize]
+	//[AllowAnonymous]
+	[Route("api/[controller]")]
     [ApiController]
     public class DestinationController : ControllerBase
     {
@@ -28,6 +29,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 		}
 
 		// GET: api/Destination
+		[AllowAnonymous]
 		[HttpGet]
         public async Task<ActionResult<IEnumerable<Destination>>> GetDestinations()
         {
@@ -38,8 +40,9 @@ namespace MatkakertomusGroupB.Server.Controllers
             return await _context.Destinations.ToListAsync();
         }
 
-        // GET: api/Destination/5
-        [HttpGet("{id}")]
+		// GET: api/Destination/5
+		[AllowAnonymous]
+		[HttpGet("{id}")]
         public async Task<ActionResult<Destination>> GetDestination(int id)
         {
           if (_context.Destinations == null)

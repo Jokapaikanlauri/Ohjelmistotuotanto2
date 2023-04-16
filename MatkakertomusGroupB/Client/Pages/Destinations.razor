@@ -5,6 +5,7 @@
 @using MatkakertomusGroupB.Shared
 
 @inject HttpClient Http
+@inject IHttpClientFactory ClientFactory
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
 
@@ -21,7 +22,7 @@
     toimii vain jos matkakohde on käyttäjän lisäämä
 -->
 
-<div class="left">
+<div id="destinations-list-auth" class="left">
     <h2>List of travels:</h2>
     <br />
 
@@ -71,7 +72,8 @@
         //Assing name to variable for future operations
         name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
 
-        list = await Http.GetFromJsonAsync<List<Destination>>($"/api/destination");
+        var client = ClientFactory.CreateClient("public");
+        list = await client.GetFromJsonAsync<List<Destination>>($"/api/destination");
 
         //var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
         if (name != null)
