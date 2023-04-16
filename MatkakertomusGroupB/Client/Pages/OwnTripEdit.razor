@@ -8,47 +8,56 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
+<div class="left">
 
-<h3>Edit trip</h3>
+    <h3>Edit trip</h3>
 
-@if (@tDTO != null)
-{
-    <EditTrip>
-        <EditForm Model="@tDTO" OnValidSubmit="@Save">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+    @if (@tDTO != null)
+    {
+        <EditTrip>
+            <EditForm Model="@tDTO" OnValidSubmit="@Save">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-            <label>Start date:</label>
-            <br />
-            <InputDate @bind-Value="tDTO.DatumStart" />
-            <br />
-            <label>End date:</label>
-            <br />
-            <InputDate @bind-Value="tDTO.DatumEnd" />
-            <br />
-            <label>Check box if private: </label>
-            <InputCheckbox @bind-Value="tDTO.Private" />
-            <br />
-            <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
-            <button type="submit" class="btn btn-success">Edit trip</button>
-            <button class="btn btn-danger" @onclick="@Delete">Delete</button>
-            <br />
-            <p>Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
-        </EditForm>
-    </EditTrip>
-}
-@if (edited)
-{
-    <div class="alert alert-success fade-in" role="alert">
-        Trip was edited successfully!
-    </div>
-}
-@if (failed)
-{
-    <div class="alert alert-danger fade-in" role="alert">
-        This is a failed alert—check it out!
-    </div>
-}
+                <br />
+                <label>Start date:</label>
+                <br />
+                <InputDate @bind-Value="tDTO.DatumStart" />
+                <br /> <br />
+                <label>End date:</label>
+                <br />
+                <InputDate @bind-Value="tDTO.DatumEnd" />
+                <br /> <br />
+                <label>Check the box if trip is private: </label>
+                <InputCheckbox @bind-Value="tDTO.Private" />
+                <br /><br />
+                <p>Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
+                <br />
+                <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
+                <button type="submit" class="btn btn-success">Edit trip</button>
+                <button class="btn btn-danger" @onclick="@Delete">Delete</button>
+                <br />
+            </EditForm>
+        </EditTrip>
+    }
+    @if (edited)
+    {
+        <div class="alert alert-success fade-in" role="alert">
+            Trip was edited successfully!
+        </div>
+    }
+    @if (failed)
+    {
+        <div class="alert alert-danger fade-in" role="alert">
+            This is a failed alert—check it out!
+        </div>
+    }
+
+    <StoryAdd tripId="TripId" />
+</div>
+
+
+
 @code {
     [Parameter]
     public int TripId { get; set; }

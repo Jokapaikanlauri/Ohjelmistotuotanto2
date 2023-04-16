@@ -1,0 +1,97 @@
+﻿@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject NavigationManager nav
+
+
+<div class="left">
+    <br />
+    <h4>Add new story to trip</h4>
+    <NewStory>
+        <EditForm Model="@sDTO" OnValidSubmit="@Save">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <label>Destination:</label>
+            <br />
+            <InputSelect @bind-Value="sDTO.DestinationId">
+            @if (destinations == null)
+            {
+                <option selected value="">No destinations available</option>
+            }
+            else
+            {
+                @foreach (DestinationDTO d in destinations) 
+                {
+                    <option value="@d.DestinationId">@d.Name</option>
+                }
+            }
+            </InputSelect>
+            <br /> <br />
+            <label>Date:</label>
+            <br />
+            <InputDate @bind-Value="sDTO.Datum" />
+            <br /> <br />
+            <label>Tell your story: </label> <br />
+            <InputTextArea @bind-Value="sDTO.Description" style="width:97%" />
+            <br /><br />
+            <button type="submit" class="btn btn-success">Add trip</button>
+        </EditForm>
+    </NewStory>
+    <p>Once you have added the story, you can add pictures below.</p>
+    <p>You can add as many pictures as you want, but only add 3 pictures at a time.</p>
+    @if (sDTO.StoryId != null)
+    {
+        <PictureUpload @id="@sDTO.StoryId" />
+    }
+    @if (added)
+    {
+        <div class="alert alert-success fade-in" role="alert">
+            A new trip was created successfully!
+        </div>
+    }
+    @if (failed)
+    {
+        <div class="alert alert-danger fade-in" role="alert">
+            This is a failed alert—check it out!
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public int? tripId { get; set; }
+    public List<DestinationDTO>? destinations = null;
+    public StoryDTO? sDTO = new();
+    public bool added = false;
+    public bool failed = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Get list of all destinations
+        destinations = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination");
+        sDTO.Datum = DateTime.Now;
+    }
+
+    async Task Save()
+    {
+        sDTO.TripId = tripId;
+        //post a new story
+        var res = await Http.PostAsJsonAsync<StoryDTO>($"/api/story", sDTO);
+        if (res.IsSuccessStatusCode)
+        {
+            added = true;
+            Console.WriteLine(res);
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+    }
+}

@@ -7,32 +7,33 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
+<div class="left">
+    <h5>List of your trips, current count: @trips</h5>
 
-<h5>Current trip count: @trips</h5>
-
-@if (list != null)
-{
-    @foreach (TripDTO t in list) 
+    @if (list != null)
     {
-        <TripItem TripDTO="@t">
-            <ul>
-                <li>Trip start: @t.DatumStart</li>
-                <li>Trip end: @t.DatumEnd</li>
-                <br/>
-                <li>
-                    <button class="btn btn-success" @onclick=@ShowStories>Show or hide trip stories</button>
-                    <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit trip</button>
-                </li>
-                @if (this.showStories)
-                {
-                    <TripStoryList tripId="@t.TripId" />
-                }
-            </ul>
-        </TripItem>
-        <hr />
-        <br />
+        @foreach (TripDTO t in list)
+        {
+            <TripItem TripDTO="@t">
+                <ul>
+                    <li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
+                    <li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
+                    <br />
+                    <li>
+                        <button class="btn btn-success" @onclick=@ShowStories>Show or hide trip stories</button>
+                        <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit trip</button>
+                    </li>
+                    @if (this.showStories)
+                    {
+                        <TripStoryList tripId="@t.TripId" />
+                    }
+                </ul>
+            </TripItem>
+            <hr />
+            <br />
+        }
     }
-} 
+</div>
 @code {
     [Parameter]
     public string? id { get; set; }

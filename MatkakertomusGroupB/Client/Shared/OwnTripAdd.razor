@@ -6,44 +6,44 @@
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 
+<div class="right">
+    <h4>Add new trip</h4>
 
-<h1>Add new trip</h1>
+    <NewTrip>
+        <EditForm Model="@tDTO" OnValidSubmit="@Save">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-<NewTrip>
-    <EditForm Model="@tDTO" OnValidSubmit="@Save">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        
-        <label>Start date:</label>
-        <br />
-        <InputDate @bind-Value="tDTO.DatumStart" />
-        <br />
-        <label>End date:</label>
-        <br />
-        <InputDate @bind-Value="tDTO.DatumEnd" />
-        <br />
-        <label>Check box if private: </label>
-        <InputCheckbox @bind-Value="tDTO.Private" />
-        <br />
-        <button type="submit" class="btn btn-success">Add trip</button>
-    </EditForm>
-</NewTrip>
-<hr />
-<br />
+            <label>Start date:</label>
+            <br />
+            <InputDate @bind-Value="tDTO.DatumStart" />
+            <br /> <br />
+            <label>End date:</label>
+            <br />
+            <InputDate @bind-Value="tDTO.DatumEnd" />
+            <br /> <br />
+            <label>Check the box if trip is private: </label>
+            <InputCheckbox @bind-Value="tDTO.Private" />
+            <br /><br />
+            <button type="submit" class="btn btn-success">Add trip</button>
+        </EditForm>
+    </NewTrip>
+    <hr />
+    <br />
 
-@if (added)
-{
-    <div class="alert alert-success fade-in" role="alert">
-        A new trip was created successfully!
-    </div>
-}
-@if (failed)
-{
-    <div class="alert alert-danger fade-in" role="alert">
-        This is a failed alert—check it out!
-    </div>
-}
-
+    @if (added)
+    {
+        <div class="alert alert-success fade-in" role="alert">
+            A new trip was created successfully!
+        </div>
+    }
+    @if (failed)
+    {
+        <div class="alert alert-danger fade-in" role="alert">
+            This is a failed alert—check it out!
+        </div>
+    }
+</div>
 
 @code {
     [Parameter]
