@@ -26,57 +26,69 @@
 <AuthorizeView>
     <Authorized>
         <div class="left">
-    <h2>List of travels:</h2>
-    <br />
-
-    @if (list != null)
-    {
-        @foreach (Destination d in list)
-        {
-            <DestinationItem Destination="@d">
-                <ul>
-                    <li>Name: @d.Name</li>
-                    <li>Country: @d.Country</li>
-                    <li>Municipality: @d.Municipality</li>
-                    <li>Description: @d.Description</li>
-                    <li>Image: @d.Image</li>
-
-                    @if (@d.Stories == null)
-                    {
-                        <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>Edit</button>
-                    }
-                </ul>
-            </DestinationItem>
+            <h2>List of travels:</h2>
             <br />
-        }
-    }
-</div>
+
+            @if (list != null)
+            {
+                @foreach (Destination d in list)
+                {
+                    <DestinationItem Destination="@d">
+                        <ul>
+                            <h4 >@d.Name</h4>
+                            <li>Country: @d.Country</li>
+                            <li>Municipality: @d.Municipality</li>
+                            <li>Description: @d.Description</li>
+                            <br>
+                            @if (d.Image != null)
+                            {
+                                <img src="data:image/png;base64,@d.Image" style="max-width:70%" />
+
+                                <br>
+                                <br>
+                            }
+                            
+                            @if (@d.Stories == null)
+                            {
+                                <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>Edit</button>
+                            }
+                        </ul>
+                    </DestinationItem>
+                    <br />
+                }
+            }
+        </div>
         <div class="right">
             <DestinationAdd id="@userId" />
         </div>
     </Authorized>
     <NotAuthorized>
         <div class="left">
-    <h2>List of travels:</h2>
-    <br />
-
-    @if (list != null)
-    {
-        @foreach (Destination d in list)
-        {
-            <DestinationItem Destination="@d">
-                <ul>
-                    <li>Name: @d.Name</li>
-                    <li>Country: @d.Country</li>
-                    <li>Municipality: @d.Municipality</li>
-                    <li>Description: @d.Description</li>
-                    <li>Image: @d.Image</li>
-                </ul>
-            </DestinationItem>
+            <h2>List of travels:</h2>
             <br />
-        }
-    }
-</div>
+
+            @if (list != null)
+            {
+                @foreach (Destination d in list)
+                {
+                    <DestinationItem Destination="@d">
+                        <h4>@d.Name</h4>
+                        <li>Country: @d.Country</li>
+                        <li>Municipality: @d.Municipality</li>
+                        <li>Description: @d.Description</li>
+                        <br>
+                        @if (d.Image != null)
+                        {
+                            <img src="data:image/png;base64,@d.Image" style="max-width:70%" />
+
+                            <br>
+                            <br>
+                        }
+                    </DestinationItem>
+                    <br />
+                }
+            }
+        </div>
         <div>You are a public user.</div>
     </NotAuthorized>
 </AuthorizeView>
@@ -91,6 +103,9 @@
     private string? nickname = null;
     private string? userId = null;
     private List<Destination>? list = null;
+    public List<Picture>? pics;
+
+
 
 
     protected override async Task OnInitializedAsync()
@@ -100,6 +115,7 @@
 
         var client = ClientFactory.CreateClient("public");
         list = await client.GetFromJsonAsync<List<Destination>>($"/api/destination");
+        pics = await Http.GetFromJsonAsync<List<Picture>>($"/api/picture");
 
         //var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
         if (name != null)

@@ -3,6 +3,8 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using MatkakertomusGroupB.Shared
+@using System.Text;
+@using System.Drawing;
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
@@ -39,12 +41,15 @@
             <br />
 
             <label>Image</label>
-
+            <InputFile OnChange="@OnInputFileChange" style="max-width:100%" multiple />
+            <br />
             <br />
             <br />
 
             <button type="submit" class="btn btn-success" >Save edit</button>
             <button class="btn btn-danger" @onclick="@Delete">Delete</button>
+            <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/destinations")'>Back to destinations</button>
+            
         </EditForm>
     </EditDestination>
 } 
@@ -73,7 +78,11 @@
     public int DestinationId { get; set; }
 
     public DestinationDTO? dDTO = new();
-
+    public int id = 1;
+    private int maxAllowedFiles = 3;
+    private long maxFileSize = 1024 * 1024 * 15; // 15Mt
+    private List<string> fileNames = new();
+    private List<IBrowserFile> loadedFiles = new();
     public bool edited = false;
     public bool failed = false;
     public bool deleted = false;
@@ -115,5 +124,62 @@
             failed = true;
             Console.WriteLine(res);
         }
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs args)
+    {
+        string base64String = "";
+
+        try
+        {
+            // here we will loop all the files that have been selected for upload
+            // this won't be necessary for traveller and destination, they only have one picture each
+            var files = args.GetMultipleFiles();
+            foreach (var file in files)
+            {
+                // this shows the uploaded file info
+                loadedFiles.Add(file);
+
+                // abbreviation fs for memorystream
+                await using MemoryStream fs = new MemoryStream();
+
+                // we'll open readstreamer for each individual file
+                await file.OpenReadStream(maxAllowedSize: 1048576).CopyToAsync(fs);
+
+                // this will call GetBytes function to convert the streamed file into bytes
+                byte[] somBytes = GetBytes(fs);
+
+                // here we finally convert the returned bytes to base64string
+                base64String = Convert.ToBase64String(somBytes, 0, somBytes.Length);
+
+                // copypaste diagnostics from example, not necessary
+                System.Diagnostics.Debug.Print("Image 64: " + base64String + Environment.NewLine);
+
+                // create new dto object to transfer data to API
+                PictureDTO pdto = new PictureDTO();
+                pdto.Image = base64String;
+                // storyid has been hardcoded for testing purposes here
+                pdto.StoryId = id;
+
+                // post the dto to API, this again will not be needed for destination nor traveller
+                // for they will save the base64 encoded string in their own tables
+                await Http.PostAsJsonAsync("api/Picture/" + id, pdto);
+            }
+        }
+
+        catch (Exception e)
+        {
+            System.Diagnostics.Debug.Print("ERROR: " + e.Message + Environment.NewLine);
+        }
+
+        // var newUploadResults = await res.Content.ReadFromJsonAsync<List<UploadResult>>();
+    }
+    public static byte[] GetBytes(Stream stream)
+    {
+        var bytes = new byte[stream.Length];
+        stream.Seek(0, SeekOrigin.Begin);
+        stream.ReadAsync(bytes, 0, bytes.Length);
+        stream.Dispose();
+        return bytes;
     }
 }
