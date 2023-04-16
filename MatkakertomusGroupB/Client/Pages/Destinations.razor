@@ -22,12 +22,13 @@
     toimii vain jos matkakohde on käyttäjän lisäämä
 -->
 
-<div id="destinations-list-auth" class="left">
+<div id="destinations-list-public" class="left">
     <h2>List of travels:</h2>
     <br />
 
     @if (list != null)
     {
+        <div id="destinations-list-public-listing">
         @foreach (Destination d in list)
         {
             <DestinationItem Destination="@d">
@@ -41,6 +42,7 @@
             </DestinationItem>
             <br />
         }
+        </div>
     }
 </div>
 
