@@ -58,7 +58,7 @@ namespace MatkakertomusGroupB.Server.Controllers
         }
 
         // Get pictures by story id
-        // GET: api/Picture/5
+        // GET: api/Picture/story/5
         [HttpGet("story/{id}")]
         public async Task<ActionResult<IEnumerable<Picture>>> GetStoryPictures(int id)
         {
@@ -146,6 +146,34 @@ namespace MatkakertomusGroupB.Server.Controllers
 
             return NoContent();
         }
+
+        // delete all pictures from a certain story
+        // DELETE: api/Picture/story/5
+        [HttpDelete("/story/{id}")]
+        public async Task<IActionResult> DeleteStoryPictures(int storyId)
+        {
+            if (_context.Pictures == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<Picture> pictureList = (IEnumerable<Picture>)GetStoryPictures(storyId);
+
+            if (pictureList == null)
+            {
+                return NotFound();
+            }
+
+            foreach (Picture picture in pictureList)
+            {
+                // delete each picture in picturelist
+                _context.Pictures.Remove(picture);
+            }
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         private bool PictureExists(int id)
         {
