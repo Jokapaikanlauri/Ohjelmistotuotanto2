@@ -19,8 +19,8 @@
                 <li>Date: @s.Datum.ToString("yyyy-MM-dd")</li>
                 <DestinationInfo destinationId=@s.DestinationId />
                 <li>Story: @s.Description</li>
-                <button class="btn btn-success" @onclick=@ShowPictures>Show or hide trip pictures</button>
-                <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit trip</button>
+                <button class="btn btn-success" @onclick=@ShowPictures>Show or hide story pictures</button>
+                <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
                 @if (showPictures)
                 {
                     <StoryPictureList storyId=@s.StoryId />                    

@@ -9,7 +9,7 @@
 @inject NavigationManager nav
 
 <div class="left">
-
+    <br />
     <h3>Edit trip</h3>
 
     @if (@tDTO != null)
@@ -31,12 +31,12 @@
                 <label>Check the box if trip is private: </label>
                 <InputCheckbox @bind-Value="tDTO.Private" />
                 <br /><br />
-                <p>Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
+                <p>NOTE: Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
                 <br />
-                <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
-                <button type="submit" class="btn btn-success">Edit trip</button>
+                <button class="btn btn-success" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
+                <button type="submit" class="btn btn-warning">Edit trip</button>
                 <button class="btn btn-danger" @onclick="@Delete">Delete</button>
-                <br />
+                <br /><br/>
             </EditForm>
         </EditTrip>
     }
@@ -53,8 +53,14 @@
         </div>
     }
 
+</div>
+<div class="right">
     <StoryAdd tripId="TripId" />
 </div>
+<div class="left">
+    <StoryList tripId="TripId" />
+</div>
+
 
 
 

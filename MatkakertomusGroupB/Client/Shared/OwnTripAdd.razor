@@ -9,7 +9,7 @@
 
 <div class="right">
     <h4>Add new trip</h4>
-
+    <br />
     <NewTrip>
         <EditForm Model="@tDTO" OnValidSubmit="@Save">
             <DataAnnotationsValidator />
@@ -29,7 +29,6 @@
             <button type="submit" class="btn btn-success">Add trip</button>
         </EditForm>
     </NewTrip>
-    <hr />
     <br />
 
     @if (added)
