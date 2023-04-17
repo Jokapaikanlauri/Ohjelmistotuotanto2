@@ -30,6 +30,7 @@ namespace MatkakertomusGroupB.Server.Controllers
 
         // GET: api/Picture
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PictureDTO>>> GetPictures()
         {
             if (_context.Pictures == null)

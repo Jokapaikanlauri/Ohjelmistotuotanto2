@@ -113,7 +113,7 @@
 
         var client = ClientFactory.CreateClient("public");
         list = await client.GetFromJsonAsync<List<Destination>>($"/api/destination");
-        pics = await Http.GetFromJsonAsync<List<Picture>>($"/api/picture");
+        pics = await client.GetFromJsonAsync<List<Picture>>($"/api/picture");
 
         //var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
         if (name != null)
