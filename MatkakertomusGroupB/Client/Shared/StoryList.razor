@@ -7,7 +7,6 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
-<br />
 
 @if (list != null)
 {
@@ -37,17 +36,20 @@
         }
         else
         {
-            <h6>Current story count: @stories</h6>
+            <br />
+            <h6>Trip story count: @stories</h6>
         }
     }
     else
     {
-        <h6>Current story count: @stories</h6>
+        <br />
+        <h6>Trip story count: @stories</h6>
     }
 }
 else
 {
-    <h6>No Stories could be fetched</h6>
+    <br />
+    <h6>No stories could be fetched</h6>
 }
 
 @code {

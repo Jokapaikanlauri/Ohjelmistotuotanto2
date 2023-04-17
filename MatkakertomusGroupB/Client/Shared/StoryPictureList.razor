@@ -6,26 +6,42 @@
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 
-<p role="status">Current picture count: @pictures</p>
 
 @if (list != null)
 {
-    @if (list.Count > 0)
+    @if (list.Count != 0)
     {
         <button class="btn btn-success" @onclick=@ShowPictures>Show or hide story pictures</button>
-        <br/>
         @if (showPictures)
         {
             @foreach (Picture p in list)
             {
                 <br />
+                <br />
                 <PictureItem Picture="@p">
                     <img src="data:image/png;base64,@p.Image" style="max-width:90%" />
                 </PictureItem>
-                <br />
             }
         }
+        else
+        {
+            <br />
+            <br/>
+            <h6>Story picture count: @pictures</h6>
+        }
     }
+    else
+    {
+        <br />
+        <br />
+        <h6>Story picture count: @pictures</h6>
+    }
+}
+else
+{
+    <br />
+    <br />
+    <h6>No pictures could be fetched</h6>
 }
 
 @code {
