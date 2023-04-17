@@ -13,130 +13,127 @@
 
 <PageTitle>Destinations</PageTitle>
 <head>
-<link rel="icon" type="image/x-icon" href="globe.png" />
+	<link rel="icon" type="image/x-icon" href="globe.png" />
 </head>
 
 <h1>Destinations</h1>
 <!--Tee tähän forms add buttonin taakse ja lisätyt matkakohteet näytetään tällä sivulla, poista ominaisuus
-    toimii vain jos matkakohde on käyttäjän lisäämä
+	toimii vain jos matkakohde on käyttäjän lisäämä
 -->
 
 
 
 <AuthorizeView>
-    <Authorized>
-        <div class="left">
-            <h2>List of travels:</h2>
-            <br />
+	<Authorized>
+		<div class="left">
+			@if (list != null)
+			{
+				@foreach (Destination d in list)
+				{
+					<div class="list-item">
+						<DestinationItem Destination="@d">
+							<ul>
+								<h4>@d.Name</h4>
+								<li>Country: @d.Country</li>
+								<li>Municipality: @d.Municipality</li>
+								<li>Description: @d.Description</li>
+								<br>
+								@if (d.Image != null)
+								{
+									<img src="data:image/png;base64,@d.Image" style="max-width:70%" />
 
-            @if (list != null)
-            {
-                @foreach (Destination d in list)
-                {
-                    <DestinationItem Destination="@d">
-                        <ul>
-                            <h4 >@d.Name</h4>
-                            <li>Country: @d.Country</li>
-                            <li>Municipality: @d.Municipality</li>
-                            <li>Description: @d.Description</li>
-                            <br>
-                            @if (d.Image != null)
-                            {
-                                <img src="data:image/png;base64,@d.Image" style="max-width:70%" />
+									<br>
+									<br>
+								}
 
-                                <br>
-                                <br>
-                            }
-                            
-                            @if (@d.Stories == null)
-                            {
-                                <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>Edit</button>
-                            }
-                        </ul>
-                    </DestinationItem>
-                    <br />
-                }
-            }
-        </div>
-        <div class="right">
-            <DestinationAdd id="@userId" />
-        </div>
-    </Authorized>
-    <NotAuthorized>
-        <div class="left">
-            <h2>List of travels:</h2>
-            <br />
+								@if (@d.Stories == null)
+								{
+									<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>Edit</button>
+								}
+							</ul>
+						</DestinationItem>
+					</div>
+					<br />
+				}
+			}
+		</div>
+		<div class="right">
+			<DestinationAdd id="@userId" />
+		</div>
+	</Authorized>
+	<NotAuthorized>
+		<div id="destinations-list-public-listing" class="left">
+			@if (list != null)
+			{
+				@foreach (Destination d in list)
+				{
+					<div id="@($"{d.Name}-div")" class="list-item">
+						<DestinationItem Destination="@d">
+							<h4>@d.Name</h4>
+							<li>Country: @d.Country</li>
+							<li>Municipality: @d.Municipality</li>
+							<li>Description: @d.Description</li>
+							<br>
+							@if (d.Image != null)
+							{
+								<img id="@($"{d.Name}-picture")" src="data:image/png;base64,@d.Image" style="max-width:70%" />
 
-            @if (list != null)
-            {
-                @foreach (Destination d in list)
-                {
-                    <DestinationItem Destination="@d">
-                        <h4>@d.Name</h4>
-                        <li>Country: @d.Country</li>
-                        <li>Municipality: @d.Municipality</li>
-                        <li>Description: @d.Description</li>
-                        <br>
-                        @if (d.Image != null)
-                        {
-                            <img src="data:image/png;base64,@d.Image" style="max-width:70%" />
-
-                            <br>
-                            <br>
-                        }
-                    </DestinationItem>
-                    <br />
-                }
-            }
-        </div>
-        <div>You are a public user.</div>
-    </NotAuthorized>
+								<br>
+								<br>
+							}
+						</DestinationItem>
+					</div>
+					<br />
+				}
+			}
+		</div>
+	</NotAuthorized>
 </AuthorizeView>
 
 
 
 
 @code {
-    //private UserDTO? userDTO = new UserDTO();
-    //private UserDTO? userDTO2 = new UserDTO();
-    private string? name = null;
-    private string? nickname = null;
-    private string? userId = null;
-    private List<Destination>? list = null;
-    public List<Picture>? pics;
+	//private UserDTO? userDTO = new UserDTO();
+	//private UserDTO? userDTO2 = new UserDTO();
+	private string? name = null;
+	private string? nickname = null;
+	private string? userId = null;
+	private List<Destination>? list = null;
+	public List<Picture>? pics;
 
 
-    protected override async Task OnInitializedAsync()
-    {
-        //Assing name to variable for future operations
-        name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+	protected override async Task OnInitializedAsync()
+	{
+		//Assing name to variable for future operations
+		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
 
-        var client = ClientFactory.CreateClient("public");
-        list = await client.GetFromJsonAsync<List<Destination>>($"/api/destination");
-        pics = await client.GetFromJsonAsync<List<Picture>>($"/api/picture");
+		var client = ClientFactory.CreateClient("public");
+		list = await client.GetFromJsonAsync<List<Destination>>($"/api/destination");
+		pics = await client.GetFromJsonAsync<List<Picture>>($"/api/picture");
 
-        //var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
-        if (name != null)
-        {
-            //Fetch user data from API via POST operation
-            var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
-            //Parse user data from API
-            var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-            nickname = userDTO.Nickname;
-        }
-    }
+		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			nickname = userDTO.Nickname;
+		}
+	}
 
-    private async Task GetUserId()
-    {
-        logger.LogInformation($"I'm a template logging message");
+	private async Task GetUserId()
+	{
+		logger.LogInformation($"I'm a template logging message");
 
-        if (name != null)
-        {
-            //Fetch user data from API via POST operation
-            var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
-            //Parse user data from API
-            var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-            userId = userDTO.Id;
-        }
-    }
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+			userId = userDTO.Id;
+		}
+	}
 }

@@ -1,24 +1,36 @@
 ﻿.left {
-    float:left;
-    width:78%;
-    background-color: lightgrey;
+    float: left;
+    width: 78%;
+    background-color: #3b3a3a;
     border-radius: 10px;
-    padding-left:4px;
+    padding-left: 4px;
 }
 .right {
-    float:right;
+    float: right;
     width: 20%;
-    background-color: lightgrey;
+    background-color: #3b3a3a;
     border-radius: 10px;
     padding: 20px;
 }
 
+.list-item {
+    border-style: double;
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
 .addHeader {
-    background-color: dimgrey;
+    background-color: midnightblue;
     border-radius: 10px;
-    text-align:center;
+    text-align: center;
 }
 
 .description{
     max-width:10%;
+}
+
+h1 {
+    border-bottom: 1px solid white;
 }
