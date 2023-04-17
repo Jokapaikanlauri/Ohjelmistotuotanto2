@@ -86,6 +86,8 @@
 
     async Task Save()
     {
+        edited = false;
+        failed = false;
         sDTO.StoryId = StoryId;
         //post a new trip
         var res = await Http.PutAsJsonAsync<StoryDTO>($"/api/story/{StoryId}", sDTO);
@@ -104,26 +106,30 @@
 
     async Task Delete()
     {
+        edited = false;
+        failed = false;
         var picres = await Http.DeleteAsync($"/api/picture/story/{sDTO.StoryId}");
         if (picres.IsSuccessStatusCode)
         {
             Console.WriteLine(picres);
+
+            var res = await Http.DeleteAsync($"/api/story/{StoryId}");
+            if (res.IsSuccessStatusCode)
+            {
+                Console.WriteLine(res);
+                nav.NavigateTo($"/trip/edit/{sDTO.TripId}");
+            }
+            else
+            {
+                failed = true;
+                Console.WriteLine(res);
+            }
         }
         else
         {
             failed = true;
             Console.WriteLine(picres);
         }
-        var res = await Http.DeleteAsync($"/api/story/{StoryId}");
-        if (res.IsSuccessStatusCode)
-        {
-            Console.WriteLine(res);
-            nav.NavigateTo($"/trip/edit/{sDTO.TripId}");
-        }
-        else
-        {
-            failed = true;
-            Console.WriteLine(res);
-        }
+        
     }
 }

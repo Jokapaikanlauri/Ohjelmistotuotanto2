@@ -30,18 +30,18 @@ namespace MatkakertomusGroupB.Server.Controllers
 
         // GET: api/Picture
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Picture>>> GetPictures()
+        public async Task<ActionResult<IEnumerable<PictureDTO>>> GetPictures()
         {
             if (_context.Pictures == null)
             {
                 return NotFound();
             }
-            return await _context.Pictures.ToListAsync();
+            return PictureListToPictureDTOList(await _context.Pictures.ToListAsync());
         }
 
         // GET: api/Picture/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Picture>> GetPicture(int id)
+        public async Task<ActionResult<PictureDTO>> GetPicture(int id)
         {
             if (_context.Pictures == null)
             {
@@ -54,7 +54,7 @@ namespace MatkakertomusGroupB.Server.Controllers
                 return NotFound();
             }
 
-            return picture;
+            return PictureToPictureDTO(picture);
         }
 
         // Get pictures by story id
@@ -80,8 +80,9 @@ namespace MatkakertomusGroupB.Server.Controllers
         // PUT: api/Picture/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPicture(int id, Picture picture)
+        public async Task<IActionResult> PutPicture(int id, PictureDTO pictureDTO)
         {
+            Picture picture = PictureDTOToPicture(pictureDTO);
             if (id != picture.PictureId)
             {
                 return BadRequest();
@@ -194,7 +195,7 @@ namespace MatkakertomusGroupB.Server.Controllers
         {
             Picture picture = new Picture();
             if (pictureDTO.PictureId != null) picture.PictureId = Convert.ToInt32(pictureDTO.PictureId);
-            if (pictureDTO.StoryId != null) picture.StoryId = Convert.ToInt32(pictureDTO.StoryId);
+            picture.StoryId = pictureDTO.StoryId;
             pictureDTO.Image = picture.Image;
 
             return picture;

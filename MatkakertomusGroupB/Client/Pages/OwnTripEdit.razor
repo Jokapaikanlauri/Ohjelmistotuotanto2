@@ -55,10 +55,15 @@
 
 </div>
 <div class="right">
-    <StoryAdd tripId="TripId" />
+    <StoryAdd tripId="@TripId" />
 </div
 <div class="left">
-    <StoryList tripId="TripId" />
+
+
+    <!--TODO UserId Should also be passed to StoryList, but how to pass it sensibly to this page?-->
+
+
+    <StoryList tripId="@TripId" />
 </div>
 
 
@@ -67,6 +72,8 @@
 @code {
     [Parameter]
     public int TripId { get; set; }
+    [Parameter]
+    public string UserId { get; set; }
 
     public TripDTO? tDTO = new();
     public bool edited = false;
