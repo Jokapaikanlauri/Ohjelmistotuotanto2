@@ -3,8 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using MatkakertomusGroupB.Shared
-@attribute [Authorize]
-@inject HttpClient Http
+@inject IHttpClientFactory ClientFactory
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -42,13 +41,15 @@ else
 }
 
 @code {
+    
     private WeatherForecast[]? forecasts;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+            var client = ClientFactory.CreateClient("public");
+            forecasts = await client.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
         }
         catch (AccessTokenNotAvailableException exception)
         {

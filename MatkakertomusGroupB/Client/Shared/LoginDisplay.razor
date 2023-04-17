@@ -14,19 +14,22 @@
 		}
 		@if (nickname != null)
 		{
-			<a href="authentication/profile"><span class="oi oi-cog" aria-hidden="true"></span> Hello @nickname</a>
+
+				<a id="nick-display" href="authentication/profile"><span class="oi oi-cog" aria-hidden="true"></span> Hello @nickname</a>
 		}
 		else
 		{
-			<span>Loading...</span>
+				<span>Loading...</span>
 			GetUserNick();
 		}
-		
-		<button class="nav-link btn btn-link" @onclick="BeginLogOut"><span class="oi oi-account-logout" aria-hidden="true"></span> Log out</button>
+
+		<button id="logout_button" class="nav-link btn btn-link" @onclick="BeginLogOut"><span class="oi oi-account-logout" aria-hidden="true"></span> Log out</button>
 	</Authorized>
 	<NotAuthorized>
+		<span id="LoginDisplay-razor-public">
 		<a href="authentication/register"><span class="oi oi-pencil" aria-hidden="true"></span> Register</a>
 		<a href="authentication/login"> <span class="oi oi-account-login" aria-hidden="true"></span> Log in</a>
+		</span>
 	</NotAuthorized>
 </AuthorizeView>
 

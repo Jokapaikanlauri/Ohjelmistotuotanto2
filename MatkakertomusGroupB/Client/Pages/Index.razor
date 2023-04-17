@@ -10,29 +10,33 @@
 
 <PageTitle>Home Page</PageTitle>
 
+<div id="index-razor">
+	<AuthorizeView>
+		<Authorized>
+			<div id="index-razor-auth" class="divi">
+				<h1>Home page</h1>
+			</div>
+			<div>
+				<p id="teksti">This website is made for you to connect with other people interested in travelling. Enjoy your passion with others or respark your inner traveler.</p>
+			</div>
+		</Authorized>
 
-<AuthorizeView>
-	<Authorized>
-		<div class="divi">
-			<h1>Home page</h1>
-		</div>
-		<div>
+		<NotAuthorized>
+			<div id="index-razor-public" class="divi">
+				<h1>Welcome to the Matkakertomus website!</h1>
+			</div>
+			<p id="notlogged">
+				Please make sure to <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin" title="Login sivulle">log in</a>
+				or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin" title="Rekisteröinti sivulle">register</a> an account.
+			</p>
 			<p id="teksti">This website is made for you to connect with other people interested in travelling. Enjoy your passion with others or respark your inner traveler.</p>
-		</div>
-	</Authorized>
+		</NotAuthorized>
+	</AuthorizeView>
 
-	<NotAuthorized>
-		<div class="divi">
-			<h1>Welcome to the Matkakertomus website!</h1>
-		</div>
-		<p id="notlogged">
-			Please make sure to <a href="https://localhost:7012/Identity/Account/Login?returnUrl=%2Fauthentication%2Flogin" title="Login sivulle">log in</a>
-			or <a href="https://localhost:7012/Identity/Account/Register?returnUrl=%2Fauthentication%2Flogin" title="Rekisteröinti sivulle">register</a> an account.
-		</p>
-		<p id="teksti">This website is made for you to connect with other people interested in travelling. Enjoy your passion with others or respark your inner traveler.</p>
-	</NotAuthorized>
-</AuthorizeView>
-<img id="kuva" src="/travel.jpg"/>
+	<img id="kuva" src="/travel.jpg" />
+</div>
+
+
 @code {
 	//private UserDTO? userDTO = new UserDTO();
 	//private UserDTO? userDTO2 = new UserDTO();

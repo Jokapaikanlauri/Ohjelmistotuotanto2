@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Client"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Shared", "MatkakertomusGroupB\Shared\MatkakertomusGroupB.Shared.csproj", "{E3923CD7-8DA1-457E-801F-64EB7C956AE6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatkakertomusGroupB.Tests", "MatkakertomusGroupB.Tests\MatkakertomusGroupB.Tests.csproj", "{9D7E6DE7-1A96-41A8-A01E-854364038D3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E3923CD7-8DA1-457E-801F-64EB7C956AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3923CD7-8DA1-457E-801F-64EB7C956AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3923CD7-8DA1-457E-801F-64EB7C956AE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D7E6DE7-1A96-41A8-A01E-854364038D3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D7E6DE7-1A96-41A8-A01E-854364038D3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D7E6DE7-1A96-41A8-A01E-854364038D3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D7E6DE7-1A96-41A8-A01E-854364038D3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
