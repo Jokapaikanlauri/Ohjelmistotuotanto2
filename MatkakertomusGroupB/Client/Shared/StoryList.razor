@@ -11,43 +11,43 @@
 
 @if (list != null)
 {
-	if (list.Count != 0)
-	{
-		<button class="btn btn-success" @onclick=@ShowStories>Show or hide trip stories</button>
-
-		if (showStories)
-		{
-			@foreach (StoryDTO s in list)
-			{
-				<StoryItem Story="@s">
-					<ul>
-						<li>Date: @s.Datum.ToString("yyyy-MM-dd")</li>
-						<DestinationInfo destinationId=@s.DestinationId />
-						<li>Story: @s.Description</li>
-						<button class="btn btn-success" @onclick=@ShowPictures>Show or hide story pictures</button>
-						<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
-						@if (showPictures)
-						{
-							<StoryPictureList storyId=@s.StoryId />
-						}
-					</ul>
-					<br />
-				</StoryItem>
-			}
-		}
-		else
-		{
-			<h6>Current story count: @stories</h6>
-		}
-	}
-	else
-	{
-		<h6>Current story count: @stories</h6>
-	}
+    if (list.Count != 0)
+    {
+        <button class="btn btn-success" @onclick=@ShowStories>Show or hide trip stories</button>
+        <br/>
+        if (showStories)
+        {
+            @foreach (StoryDTO s in list)
+            {
+                <br/>
+                <StoryItem Story="@s">
+                    <ul>
+                        <li>Date: @s.Datum.ToString("yyyy-MM-dd")</li>
+                        <DestinationInfo destinationId=@s.DestinationId />
+                        <li>Story: @s.Description</li>
+                        @if(userId != null)
+                        {
+                            <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
+                        }
+                        <StoryPictureList storyId=@s.StoryId />
+                    </ul>
+                    <br />
+                </StoryItem>
+            }
+        }
+        else
+        {
+            <h6>Current story count: @stories</h6>
+        }
+    }
+    else
+    {
+        <h6>Current story count: @stories</h6>
+    }
 }
 else
 {
-	<h6>No Stories could be fetched</h6>
+    <h6>No Stories could be fetched</h6>
 }
 
 @code {
@@ -56,29 +56,23 @@ else
     [Parameter]
     public string? userId { get; set; }
 
-	private int stories = 0;
-	private List<StoryDTO>? list = null;
-	private bool showPictures = false;
-	private bool showStories = false;
+    private int stories = 0;
+    private List<StoryDTO>? list = null;
+    private bool showStories = false;
 
 
-	protected override async Task OnInitializedAsync()
-	{
-		//Get list stories for a Trip
-		list = await Http.GetFromJsonAsync<List<StoryDTO>>($"/api/story/trip/{tripId}");
-		if (list != null) stories = list.Count;
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        //Get list stories for a Trip
+        list = await Http.GetFromJsonAsync<List<StoryDTO>>($"/api/story/trip/{tripId}");
+        if (list != null) stories = list.Count;
+    }
 
-	void ShowPictures()
-	{
-		if (!showPictures) showPictures = true;
-		else showPictures = false;
-	}
 
-	void ShowStories()
-	{
-		if (!showStories) showStories = true;
-		else showStories = false;
-	}
+    void ShowStories()
+    {
+        if (!showStories) showStories = true;
+        else showStories = false;
+    }
 
 }

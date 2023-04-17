@@ -20,7 +20,7 @@
 					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
 					<br />
 					<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit trip</button>
-					<StoryList tripId="@t.TripId" />
+					<StoryList tripId="@t.TripId" userId="@id" />
 				</ul>
 			</TripItem>
 			<hr />

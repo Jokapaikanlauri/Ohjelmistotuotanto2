@@ -19,13 +19,7 @@
                     <li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
                     <li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
                     <br />
-                    <li>
-                        <button class="btn btn-success" @onclick=@this.ShowStories>Show or hide trip stories</button>
-                    </li>
-                    @if (this.showStories)
-                    {
-                        <StoryList tripId="@t.TripId" />
-                    }
+                    <StoryList tripId="@t.TripId" />
                 </ul>
             </TripItem>
             <hr />
@@ -39,18 +33,11 @@
 
     private int trips = 0;
     private List<TripDTO>? list = null;
-    public bool showStories = false;
 
     protected override async Task OnInitializedAsync()
     {
         //Get list of all public trips
         list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/");
         if (list != null) trips = list.Count;
-    }
-
-    void ShowStories()
-    {
-        if (!showStories) showStories = true;
-        else showStories = false;
     }
 }

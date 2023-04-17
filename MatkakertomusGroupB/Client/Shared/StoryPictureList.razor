@@ -10,23 +10,29 @@
 
 @if (list != null)
 {
-    <ul>
-        @foreach (Picture p in list)
+    @if (list.Count > 0)
+    {
+        <button class="btn btn-success" @onclick=@ShowPictures>Show or hide story pictures</button>
+        <br/>
+        @if (showPictures)
         {
-            <li>
+            @foreach (Picture p in list)
+            {
+                <br />
                 <PictureItem Picture="@p">
-                    <img src="data:image/png;base64,@p.Image" style="max-width:90%"/>
+                    <img src="data:image/png;base64,@p.Image" style="max-width:90%" />
                 </PictureItem>
-            </li>
-            <br />
+                <br />
+            }
         }
-    </ul>
+    }
 }
 
 @code {
     [Parameter]
     public int? storyId { get; set; }
 
+    private bool showPictures = false;
     private int pictures = 0;
     private List<Picture>? list = null;
 
@@ -35,5 +41,11 @@
         //Get list of pictures for a story
         list = await Http.GetFromJsonAsync<List<Picture>>($"/api/picture/story/{storyId}");
         if (list != null) pictures = list.Count;
+    }
+
+    void ShowPictures()
+    {
+        if (!showPictures) showPictures = true;
+        else showPictures = false;
     }
 }
