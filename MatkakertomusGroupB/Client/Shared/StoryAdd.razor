@@ -8,56 +8,54 @@
 @inject NavigationManager nav
 
 
-<div class="left">
-    <br />
-    <h4>Add new story to trip</h4>
-    <br/>
-    <NewStory>
-        <EditForm Model="@sDTO" OnValidSubmit="@Save">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+<br />
+<h4>Add new story to trip</h4>
+<br />
+<NewStory>
+    <EditForm Model="@sDTO" OnValidSubmit="@Save">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-            <label>Destination:</label>
-            <br />
-            <InputSelect @bind-Value="sDTO.DestinationId">
+        <label>Destination:</label>
+        <br />
+        <InputSelect @bind-Value="sDTO.DestinationId">
             @if (destinations == null)
             {
                 <option selected value="">No destinations available</option>
             }
             else
             {
-                @foreach (DestinationDTO d in destinations) 
+                @foreach (DestinationDTO d in destinations)
                 {
                     <option selected value="@d.DestinationId">@d.Name</option>
                 }
             }
-            </InputSelect>
-            <br /> <br />
-            <label>Date:</label>
-            <br />
-            <InputDate @bind-Value="sDTO.Datum" />
-            <br /> <br />
-            <label>Tell your story: </label> <br />
-            <InputTextArea @bind-Value="sDTO.Description" style="width:97%" />
-            <br /><br />
-            <button type="submit" class="btn btn-success">Add story to your trip</button>
-        </EditForm>
-    </NewStory>
-    <p>Once you have added the story, you can add pictures.</p>
+        </InputSelect>
+        <br /> <br />
+        <label>Date:</label>
+        <br />
+        <InputDate @bind-Value="sDTO.Datum" />
+        <br /> <br />
+        <label>Tell your story: </label> <br />
+        <InputTextArea @bind-Value="sDTO.Description" style="width:100%" />
+        <br /><br />
+        <button type="submit" class="btn btn-success">Add story to your trip</button>
+    </EditForm>
+</NewStory>
+<p>Once you have added the story, you can add pictures.</p>
 
-    @if (added)
-    {
-        <div class="alert alert-success fade-in" role="alert">
-            A new trip was created successfully!
-        </div>
-    }
-    @if (failed)
-    {
-        <div class="alert alert-danger fade-in" role="alert">
-            This is a failed alert—check it out!
-        </div>
-    }
-</div>
+@if (added)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        A new trip was created successfully!
+    </div>
+}
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        This is a failed alert—check it out!
+    </div>
+}
 
 
 @code {

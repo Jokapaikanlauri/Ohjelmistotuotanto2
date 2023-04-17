@@ -20,7 +20,10 @@
                 <DestinationInfo destinationId=@s.DestinationId />
                 <li>Story: @s.Description</li>
                 <button class="btn btn-success" @onclick=@ShowPictures>Show or hide story pictures</button>
-                <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
+                @if (userId != null)
+                {
+                    <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
+                }
                 @if (showPictures)
                 {
                     <StoryPictureList storyId=@s.StoryId />                    
@@ -34,6 +37,8 @@
 @code {
     [Parameter]
     public int? tripId { get; set; }
+    [Parameter]
+    public string? userId { get; set; }
 
     private int stories = 0;
     private List<StoryDTO>? list = null;
