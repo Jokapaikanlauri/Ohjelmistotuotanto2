@@ -11,7 +11,7 @@
 
 <h1>Traveller List</h1>
 
-<p role="status">Current traveller count: @count</p>
+<p role="status">Here you can see all registered travellers, current count: @count</p>
 
 @if (list != null)
 {
@@ -23,10 +23,10 @@
                 <li>Last name: @t.Surname</li>
                 <li>Nickname: @t.Nickname</li>
                 <li>Municipality: @t.Municipality</li>
-                <li>Image: @t.Image</li>
             </ul>
+            <img src="data:image/png;base64,@t.Image" style="max-width:70%" />
         </TravellerItem>
-        <br />
+        <br /> <hr /> <br />
     }
 }
 

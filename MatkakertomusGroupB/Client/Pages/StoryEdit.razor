@@ -1,0 +1,135 @@
+﻿@page "/story/edit/{StoryId:int}"
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject NavigationManager nav
+
+
+<div class="left">
+    <br />
+    <h4>Edit your story</h4>
+    <NewStory>
+        <EditForm Model="@sDTO" OnValidSubmit="@Save">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <label>Destination:</label>
+            <br />
+            <InputSelect @bind-Value="sDTO.DestinationId">
+                @if (destinations == null)
+                {
+                    <option selected value="">No destinations available</option>
+                }
+                else
+                {
+                    @foreach (DestinationDTO d in destinations)
+                    {
+                        <option value="@d.DestinationId">@d.Name</option>
+                    }
+                }
+            </InputSelect>
+            <br /> <br />
+            <label>Date:</label>
+            <br />
+            <InputDate @bind-Value="sDTO.Datum" />
+            <br /> <br />
+            <label>Tell your story: </label> <br />
+            <InputTextArea @bind-Value="sDTO.Description" style="width:97%" />
+            <br />
+            <p>NOTE: Deleting the story will also delete all the pictures attached to it!!!</p>
+            <br /><br />
+            @if (sDTO.TripId != null)
+            {
+                <button class="btn btn-success" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
+            }
+            <button type="submit" class="btn btn-warning">Edit story</button>
+            <button class="btn btn-danger" @onclick="@Delete">Delete</button>
+            <br/><br/>
+            <PictureUpload id="@StoryId" />
+        </EditForm>
+    </NewStory>
+    @if (edited)
+    {
+        <div class="alert alert-success fade-in" role="alert">
+            A new trip was created successfully!
+        </div>
+    }
+    @if (failed)
+    {
+        <div class="alert alert-danger fade-in" role="alert">
+            This is a failed alert—check it out!
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public int StoryId { get; set; }
+
+    public StoryDTO sDTO = new();
+    public List<DestinationDTO>? destinations = null;
+    public bool edited = false;
+    public bool failed = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Get list of all destinations
+        destinations = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination");
+        sDTO = await Http.GetFromJsonAsync<StoryDTO>($"/api/story/{StoryId}");
+    }
+
+    async Task Save()
+    {
+        edited = false;
+        failed = false;
+        sDTO.StoryId = StoryId;
+        //post a new trip
+        var res = await Http.PutAsJsonAsync<StoryDTO>($"/api/story/{StoryId}", sDTO);
+        if (res.IsSuccessStatusCode)
+        {
+            edited = true;
+            Console.WriteLine(res);
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+        StateHasChanged();
+    }
+
+    async Task Delete()
+    {
+        edited = false;
+        failed = false;
+        var picres = await Http.DeleteAsync($"/api/picture/story/{sDTO.StoryId}");
+        if (picres.IsSuccessStatusCode)
+        {
+            Console.WriteLine(picres);
+
+            var res = await Http.DeleteAsync($"/api/story/{StoryId}");
+            if (res.IsSuccessStatusCode)
+            {
+                Console.WriteLine(res);
+                nav.NavigateTo($"/trip/edit/{sDTO.TripId}");
+            }
+            else
+            {
+                failed = true;
+                Console.WriteLine(res);
+            }
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(picres);
+        }
+        
+    }
+}

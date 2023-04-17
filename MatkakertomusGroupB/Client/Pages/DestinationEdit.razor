@@ -1,0 +1,182 @@
+﻿@page "/destination/edit/{DestinationId:int}"
+@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@using System.Text;
+@using System.Drawing;
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject NavigationManager nav
+
+<h3>Destination Edit</h3>
+
+@if (@dDTO != null)
+{
+    <EditDestination>
+        <EditForm Model="@dDTO" OnValidSubmit="@Save">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <label>Name</label>
+            <br />
+            <InputText @bind-Value="dDTO.Name" placeholder="Name.." />
+            <br />
+            <br />
+            <label>Country</label>
+            <br />
+            <InputText @bind-Value="dDTO.Country" placeholder="Country.." />
+            <br />
+            <br />
+            <label>Municipality</label>
+            <br />
+            <InputText @bind-Value="dDTO.Municipality" placeholder="Municipality.." />
+            <br />
+            <br />
+            <label>Description</label>
+            <br />
+            <InputTextArea @bind-Value="dDTO.Description" placeholder="Description.." style="width:20%"/>
+            <br />
+            <br />
+
+            <label>Image</label>
+            <InputFile OnChange="@OnInputFileChange" style="max-width:100%" multiple />
+            <br />
+
+            @if (dDTO.Image != null)
+            {
+                <img src="data:image/png;base64,@dDTO.Image" style="max-width:40%" />
+
+            }
+            <br />
+            <br />
+
+            <button type="submit" class="btn btn-success">Save edit</button>
+            <button class="btn btn-danger" @onclick="@Delete">Delete</button>
+            <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/destinations")'>Back to destinations</button>
+            
+        </EditForm>
+    </EditDestination>
+} 
+
+@if (edited)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        Destination was edited successfully!
+    </div>
+}
+@if (deleted)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        Destination was deleted successfully!
+    </div>
+}
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        Unexpected error while editing!
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int DestinationId { get; set; }
+
+    public DestinationDTO? dDTO = new();
+
+    private List<string> fileNames = new();
+    private List<IBrowserFile> loadedFiles = new();
+    public List<DestinationDTO>? search = null;
+
+    public int id = 1;
+    private int maxAllowedFiles = 3;
+    private long maxFileSize = 1024 * 1024 * 15; // 15Mt
+
+    public bool nameExists = false;
+    public bool edited = false;
+    public bool failed = false;
+    public bool deleted = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        dDTO = await Http.GetFromJsonAsync<DestinationDTO>($"/api/destination/{DestinationId}");
+    }
+
+    async Task Save()
+    {
+        dDTO.DestinationId = DestinationId;
+        var res = await Http.PutAsJsonAsync<DestinationDTO>($"/api/destination/{DestinationId}", dDTO);
+        if (res.IsSuccessStatusCode)
+        {
+            edited = true;
+            Console.WriteLine(res);
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+        StateHasChanged();
+    }
+
+    async Task Delete()
+    {
+        var res = await Http.DeleteAsync($"/api/destination/{DestinationId}");
+        if (res.IsSuccessStatusCode)
+        {
+            Console.WriteLine(res);
+            nav.NavigateTo($"/destinations");
+            deleted = true;
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs args)
+    {
+        string base64String = "";
+
+        try
+        {
+            // here we will loop all the files that have been selected for upload
+            // this won't be necessary for traveller and destination, they only have one picture each
+            var files = args.GetMultipleFiles();
+            foreach (var file in files)
+            {
+                // abbreviation fs for memorystream
+                await using MemoryStream fs = new MemoryStream();
+
+                // we'll open readstreamer for each individual file
+                await file.OpenReadStream(maxAllowedSize: 1048576).CopyToAsync(fs);
+
+                // this will call GetBytes function to convert the streamed file into bytes
+                byte[] somBytes = GetBytes(fs);
+
+                // here we finally convert the returned bytes to base64string
+                base64String = Convert.ToBase64String(somBytes, 0, somBytes.Length);
+                dDTO.Image = base64String;
+            }
+
+        }
+
+        catch (Exception e)
+        {
+            System.Diagnostics.Debug.Print("ERROR: " + e.Message + Environment.NewLine);
+        }
+
+        // var newUploadResults = await res.Content.ReadFromJsonAsync<List<UploadResult>>();
+    }
+    public static byte[] GetBytes(Stream stream)
+    {
+        var bytes = new byte[stream.Length];
+        stream.Seek(0, SeekOrigin.Begin);
+        stream.ReadAsync(bytes, 0, bytes.Length);
+        stream.Dispose();
+        return bytes;
+    }
+}

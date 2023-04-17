@@ -1,18 +1,20 @@
-﻿@page "/storypicupload"
-@using System.Net.Http.Headers
+﻿@using System.Net.Http.Headers
 @using MatkakertomusGroupB.Shared.Models;
 @inject HttpClient Http
 
-
+<!-- THIS IS NOT IN USE, OLD MODEL, DID NOT MAKE IT
 <PageTitle>Upload story pictures</PageTitle>
 
-<h1>Upload pictures to your story</h1>
-
+<h4>Upload pictures to your story</h4>
+<br/>
+<p>Select up to 3 images to upload to your story.</p>
+<p>You can upload pictures to the story multiple times.</p>
+-->
 <!--This is how you upload multiple files-->
-<InputFile OnChange="@OnInputFileChange" multiple />
-
+<!--InputFile OnChange="@OnInputFileChange" multiple />
+-->
 <!--This is just for testing (or confirmation) purposes, it shows you the uploaded filenames and stored filenames-->
-@if (fileNames.Count > 0)
+@*@if (fileNames.Count > 0)
 {
     <ul>
         @foreach (var fileName in fileNames)
@@ -27,39 +29,49 @@
         }
     </ul>
 }
+@if (tooManyFiles)
+{
+    <h4>Upload max 3 files at a time.</h4>
+}*@
 
-@code {
+@*code {
     [Parameter]
-    public int id { get; set; }
+    public int? id { get; set; }
+
     private int maxAllowedFiles = 3;
-    private long maxFileSize = 1024 * 1024 * 8; // 8Mt
+    private long maxFileSize = 1024 * 1024 * 15; // 15Mt
     private List<string> fileNames = new();
+    private bool tooManyFiles = false;
     private List<UploadResult> uploadResults = new();
 
     // Function that creates a streamcontent that uploads the files
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
+        tooManyFiles = false;
         using var content = new MultipartFormDataContent();
-
-        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        if (e.FileCount < 4)
         {
-            var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+            {
+                var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
 
-            fileNames.Add(file.Name);
-            content.Add(
-                content: fileContent,
-                name: "\"files\"",
-                fileName: file.Name);
+                fileNames.Add(file.Name);
+                content.Add(
+                    content: fileContent,
+                    name: "\"files\"",
+                    fileName: file.Name);
+            }
+
+            var response = await Http.PostAsync("api/File", content);
+            var newUploadResults = await response.Content.ReadFromJsonAsync<List<UploadResult>>();
+
+            if (newUploadResults is not null)
+            {
+                uploadResults = uploadResults.Concat(newUploadResults).ToList();
+            }
         }
-
-        var response = await Http.PostAsync("api/File", content);
-        var newUploadResults = await response.Content.ReadFromJsonAsync<List<UploadResult>>();
-
-        if (newUploadResults is not null)
-        {
-            uploadResults = uploadResults.Concat(newUploadResults).ToList();
-        }
+        else tooManyFiles = true;
     }
 
 
@@ -77,3 +89,4 @@
         return "File not found.";
     }
 }
+*@

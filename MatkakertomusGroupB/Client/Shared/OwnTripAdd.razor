@@ -5,65 +5,64 @@
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
+@inject NavigationManager nav
 
+<div class="right">
+    <h4>Add new trip</h4>
+    <br />
+    <NewTrip>
+        <EditForm Model="@tDTO" OnValidSubmit="@Save">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-<h1>Add new trip</h1>
+            <label>Start date:</label>
+            <br />
+            <InputDate @bind-Value="tDTO.DatumStart" />
+            <br /> <br />
+            <label>End date:</label>
+            <br />
+            <InputDate @bind-Value="tDTO.DatumEnd" />
+            <br /> <br />
+            <label>Check box for private trip: </label>
+            <InputCheckbox @bind-Value="tDTO.Private" />
+            <br /><br />
+            <button type="submit" class="btn btn-success">Add trip</button>
+        </EditForm>
+    </NewTrip>
+    <br />
 
-<NewTrip>
-    <EditForm Model="@trip" OnValidSubmit="@Save">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        
-        <label>Start date:</label>
-        <br />
-        <InputDate @bind-Value="trip.DatumStart" />
-        <br />
-        <label>End date:</label>
-        <br />
-        <InputDate @bind-Value="trip.DatumEnd" />
-        <br />
-        <label>Check box if private: </label>
-        <InputCheckbox @bind-Value="trip.Private" />
-        <br />
-        <button type="submit" class="btn btn-success">Add trip</button>
-    </EditForm>
-</NewTrip>
-<hr />
-<br />
-
-@if (added)
-{
-    <div class="alert alert-success fade-in" role="alert">
-        A new trip was created successfully!
-    </div>
-}
-@if (failed)
-{
-    <div class="alert alert-danger fade-in" role="alert">
-        This is a failed alert—check it out!
-    </div>
-}
-
+    @if (added)
+    {
+        <div class="alert alert-success fade-in" role="alert">
+            A new trip was created successfully!
+        </div>
+    }
+    @if (failed)
+    {
+        <div class="alert alert-danger fade-in" role="alert">
+            This is a failed alert—check it out!
+        </div>
+    }
+</div>
 
 @code {
     [Parameter]
     public string? id { get; set; }
 
-    public Traveller traveller = new();
-    public Trip trip = new();
+    public TripDTO tDTO = new();
     public bool added = false;
     public bool failed = false;
 
     async Task Save()
     {
-        traveller.Id = id;
-        trip.Traveller = traveller;
+        tDTO.TravellerId = id;
         //post a new trip
-        var res = await Http.PostAsJsonAsync<Trip>($"/api/trip", trip);
+        var res = await Http.PostAsJsonAsync<TripDTO>($"/api/trip", tDTO);
         if (res.IsSuccessStatusCode)
         {
             added = true;
             Console.WriteLine(res);
+
         }
         else
         {

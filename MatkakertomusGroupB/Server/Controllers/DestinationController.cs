@@ -28,22 +28,22 @@ namespace MatkakertomusGroupB.Server.Controllers
 			_logger = logger;
 		}
 
-		// GET: api/Destination
-		[AllowAnonymous]
+        // GET: api/Destination
+        [AllowAnonymous]
 		[HttpGet]
-        public async Task<ActionResult<IEnumerable<Destination>>> GetDestinations()
+        public async Task<ActionResult<IEnumerable<DestinationDTO>>> GetDestinations()
         {
           if (_context.Destinations == null)
           {
               return NotFound();
           }
-            return await _context.Destinations.ToListAsync();
+            return DestinationListToDestinationDTOList(await _context.Destinations.ToListAsync());
         }
 
-		// GET: api/Destination/5
-		[AllowAnonymous]
-		[HttpGet("{id}")]
-        public async Task<ActionResult<Destination>> GetDestination(int id)
+        [AllowAnonymous]
+        // GET: api/Destination/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DestinationDTO>> GetDestination(int id)
         {
           if (_context.Destinations == null)
           {
@@ -56,19 +56,20 @@ namespace MatkakertomusGroupB.Server.Controllers
                 return NotFound();
             }
 
-            return destination;
+            return DestinationToDestinationDTO(destination);
         }
 
         // PUT: api/Destination/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDestination(int id, Destination destination)
+        public async Task<IActionResult> PutDestination(int id, DestinationDTO destinationDTO)
         {
-            if (id != destination.DestinationId)
+            Destination destination = DestinationDTOToDestination(destinationDTO);
+            if (id != destinationDTO.DestinationId)
             {
                 return BadRequest();
             }
-
+            
             _context.Entry(destination).State = EntityState.Modified;
 
             try
@@ -95,19 +96,13 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Destination>> PostDestination(DestinationDTO destinationDTO)
         {
-          if (_context.Destinations == null)
+           Destination destination = DestinationDTOToDestination(destinationDTO);
+            if (_context.Destinations == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Destinations'  is null.");
           }
 
-            Destination destination = new Destination
-            {
-                Name = destinationDTO.Name,
-                Country = destinationDTO.Country,
-                Municipality = destinationDTO.Municipality,
-                Description = destinationDTO.Description,
-                Image = destinationDTO.Image
-            };
+
             _context.Destinations.Add(destination);
             
             await _context.SaveChangesAsync();
@@ -135,6 +130,48 @@ namespace MatkakertomusGroupB.Server.Controllers
             return NoContent();
         }
 
+        private List<Destination> DestinationDTOListToDestinationList(List<DestinationDTO> destinationDTOList)
+        {
+            List<Destination> destinationList = new List<Destination>();
+            foreach (DestinationDTO destinationDTO in destinationDTOList) destinationList.Add(DestinationDTOToDestination(destinationDTO));
+
+            return destinationList; 
+        }
+        private List<DestinationDTO> DestinationListToDestinationDTOList(List<Destination> destinationList)
+        {
+            List<DestinationDTO> destinationDTOList = new List<DestinationDTO>();
+            foreach (Destination destination in destinationList) destinationDTOList.Add(DestinationToDestinationDTO(destination));
+
+            return destinationDTOList;
+        }
+
+        private Destination DestinationDTOToDestination(DestinationDTO destinationDTO)
+        {
+           
+            Destination destination= new Destination
+            {
+                DestinationId = destinationDTO.DestinationId,
+                Name = destinationDTO.Name,
+                Country = destinationDTO.Country,
+                Municipality = destinationDTO.Municipality,
+                Description = destinationDTO.Description,
+                Image = destinationDTO.Image
+            };
+            return destination;
+        }
+
+        private DestinationDTO DestinationToDestinationDTO(Destination destination)
+        {
+            DestinationDTO destinationDTO = new DestinationDTO();
+            destinationDTO.DestinationId = destination.DestinationId;
+            destinationDTO.Name = destination.Name;
+            destinationDTO.Country = destination.Country;
+            destinationDTO.Description = destination.Description;
+            destinationDTO.Image = destination.Image;
+            destinationDTO.Municipality = destination.Municipality;
+
+            return destinationDTO;
+        }
         private bool DestinationExists(int id)
         {
             return (_context.Destinations?.Any(e => e.DestinationId == id)).GetValueOrDefault();

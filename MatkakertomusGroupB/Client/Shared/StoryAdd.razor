@@ -1,0 +1,99 @@
+﻿@using MatkakertomusGroupB.Shared.Models;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using MatkakertomusGroupB.Shared
+@attribute [Authorize]
+@inject HttpClient Http
+@inject AuthenticationStateProvider asp
+@inject NavigationManager nav
+
+
+<br />
+<h4>Add new story to trip</h4>
+<br />
+<NewStory>
+    <EditForm Model="@sDTO" OnValidSubmit="@Save">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <label>Destination:</label>
+        <br />
+        <InputSelect @bind-Value="sDTO.DestinationId">
+            @if (destinations == null)
+            {
+                <option selected value="">No destinations available</option>
+            }
+            else
+            {
+                @foreach (DestinationDTO d in destinations)
+                {
+                    <option selected value="@d.DestinationId">@d.Name</option>
+                }
+            }
+        </InputSelect>
+        <br /> <br />
+        <label>Date:</label>
+        <br />
+        <InputDate @bind-Value="sDTO.Datum" />
+        <br /> <br />
+        <label>Tell your story: </label> <br />
+        <InputTextArea @bind-Value="sDTO.Description" style="width:100%" />
+        <br /><br />
+        <button type="submit" class="btn btn-success">Add story to your trip</button>
+    </EditForm>
+</NewStory>
+<p>Once you have added the story, you can add pictures.</p>
+
+@if (added)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        A new trip was created successfully!
+    </div>
+}
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        This is a failed alert—check it out!
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public int tripId { get; set; }
+    public List<DestinationDTO>? destinations = null;
+    public StoryDTO sDTO = new();
+    public bool added = false;
+    public bool failed = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Get list of all destinations
+        destinations = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination");
+        sDTO.Datum = DateTime.Now;
+        DestinationDTO dest = destinations.Last<DestinationDTO>();
+        if (dest.DestinationId != null) sDTO.DestinationId = Convert.ToInt32(dest.DestinationId);
+    }
+
+    async Task Save()
+    {
+        failed = false;
+        added = false;
+        sDTO.TripId = tripId;
+        //post a new story
+        var res = await Http.PostAsJsonAsync<StoryDTO>($"/api/story", sDTO);
+        sDTO = await res.Content.ReadFromJsonAsync<StoryDTO>();
+
+        if (res.IsSuccessStatusCode)
+        {
+            added = true;
+            Console.WriteLine(res);
+            if (sDTO.StoryId != null) nav.NavigateTo($"/story/edit/{sDTO.StoryId}");
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(res);
+        }
+    }
+}

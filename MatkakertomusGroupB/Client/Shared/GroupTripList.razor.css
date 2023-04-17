@@ -1,0 +1,7 @@
+﻿.left {
+    float: left;
+    width: 100%;
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding: 5px;
+}

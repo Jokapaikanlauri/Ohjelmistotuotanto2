@@ -7,33 +7,37 @@
 @inject AuthenticationStateProvider asp
 
 
-<p role="status">Current trip count: @trips</p>
+<div class="left">
+    <h3>List of group trips, current count: @trips</h3>
 
-@if (list != null)
-{
-    @foreach (Trip t in list)
+    @if (list != null)
     {
-        <TripItem Trip="@t">
-            <ul>
-                <li>Trip start: @t.DatumStart</li>
-                <li>Trip end: @t.DatumEnd</li>
-                <li>Trip stories: @t.Stories</li>
-                <TripStoryList tripId=@t.TripId />
-            </ul>
-        </TripItem>
-        <hr />
-        <br />
+        @foreach (TripDTO t in list)
+        {
+            <TripItem Trip="@t">
+                <ul>
+                    <li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
+                    <li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
+                    <br />
+                    <StoryList tripId="@t.TripId" />
+                </ul>
+            </TripItem>
+            <hr />
+            <br />
+        }
     }
-} 
+</div>
 @code {
-    private int trips = 0;
-    private List<Trip>? list = null;
+    [Parameter]
+    public string? id { get; set; }
 
+    private int trips = 0;
+    private List<TripDTO>? list = null;
 
     protected override async Task OnInitializedAsync()
     {
         //Get list of all public trips
-        list = await Http.GetFromJsonAsync<List<Trip>>($"/api/trip/");
+        list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/");
         if (list != null) trips = list.Count;
     }
 }

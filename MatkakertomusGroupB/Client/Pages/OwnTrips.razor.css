@@ -1,11 +1,11 @@
-﻿.left {
+﻿::deep .left {
     float:left;
     width:78%;
     background-color: lightgrey;
     border-radius: 10px;
     padding-left:4px;
 }
-.right {
+::deep .right {
     float:right;
     width: 20%;
     background-color: lightgrey;
@@ -17,8 +17,4 @@
     background-color: dimgrey;
     border-radius: 10px;
     text-align:center;
-}
-
-.description{
-    max-width:10%;
 }

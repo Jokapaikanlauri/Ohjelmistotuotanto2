@@ -6,33 +6,88 @@
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 
-<p role="status">Current picture count: @pictures</p>
 
 @if (list != null)
 {
-    @foreach (Picture p in list)
+    @if (list.Count != 0)
     {
-        <PictureItem Picture="@p">
-            <ul>
-                <li>@p.Image</li>
-            </ul>
-        </PictureItem>
-        <br />
+        <button class="btn btn-success" @onclick=@ShowPictures>Show or hide story pictures</button>
+        @if (showPictures)
+        {
+            @foreach (PictureDTO p in list)
+            {
+                <br />
+                <br />
+                <PictureItem Picture="@p">
+
+
+                    <!--THIS IS TODO CORRECTLY-->
+
+
+                    <!--<button class="btn btn-danger" @onclick='@Delete(@p.PictureId)'>Delete below picture from story</button>-->
+                    
+                    
+                    <img src="data:image/png;base64,@p.Image" style="max-width:90%" />
+                </PictureItem>
+            }
+        }
+        else
+        {
+            <br />
+            <br />
+            <h6>Story picture count: @pictures</h6>
+        }
     }
-} 
+    else
+    {
+        <br />
+        <br />
+        <h6>Story picture count: @pictures</h6>
+    }
+}
+else
+{
+    <br />
+    <br />
+    <h6>No pictures could be fetched</h6>
+}
 
 @code {
     [Parameter]
-    public int storyId { get; set; }
+    public int? storyId { get; set; }
 
+    private bool showPictures = false;
     private int pictures = 0;
-    private List<Picture>? list = null;
-
+    public bool deleted = false;
+    public bool failed = false;
+    private List<PictureDTO>? list = null;
 
     protected override async Task OnInitializedAsync()
     {
-        //Get list stories for a Trip
-        list = await Http.GetFromJsonAsync<List<Picture>>($"/api/story/trip/{storyId}");
+        //Get list of pictures for a story
+        list = await Http.GetFromJsonAsync<List<PictureDTO>>($"/api/picture/story/{storyId}");
         if (list != null) pictures = list.Count;
+    }
+
+    void ShowPictures()
+    {
+        if (!showPictures) showPictures = true;
+        else showPictures = false;
+    }
+
+    async Task Delete(int id)
+    {
+        deleted = false;
+        failed = false;
+        var picres = await Http.DeleteAsync($"/api/picture/{id}");
+        if (picres.IsSuccessStatusCode)
+        {
+            Console.WriteLine(picres);
+        }
+        else
+        {
+            failed = true;
+            Console.WriteLine(picres);
+        }
     }
 }

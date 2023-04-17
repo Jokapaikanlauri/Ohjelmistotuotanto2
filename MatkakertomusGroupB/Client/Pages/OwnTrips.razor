@@ -8,40 +8,36 @@
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
 
-<PageTitle>Own trips</PageTitle>
+<AuthorizeView>
+    <Authorized>
 
-<h1>Own trips</h1>
 
-<div class="main">
-    @if (nickname != null)
-    {
-        <div>
-            <p>Username is: @name</p>
-            <p>User nickname is: @nickname</p>
+        <PageTitle>Own trips</PageTitle>
+        <h1>Own trips</h1>
+
+        <div class="right">
+            <OwnTripAdd id="@userId" />
         </div>
-    }
-    else
-    {
-        <div>
-            <p><em>Loading...</em></p>
 
-            <p>Username is: @name</p>
-        </div>
-    }
-</div>
+        @if (userId != null)
+        {
+            <OwnTripList id=@userId />
+        }
 
-<OwnTripAdd id="@userId" />
 
-@if (userId != null)
-{
-    <OwnTripList id=@userId />
-}
+    </Authorized>
+
+    <NotAuthorized>
+        <div>You are a public user.</div>
+    </NotAuthorized>
+
+</AuthorizeView>
+
 
 
 @code {
 
     public UserDTO? userNickDTO = new UserDTO();
-    public UserDTO? userNickDTO2 = new UserDTO();
     public string? nickname = null;
 
     public string? name = null;
@@ -59,7 +55,7 @@
         //Parse user data from API
         userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
         nickname = userNickDTO.Nickname;
-        
+
         if (name != null)
         {
             //Fetch user data from API via POST operation
@@ -71,11 +67,11 @@
     }
 
     /*private async Task GetUserId()
-    {
+        {
         logger.LogInformation($"I'm a template logging message");
 
         if (name != null)
-        {
+            {
             //Fetch user data from API via POST operation
             var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
             //Parse user data from API

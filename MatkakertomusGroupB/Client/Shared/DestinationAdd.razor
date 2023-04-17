@@ -6,94 +6,167 @@
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
+@inject NavigationManager nav
+
+
 <head>
     <link href="Pages/Destinations.razor.css" />
 </head>
 <div class="right">
-<NewDestination>
-    <div class="addHeader">
-        <h4>Add a new destination</h4>
-    </div>
-    <div class="addDetails">
+    <NewDestination>
+        <div class="addHeader">
+            <h4>Add a new destination</h4>
+        </div>
+        <div class="addDetails">
 
-        <label>Name</label>
-        <br />
-        <InputText @bind-Value="destination.Name" placeholder="Name.." />
-        <br />
-        <label>Country</label>
-        <br />
-        <InputText @bind-Value="destination.Country" placeholder="Country.." />
-        <br />
-        <label>Municipality</label>
-        <br />
-        <InputText @bind-Value="destination.Municipality" placeholder="Municipality.." />
-        <br />
-        <label>Description</label>
-        <br />
-        <InputText @bind-Value="destination.Description" placeholder="Description.." />
-        <br />
-        <label>Image</label>
-        <InputFile OnChange="@OnInputFileChange" multiple />
-        <br />
-        <br />
+            <EditForm Model="@destination" OnValidSubmit="@addDestination">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <label>Name</label>
+                <br />
+                <InputText @bind-Value="destination.Name" placeholder="Name.." style="max-width:100%" />
+                <br />
+                <label>Country</label>
+                <br />
+                <InputText @bind-Value="destination.Country" placeholder="Country.." style="max-width:100%" />
+                <br />
+                <label>Municipality</label>
+                <br />
+                <InputText @bind-Value="destination.Municipality" placeholder="Municipality.." style="max-width:100%" />
+                <br />
+                <label>Description</label>
+                <br />
+                <InputTextArea @bind-Value="destination.Description" placeholder="Description.." style="max-width:100%" />
+                <br />
+                <label>Image</label>
+                <InputFile OnChange="@OnInputFileChange" style="max-width:100%"/>
+                <br />
+                <br />
+                @if (destination.Image != null)
+                {
+                        <img src="data:image/png;base64,@destination.Image" style="max-width:70%"/>
 
-        <button @onclick="()=>addDestination()">Add</button>
-    </div>
-</NewDestination>
+                }
+                <br />
+                <button type="submit" class="btn btn-success">Add</button>
+            </EditForm>
+        </div>
+    </NewDestination>
 </div>
+
+
+@if (added)
+{
+    <div class="alert alert-success fade-in" role="alert">
+        Destination was added successfully!
+    </div>
+}
+@if (failed)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        It's not a destination if it does not have a name!
+    </div>
+}
+@if (nameExists)
+{
+    <div class="alert alert-danger fade-in" role="alert">
+        Destination with this name already exists!
+    </div>
+}
 
 @code {
     [Parameter]
     public string? id { get; set; }
 
     public DestinationDTO destination = new();
-    private int maxAllowedFiles = 3;
-    private long maxFileSize = 1024 * 1024 * 8; // 8Mt
+
     private List<string> fileNames = new();
     private List<UploadResult> uploadResults = new();
+    private List<IBrowserFile> loadedFiles = new();
+    public List<DestinationDTO>? search = null;
+
+
+    public int i = 1;
+    private int maxAllowedFiles = 1;
+    private long maxFileSize = 1024 * 1024 * 8; // 8Mt
+
+    public bool nameExists = false;
     public bool added = false;
     public bool failed = false;
 
-
     async Task addDestination()
     {
+        search = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination/");
+
+        foreach (DestinationDTO d in search)
+        {
+            if(d.Name == destination.Name)
+            {
+                nameExists = true;
+                return;
+            }
+        }
 
         var res = await Http.PostAsJsonAsync<DestinationDTO>($"/api/destination", destination);
         if (res.IsSuccessStatusCode)
         {
             added = true;
             Console.WriteLine(res);
+            StateHasChanged();
         }
         else
         {
+
             failed = true;
             Console.WriteLine(res);
         }
-
+        
     }
 
-    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    private async Task OnInputFileChange(InputFileChangeEventArgs args)
     {
-        using var content = new MultipartFormDataContent();
+        string base64String = "";
 
-        foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+        try
         {
-            var fileContent = new StreamContent(file.OpenReadStream(maxFileSize));
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            // here we will loop all the files that have been selected for upload
+            // this won't be necessary for traveller and destination, they only have one picture each
+            var files = args.GetMultipleFiles();
+            foreach (var file in files)
+            {
+                // this shows the uploaded file info
+                loadedFiles.Add(file);
 
-            fileNames.Add(file.Name);
-            content.Add(
-                content: fileContent,
-                name: "\"files\"",
-                fileName: file.Name);
+                // abbreviation fs for memorystream
+                await using MemoryStream fs = new MemoryStream();
+
+                // we'll open readstreamer for each individual file
+                await file.OpenReadStream(maxAllowedSize: 1048576).CopyToAsync(fs);
+
+                // this will call GetBytes function to convert the streamed file into bytes
+                byte[] somBytes = GetBytes(fs);
+
+                // here we finally convert the returned bytes to base64string
+                base64String = Convert.ToBase64String(somBytes, 0, somBytes.Length);
+                destination.Image=base64String;
+            }
+
         }
 
-        var response = await Http.PostAsync("api/File", content);
-        var newUploadResults = await response.Content.ReadFromJsonAsync<List<UploadResult>>();
-
-        if (newUploadResults is not null)
+        catch (Exception e)
         {
-            uploadResults = uploadResults.Concat(newUploadResults).ToList();
+            System.Diagnostics.Debug.Print("ERROR: " + e.Message + Environment.NewLine);
         }
+
+        // var newUploadResults = await res.Content.ReadFromJsonAsync<List<UploadResult>>();
+    }
+
+    public static byte[] GetBytes(Stream stream)
+    {
+        var bytes = new byte[stream.Length];
+        stream.Seek(0, SeekOrigin.Begin);
+        stream.ReadAsync(bytes, 0, bytes.Length);
+        stream.Dispose();
+        return bytes;
     }
 }

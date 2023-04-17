@@ -5,40 +5,40 @@
 @attribute [Authorize]
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
+@inject NavigationManager nav
 
+<div class="left">
+	<h5>List of your trips, current count: @trips</h5>
 
-<p role="status">Current trip count: @trips</p>
-
-@if (list != null)
-{
-    @foreach (Trip t in list) 
-    {
-        <TripItem Trip="@t">
-            <ul>
-                <li>Trip start: @t.DatumStart</li>
-                <li>Trip end: @t.DatumEnd</li>
-                <li>Trip stories: @t.Stories</li>
-                <TripStoryList tripId="@t.TripId" />
-            </ul>
-        </TripItem>
-        <hr />
-        <br />
-    }
-} 
+	@if (list != null)
+	{
+		@foreach (TripDTO t in list)
+		{
+			<TripItem TripDTO="@t">
+				<ul>
+					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
+					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
+					<br />
+					<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit trip</button>
+					<StoryList tripId="@t.TripId" userId="@id" />
+				</ul>
+			</TripItem>
+			<hr />
+			<br />
+		}
+	}
+</div>
 @code {
-    [Parameter]
-    public string? id { get; set; }
+	[Parameter]
+	public string? id { get; set; }
 
-    private int trips = 0;
-    private List<Trip>? list = null;
+	private int trips = 0;
+	private List<TripDTO>? list = null;
 
-
-    protected override async Task OnInitializedAsync()
-    {
-        
-        //Get list of all own trips with user id
-        list = await Http.GetFromJsonAsync<List<Trip>>($"/api/trip/traveller/{id}");
-        if (list != null) trips = list.Count;
-        
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		//Get list of all own trips with user id
+		list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/traveller/{id}");
+		if (list != null) trips = list.Count;
+	}
 }
