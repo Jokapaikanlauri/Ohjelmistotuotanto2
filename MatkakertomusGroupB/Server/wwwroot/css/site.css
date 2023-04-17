@@ -71,7 +71,9 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #181a1b;
+    color: white;
 }
 .footer {
   position: absolute;

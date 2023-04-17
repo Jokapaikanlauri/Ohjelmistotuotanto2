@@ -32,17 +32,12 @@
 				<label asp-for="Input.Description" class="form-label"></label>
 			</div>
 			<div class="form-floating mb-3">
-				<input asp-for="Input.Image" class="form-control" placeholder="Please enter your image." />
 				<label asp-for="Input.Image" class="form-label"></label>
+				<img id="img-preview" src="data:image/png;base64,@Model.Input.Image" alt="Image Preview" />
+				<input asp-for="Input.Image" class="form-control" type="hidden" id="Input_Image" />
+				<input type="file" name="ImageFile" id="ImageFile" accept="image/*" />
+				<button type="button" onclick="removeImage()">Remove Image</button>
 			</div>
-
-			<!--Possible solution on how to display image:
-			<div class="form-floating mb-3">
-			  <img src="Input.Image" class="img-fluid" alt="Your image" />
-			  <label asp-for="Input.Image" class="form-label"></label>
-			</div>
-			-->
-
 			<div class="form-floating mb-3">
 				<input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
 				<label asp-for="Input.PhoneNumber" class="form-label"></label>
@@ -55,4 +50,32 @@
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
+	<script>
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+
+				reader.onload = function (e) {
+					$('#img-preview').attr('src', e.target.result);
+					$('#Input_Image').val(e.target.result.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''));
+				}
+				reader.readAsDataURL(input.files[0]);
+
+				$('#ImageFile').val('');
+			}
+		}
+
+		function removeImage() {
+			$('#img-preview').attr('src', '');
+			$('#Input_Image').val('');
+			$('#ImageFile').val('');
+		}
+
+		$(document).ready(function () {
+			$('#ImageFile').change(function () {
+				readURL(this);
+			});
+		});
+	</script>
 }
+

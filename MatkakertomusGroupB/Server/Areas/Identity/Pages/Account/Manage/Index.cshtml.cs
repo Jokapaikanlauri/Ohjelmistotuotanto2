@@ -19,13 +19,17 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 	{
 		private readonly UserManager<Traveller> _userManager;
 		private readonly SignInManager<Traveller> _signInManager;
+		private readonly ILogger<IndexModel> _logger;
 
 		public IndexModel(
 			UserManager<Traveller> userManager,
-			SignInManager<Traveller> signInManager)
+			SignInManager<Traveller> signInManager,
+			ILogger<IndexModel> logger)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
+			_logger = logger;
+			_logger.LogInformation("IndexModel constructor called.");
 		}
 
 		/// <summary>
@@ -86,7 +90,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 			[Display(Name = "Description")]
 			public string Description { get; set; }
 
-			[Required]
+			//[Required]
 			[DataType(DataType.Text)]
 			[Display(Name = "Image")]
 			public string Image { get; set; }
@@ -113,8 +117,8 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 				Description = user.Description,
 				// Add required translations to get an image object that can be refferred in the .cshtml, 
 				// Also remember to add required image => binary translation in OnPostAsync()
-				Image = "I'm a Teapot",
-				//Image = user.Image,
+				//Image = "I'm a Teapot",
+				Image = user.Image,
 				PhoneNumber = phoneNumber
 			};
 		}
@@ -133,24 +137,35 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 
 		public async Task<IActionResult> OnPostAsync()
 		{
+			//_logger.LogInformation("OnPostAsync method was called.");
 			var user = await _userManager.GetUserAsync(User);
+			//_logger.LogInformation($"OnPostAsync User: {user}");
 			if (user == null)
 			{
+				//_logger.LogWarning("OnPostAsync user was null");
 				return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 			}
 
 			if (!ModelState.IsValid)
 			{
+				//_logger.LogWarning("OnPostAsync model state was not valid.");
+				foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+				{
+					//_logger.LogError(error.ErrorMessage);
+				}
 				await LoadAsync(user);
 				return Page();
 			}
 
 			var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+			//_logger.LogInformation($"OnPostAsync phoneNumber: {phoneNumber}");
 			if (Input.PhoneNumber != phoneNumber)
 			{
+				//_logger.LogInformation("OnPostAsync phone number was different");
 				var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
 				if (!setPhoneResult.Succeeded)
 				{
+					//_logger.LogWarning("OnPostAsync phone number change failed");
 					StatusMessage = "Unexpected error when trying to set phone number.";
 					return RedirectToPage();
 				}
@@ -181,11 +196,16 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 			{
 				user.Image = Input.Image;
 			}
+			//_logger.LogInformation("OnPostAsync all properties were set according to changes");
 			await _userManager.UpdateAsync(user);
 
-
+			//_logger.LogInformation("OnPostAsync changes were updated to user");
 			await _signInManager.RefreshSignInAsync(user);
+
+			//_logger.LogInformation("OnPostAsync user was refreshed");
 			StatusMessage = "Your profile has been updated";
+
+			//_logger.LogInformation("OnPostAsync profile was refreshed and message delivered, returning to page");
 			return RedirectToPage();
 		}
 	}
