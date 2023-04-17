@@ -8,50 +8,37 @@
 @inject NavigationManager nav
 
 <div class="left">
-    <h5>List of your trips, current count: @trips</h5>
+	<h5>List of your trips, current count: @trips</h5>
 
-    @if (list != null)
-    {
-        @foreach (TripDTO t in list)
-        {
-            <TripItem TripDTO="@t">
-                <ul>
-                    <li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
-                    <li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
-                    <br />
-                    <li>
-                        <button class="btn btn-success" @onclick=@this.ShowStories>Show or hide trip stories</button>
-                        <button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit trip</button>
-                    </li>
-                    @if (this.showStories)
-                    {
-                        <StoryList tripId="@t.TripId" userId="@id" />
-                    }
-                </ul>
-            </TripItem>
-            <hr />
-            <br />
-        }
-    }
+	@if (list != null)
+	{
+		@foreach (TripDTO t in list)
+		{
+			<TripItem TripDTO="@t">
+				<ul>
+					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
+					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
+					<br />
+					<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit trip</button>
+					<StoryList tripId="@t.TripId" />
+				</ul>
+			</TripItem>
+			<hr />
+			<br />
+		}
+	}
 </div>
 @code {
-    [Parameter]
-    public string? id { get; set; }
+	[Parameter]
+	public string? id { get; set; }
 
-    private int trips = 0;
-    private List<TripDTO>? list = null;
-    public bool showStories = false;
+	private int trips = 0;
+	private List<TripDTO>? list = null;
 
-    protected override async Task OnInitializedAsync()
-    {
-        //Get list of all own trips with user id
-        list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/traveller/{id}");
-        if (list != null) trips = list.Count;
-    }
-
-    void ShowStories()
-    {
-        if (!showStories) showStories = true;
-        else showStories = false;
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		//Get list of all own trips with user id
+		list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/traveller/{id}");
+		if (list != null) trips = list.Count;
+	}
 }
