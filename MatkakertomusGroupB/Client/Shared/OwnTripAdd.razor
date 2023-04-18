@@ -56,7 +56,7 @@
     async Task Save()
     {
         added = failed = false;
-        if (tDTO.DatumEnd != null || tDTO.DatumStart != null)
+        if (tDTO.DatumEnd != null && tDTO.DatumStart != null)
         {
 
             tDTO.TravellerId = id;
