@@ -49,25 +49,31 @@
     [Parameter]
     public string? id { get; set; }
 
-    public TripDTO tDTO = new();
+    public TripDTO tDTO = new TripDTO();
     public bool added = false;
     public bool failed = false;
 
     async Task Save()
     {
-        tDTO.TravellerId = id;
-        //post a new trip
-        var res = await Http.PostAsJsonAsync<TripDTO>($"/api/trip", tDTO);
-        if (res.IsSuccessStatusCode)
+        added = failed = false;
+        if (tDTO.DatumEnd != null && tDTO.DatumStart != null)
         {
-            added = true;
-            Console.WriteLine(res);
 
+            tDTO.TravellerId = id;
+            //post a new trip
+            var res = await Http.PostAsJsonAsync<TripDTO>($"/api/trip", tDTO);
+            if (res.IsSuccessStatusCode)
+            {
+                added = true;
+                Console.WriteLine(res);
+
+            }
+            else
+            {
+                failed = true;
+                Console.WriteLine(res);
+            }
         }
-        else
-        {
-            failed = true;
-            Console.WriteLine(res);
-        }
+        else failed = true;
     }
 }
