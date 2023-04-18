@@ -1,7 +1,6 @@
 ﻿.left {
     float: left;
     width: 78%;
-    background-color: #3b3a3a;
     border-radius: 10px;
     padding-left: 4px;
 }
@@ -19,6 +18,7 @@
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
+    background-color: #3b3a3a;
 }
 
 .addHeader {

@@ -32,8 +32,7 @@
 				<label asp-for="Input.Description" class="form-label"></label>
 			</div>
 			<div class="form-floating mb-3">
-				<label asp-for="Input.Image" class="form-label"></label>
-				<img id="img-preview" src="data:image/png;base64,@Model.Input.Image" alt="Image Preview" />
+				<img style="max-height: 240px" id="img-preview" src="data:image/png;base64,@Model.Input.Image" alt="Image Preview" onerror="this.onerror=null;this.src='';this.alt='Please Upload a new profile picture';" />
 				<input asp-for="Input.Image" class="form-control" type="hidden" id="Input_Image" />
 				<input type="file" name="ImageFile" id="ImageFile" accept="image/*" />
 				<button type="button" onclick="removeImage()">Remove Image</button>
@@ -60,8 +59,6 @@
 					$('#Input_Image').val(e.target.result.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''));
 				}
 				reader.readAsDataURL(input.files[0]);
-
-				$('#ImageFile').val('');
 			}
 		}
 

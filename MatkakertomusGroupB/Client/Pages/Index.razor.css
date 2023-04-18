@@ -1,14 +1,16 @@
-﻿#teksti{
-    margin-top:2em;
+﻿#teksti {
+    margin-top: 2em;
 }
+
 .divi {
     border-bottom: 1px solid lightgrey;
-    width:60%;
+    width: 60%;
 }
-#notlogged{
-    font-style:italic;
+
+#notlogged {
+    font-style: italic;
 }
+
 #kuva {
-    
     max-width: 60%;
 }

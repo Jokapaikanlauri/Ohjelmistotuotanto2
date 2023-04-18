@@ -15,30 +15,34 @@
 
 @if (list != null)
 {
-    @foreach (Traveller t in list)
-    {
-        <TravellerItem Traveller="@t">
-            <ul>
-                <li>First name: @t.Forename</li>
-                <li>Last name: @t.Surname</li>
-                <li>Nickname: @t.Nickname</li>
-                <li>Municipality: @t.Municipality</li>
-            </ul>
-            <img src="data:image/png;base64,@t.Image" style="max-width:70%" />
-        </TravellerItem>
-        <br /> <hr /> <br />
-    }
+	@foreach (Traveller t in list)
+	{
+		<TravellerItem Traveller="@t">
+			<div class="list-item">
+				<ul>
+					<li>First name: @t.Forename</li>
+					<li>Last name: @t.Surname</li>
+					<li>Nickname: @t.Nickname</li>
+					<li>Municipality: @t.Municipality</li>
+				</ul>
+				<img src="data:image/png;base64,@t.Image" style="max-width:70%" />
+			</div>
+		</TravellerItem>
+		<br />
+		<hr />
+		<br />
+	}
 }
 
 
 @code {
-    private int count = 0;
+	private int count = 0;
 
-    private List<Traveller>? list = null;
-    protected override async Task OnInitializedAsync()
-    {
-        list = await Http.GetFromJsonAsync<List<Traveller>>($"/api/traveller");
-        if (list != null) count = list.Count;
-    }
+	private List<Traveller>? list = null;
+	protected override async Task OnInitializedAsync()
+	{
+		list = await Http.GetFromJsonAsync<List<Traveller>>($"/api/traveller");
+		if (list != null) count = list.Count;
+	}
 
 }

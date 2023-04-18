@@ -1,13 +1,13 @@
 ﻿.left {
     float: left;
-    width: 100%;
+    width: 78%;
     border-radius: 10px;
     padding: 5px;
 }
 
 .list-item {
-    border-style: double;
-    border-color: white;
+    border-style: solid;
+    border-color: gold;
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;

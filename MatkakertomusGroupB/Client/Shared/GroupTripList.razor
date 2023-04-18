@@ -6,38 +6,36 @@
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 
-
+<h3>List of all trips, current count: @trips</h3>
 <div class="left">
-    <h3>List of group trips, current count: @trips</h3>
 
-    @if (list != null)
-    {
-        @foreach (TripDTO t in list)
-        {
-            <TripItem Trip="@t">
-                <ul>
-                    <li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
-                    <li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
-                    <br />
-                    <StoryList tripId="@t.TripId" />
-                </ul>
-            </TripItem>
-            <hr />
-            <br />
-        }
-    }
+	@if (list != null)
+	{
+		@foreach (TripDTO t in list)
+		{
+			<TripItem Trip="@t">
+				<ul class="list-item">
+					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
+					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
+					<br />
+					<StoryList tripId="@t.TripId" />
+				</ul>
+			</TripItem>
+			<br />
+		}
+	}
 </div>
 @code {
-    [Parameter]
-    public string? id { get; set; }
+	[Parameter]
+	public string? id { get; set; }
 
-    private int trips = 0;
-    private List<TripDTO>? list = null;
+	private int trips = 0;
+	private List<TripDTO>? list = null;
 
-    protected override async Task OnInitializedAsync()
-    {
-        //Get list of all public trips
-        list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/");
-        if (list != null) trips = list.Count;
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		//Get list of all public trips
+		list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/");
+		if (list != null) trips = list.Count;
+	}
 }
