@@ -12,15 +12,6 @@
     padding: 20px;
 }
 
-.list-item {
-    border-style: double;
-    border-color: white;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    background-color: #3b3a3a;
-}
-
 .addHeader {
     background-color: midnightblue;
     border-radius: 10px;
@@ -29,8 +20,4 @@
 
 .description{
     max-width:10%;
-}
-
-h1 {
-    border-bottom: 1px solid white;
 }

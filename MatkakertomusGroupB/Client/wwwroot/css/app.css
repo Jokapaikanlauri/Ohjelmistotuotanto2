@@ -6,6 +6,28 @@ html, body {
     color: white;
 }
 
+.list-item {
+    border-style: double;
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: #3b3a3a;
+}
+
+.list-item .list-item{
+    border-color: gold;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: #3b3a3a;
+}
+
+
+h1 {
+    border-bottom: 1px solid white;
+}
+
 h1:focus {
     outline: none;
 }
