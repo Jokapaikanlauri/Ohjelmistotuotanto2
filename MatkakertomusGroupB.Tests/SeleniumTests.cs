@@ -22,7 +22,7 @@ namespace MatkakertomusGroupB.Tests
 	Test, TestCase or TestCaseSource attribute, it will be treated as a test fixture.
 	 */
 	[TestFixture]
-	public class Tests
+	public class SeleniumTests
 	{
 		private IWebDriver _webDriver;
 		private Process _webServerProcess;
@@ -223,7 +223,7 @@ namespace MatkakertomusGroupB.Tests
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu destinations link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
 			//Group Trips
-			actual = _webDriver.FindElement(By.PartialLinkText("Group Trips")).GetAttribute("href").ToString();
+			actual = _webDriver.FindElement(By.PartialLinkText("Group's Trips")).GetAttribute("href").ToString();
 			expected = "grouptrips";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu group trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
