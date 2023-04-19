@@ -8,76 +8,54 @@
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
 
+<PageTitle>My trips</PageTitle>
+
 <AuthorizeView>
-    <Authorized>
-
-
-        <PageTitle>My trips</PageTitle>
-        <h1>My trips</h1>
-
-        <div class="right">
-            <OwnTripAdd id="@userId" />
-        </div>
-
-        @if (userId != null)
-        {
-            <OwnTripList id=@userId />
-        }
-
-
-    </Authorized>
-
-    <NotAuthorized>
-        <div>You are a public user.</div>
-    </NotAuthorized>
-
+	<Authorized>
+		<h1>My trips</h1>
+		<div class="left">
+			@if (userId != null)
+			{
+				<OwnTripList id=@userId />
+			}
+		</div>
+		<div class="right">
+			<OwnTripAdd id="@userId" />
+		</div>
+	</Authorized>
+	<NotAuthorized>
+		<div>You are a public user.</div>
+	</NotAuthorized>
 </AuthorizeView>
-
-
 
 @code {
 
-    public UserDTO? userNickDTO = new UserDTO();
-    public string? nickname = null;
+	public UserDTO? userNickDTO = new UserDTO();
+	public string? nickname = null;
 
-    public string? name = null;
-    public string? userId = null;
+	public string? name = null;
+	public string? userId = null;
 
-    protected override async Task OnInitializedAsync()
-    {
-        //Assing name to DTO for POST operation
-        name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
-        userNickDTO.Username = name;
+	protected override async Task OnInitializedAsync()
+	{
+		//Assing name to DTO for POST operation
+		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+		userNickDTO.Username = name;
 
-        //Fetch user data from API via POST operation
-        var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userNickDTO);
+		//Fetch user data from API via POST operation
+		var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userNickDTO);
 
-        //Parse user data from API
-        userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-        nickname = userNickDTO.Nickname;
+		//Parse user data from API
+		userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
+		nickname = userNickDTO.Nickname;
 
-        if (name != null)
-        {
-            //Fetch user data from API via POST operation
-            var res = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
-            //Parse user data from API
-            var userDTO = await res.Content.ReadFromJsonAsync<UserDTO>();
-            userId = userDTO.Id;
-        }
-    }
-
-    /*private async Task GetUserId()
-        {
-        logger.LogInformation($"I'm a template logging message");
-
-        if (name != null)
-            {
-            //Fetch user data from API via POST operation
-            var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
-            //Parse user data from API
-            var userDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
-            userId = userDTO.Id;
-        }
-        if (userId != null) StateHasChanged();
-    }*/
+		if (name != null)
+		{
+			//Fetch user data from API via POST operation
+			var res = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+			//Parse user data from API
+			var userDTO = await res.Content.ReadFromJsonAsync<UserDTO>();
+			userId = userDTO.Id;
+		}
+	}
 }

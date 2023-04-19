@@ -6,9 +6,8 @@
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 
-<h3>List of all trips, current count: @trips</h3>
+<h5>List of all trips, current count: @trips</h5>
 <div class="left">
-
 	@if (list != null)
 	{
 		@foreach (TripDTO t in list)

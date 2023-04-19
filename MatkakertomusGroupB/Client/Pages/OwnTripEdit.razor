@@ -8,18 +8,15 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
-<div class="left">
-    <br />
-    <h3>Edit trip</h3>
+<h1>Edit trip</h1>
 
+<div class="left">
     @if (@tDTO != null)
     {
         <EditTrip>
             <EditForm Model="@tDTO" OnValidSubmit="@Save">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-
-                <br />
                 <label>Start date:</label>
                 <br />
                 <InputDate @bind-Value="tDTO.DatumStart" />
@@ -57,7 +54,7 @@
 <div class="right">
     <StoryAdd tripId="@TripId" />
 </div
-<div class="left">
+<div style="margin-top: 10 px">
 
 
     <!--TODO UserId Should also be passed to StoryList, but how to pass it sensibly to this page?-->

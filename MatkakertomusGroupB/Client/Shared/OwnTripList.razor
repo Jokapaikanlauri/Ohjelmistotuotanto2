@@ -7,15 +7,14 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
-<div class="left">
-	<h5>List of your trips, current count: @trips</h5>
-
+<h5>List of your trips, current count: @trips</h5>
 	@if (list != null)
+{
+	@foreach (TripDTO t in list)
 	{
-		@foreach (TripDTO t in list)
-		{
+		<div class="list-item">
 			<TripItem TripDTO="@t">
-				<ul class="list-item">
+				<ul>
 					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
 					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
 					<br />
@@ -23,10 +22,11 @@
 					<StoryList tripId="@t.TripId" userId="@id" />
 				</ul>
 			</TripItem>
-			<br />
-		}
+		</div>
+		<br />
 	}
-</div>
+}
+
 @code {
 	[Parameter]
 	public string? id { get; set; }
