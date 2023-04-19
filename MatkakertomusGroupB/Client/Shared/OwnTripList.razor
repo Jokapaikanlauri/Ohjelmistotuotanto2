@@ -14,6 +14,15 @@
 	{
 		<div class="list-item">
 			<TripItem TripDTO="@t">
+				@if (t.Private)
+				{
+					<span style="color: darkgoldenrod" class="oi oi-lock-locked" aria-hidden="true" />
+					<span> Private</span>
+				}
+				else
+				{
+					<span  class="oi oi-lock-unlocked" aria-hidden="true"> Public</span>
+				}
 				<ul>
 					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
 					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>

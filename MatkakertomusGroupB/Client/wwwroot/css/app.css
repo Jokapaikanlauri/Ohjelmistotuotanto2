@@ -26,8 +26,10 @@ li {
     border-radius: 5px;
     background-color: #3b3a3a;
     margin: 2px;
-    width: 100%;
+    max-width: 78vw;
 }
+
+
 
     .list-item .list-item {
         border-color: gold;
@@ -35,6 +37,7 @@ li {
         border-width: 1px;
         border-radius: 5px;
         background-color: #3b3a3a;
+        max-width: 78vw;
     }
 
 

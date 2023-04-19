@@ -31,11 +31,12 @@
                 <p>NOTE: Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
                 <br />
                 <button class="btn btn-success" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
-                <button type="submit" class="btn btn-warning">Edit trip</button>
+                <button type="submit" class="btn btn-warning">Save Changes</button>
                 <button class="btn btn-danger" @onclick="@Delete">Delete</button>
                 <br /><br/>
             </EditForm>
         </EditTrip>
+        <br /><br/>
     }
     @if (edited)
     {
