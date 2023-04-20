@@ -223,10 +223,14 @@ namespace MatkakertomusGroupB.Tests
 
 			//Destinations
 			string linkText = "Destinations";
+			//Find the correct anchor <a> item via link text
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			//Get the href of the <a>
 			string actual = elem.GetAttribute("href").ToString();
 			expected = "destinations";
+			//Compare the previous to be as expected
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu destinations link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			//Use the found link to navigate to said page
 			elem.Click();
 			//Expect to find page content
 			string keyElemId = "destinations-razor-auth-listing";
