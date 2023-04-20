@@ -28,6 +28,8 @@ namespace MatkakertomusGroupB.Tests
 		private IWebDriver _webDriver;
 		private Process _webServerProcess;
 		private string _baseUrl { get; set; } = "https://localhost:7012";
+		private bool extraDelayEnabled = true;
+		private int extraDelayInMilliSeconds = 500;
 
 
 		[SetUp]
@@ -50,7 +52,7 @@ namespace MatkakertomusGroupB.Tests
 				//Console.WriteLine($"run --project {webProjectPath}\\MatkakertomusGroupB.Server.csproj");
 
 				// Wait for the server to start up
-				Thread.Sleep(5);
+				Thread.Sleep(7000);
 
 				// Create a new Selenium WebDriver manager instance
 				new DriverManager().SetUpDriver(new ChromeConfig());
@@ -228,10 +230,29 @@ namespace MatkakertomusGroupB.Tests
 			elem.Click();
 			//Expect to find page content
 			string keyElemId = "destinations-razor-auth-listing";
+			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to {keyElem.GetAttribute("innerHTML").ToString()} find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found. {_webDriver.PageSource.ToString()}");
-			_webDriver.Navigate().Back();
+			//Define wait time
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
 
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 
 			//Home
 			linkText = "Home";
@@ -242,9 +263,29 @@ namespace MatkakertomusGroupB.Tests
 			elem.Click();
 			//Expect to find page content
 			keyElemId = "index-razor";
+			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-			_webDriver.Navigate().Back();
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 
 			//Group's Trips
 			linkText = "Group's Trips";
@@ -255,9 +296,29 @@ namespace MatkakertomusGroupB.Tests
 			elem.Click();
 			//Expect to find page content
 			keyElemId = "grouptriplist-razor";
+			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-			_webDriver.Navigate().Back();
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 
 			//Own Trips
 			linkText = "My Trips";
@@ -268,9 +329,29 @@ namespace MatkakertomusGroupB.Tests
 			elem.Click();
 			//Expect to find page content
 			keyElemId = "owntrips-razor";
+			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-			_webDriver.Navigate().Back();
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 
 			//My Information
 			linkText = "My Information";
@@ -281,9 +362,31 @@ namespace MatkakertomusGroupB.Tests
 			elem.Click();
 			//Expect to find page content
 			keyElemId = "identitypage-index";
+			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			//Return back to previous page
 			_webDriver.Navigate().Back();
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 
 			//Other Travellers
 			linkText = "Travellers";
@@ -293,10 +396,30 @@ namespace MatkakertomusGroupB.Tests
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu travellers link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 			elem.Click();
 			//Expect to find page content
-			keyElemId = "travellerlist";
+			keyElemId = "travellerlist-razor";
+			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-			_webDriver.Navigate().Back();
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 
 			//Verify that nav menu has only 6 links
 			elem = _webDriver.FindElement(By.Id("navmenu-auth"));
@@ -306,15 +429,16 @@ namespace MatkakertomusGroupB.Tests
 
 			_webDriver.FindElement(By.Id("logout_button")).Click();
 
-			Thread.Sleep(1000);
-			//The whole bucket, logged out notfication hardcoded elsewhere
+			//Wait for built-in auth notification
+			Thread.Sleep(5000);
+			//The whole bucket, logged out notfication hardcoded
 			string pageContent = _webDriver.FindElement(By.Id("app")).Text.ToString();
 			expected = "You are logged out.";
 
 
-			Thread.Sleep(2000);
-			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{pageContent}\"");
+			Thread.Sleep(100);
 
+			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{pageContent}\"");
 		}
 	}
 }
