@@ -21,11 +21,9 @@
 	toimii vain jos matkakohde on käyttäjän lisäämä
 -->
 
-
-
 <AuthorizeView>
 	<Authorized>
-		<div class="left">
+		<div id="destinations-razor-auth-listing" class="left">
 			@if (list != null)
 			{
 				@foreach (Destination d in list)
@@ -62,7 +60,7 @@
 		</div>
 	</Authorized>
 	<NotAuthorized>
-		<div id="destinations-list-public-listing" class="left">
+		<div id="destinations-razor-public-listing" class="left">
 			@if (list != null)
 			{
 				@foreach (Destination d in list)
@@ -106,7 +104,8 @@
 	protected override async Task OnInitializedAsync()
 	{
 		//Assing name to variable for future operations
-		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+		var authState = await asp.GetAuthenticationStateAsync();
+		name = authState.User.Identity.Name;
 
 		var client = ClientFactory.CreateClient("public");
 		list = await client.GetFromJsonAsync<List<Destination>>($"/api/destination");

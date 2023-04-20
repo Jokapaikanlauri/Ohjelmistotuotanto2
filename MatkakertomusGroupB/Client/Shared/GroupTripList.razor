@@ -7,7 +7,7 @@
 @inject AuthenticationStateProvider asp
 
 <h5>List of all trips, current count: @trips</h5>
-<div class="left">
+<div id="grouptriplist-razor" class="left">
 	@if (list != null)
 	{
 		@foreach (TripDTO t in list)

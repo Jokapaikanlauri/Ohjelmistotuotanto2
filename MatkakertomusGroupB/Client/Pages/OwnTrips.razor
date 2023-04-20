@@ -13,7 +13,7 @@
 <AuthorizeView>
 	<Authorized>
 		<h1>My trips</h1>
-		<div class="left">
+		<div id="owntrips-razor" class="left">
 			@if (userId != null)
 			{
 				<OwnTripList id=@userId />

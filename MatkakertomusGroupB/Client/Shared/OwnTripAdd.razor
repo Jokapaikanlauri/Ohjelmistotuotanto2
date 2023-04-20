@@ -14,22 +14,24 @@
 		<h4>Add new trip</h4>
 	</div>
 	<div class="addDetails">
-		<EditForm Model="@tDTO" OnValidSubmit="@Save">
-			<DataAnnotationsValidator />
-			<ValidationSummary />
-			<label>Start date:</label>
-			<br />
-			<InputDate @bind-Value="tDTO.DatumStart" />
-			<br /> <br />
-			<label>End date:</label>
-			<br />
-			<InputDate @bind-Value="tDTO.DatumEnd" />
-			<br /> <br />
-			<label>Check box for private trip: </label>
-			<InputCheckbox @bind-Value="tDTO.Private" />
-			<br /><br />
-			<button type="submit" class="btn btn-success">Add trip</button>
-		</EditForm>
+		<NewTrip>
+			<EditForm Model="@tDTO" OnValidSubmit="@Save">
+				<DataAnnotationsValidator />
+				<ValidationSummary />
+				<label>Start date:</label>
+				<br />
+				<InputDate @bind-Value="tDTO.DatumStart" />
+				<br /> <br />
+				<label>End date:</label>
+				<br />
+				<InputDate @bind-Value="tDTO.DatumEnd" />
+				<br /> <br />
+				<label>Check box for private trip: </label>
+				<InputCheckbox @bind-Value="tDTO.Private" />
+				<br /><br />
+				<button type="submit" class="btn btn-success">Add trip</button>
+			</EditForm>
+		</NewTrip>
 	</div>
 	<br />
 	@if (added)

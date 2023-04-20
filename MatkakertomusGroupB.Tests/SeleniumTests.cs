@@ -11,6 +11,7 @@ using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using NUnit.Framework;
+using MatkakertomusGroupB.Client.Pages;
 
 namespace MatkakertomusGroupB.Tests
 {
@@ -49,7 +50,7 @@ namespace MatkakertomusGroupB.Tests
 				//Console.WriteLine($"run --project {webProjectPath}\\MatkakertomusGroupB.Server.csproj");
 
 				// Wait for the server to start up
-				Thread.Sleep(5000);
+				Thread.Sleep(5);
 
 				// Create a new Selenium WebDriver manager instance
 				new DriverManager().SetUpDriver(new ChromeConfig());
@@ -72,6 +73,9 @@ namespace MatkakertomusGroupB.Tests
 
 			//Global Implicit wait before failing (waits for element to be found)
 			_webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+
+			// Wait for the server to start up
+			Thread.Sleep(5);
 		}
 
 		/// <summary>
@@ -145,7 +149,7 @@ namespace MatkakertomusGroupB.Tests
 			var title = wait.Until(drv => drv.Title.Equals("Destinations"));
 
 
-			expected = "destinations-list-public-listing";
+			expected = "destinations-razor-public-listing";
 			var publicListingElem = _webDriver.FindElement(By.Id(expected));
 
 			Assert.AreEqual(true, publicListingElem.Enabled, $"Expected page to have element with id \"{expected}\", but it wasn't: {publicListingElem.Enabled}");
@@ -153,7 +157,7 @@ namespace MatkakertomusGroupB.Tests
 			var destinationsListHTML = _webDriver.FindElement(By.Id("Kiuruvesi-div")).GetAttribute("innerHTML");
 			expected = "Kiuruvesi</h4>";
 			Assert.True(destinationsListHTML.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListHTML}\"")
-				
+
 				;
 			var destinationsListText = _webDriver.FindElement(By.Id("Kiuruvesi-div")).Text.ToString();
 			expected = "Country: FINLAND";
@@ -211,44 +215,94 @@ namespace MatkakertomusGroupB.Tests
 			Assert.False(loginDisplayHTML.Contains("login"), $"Expected login box to not \"login\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
 
 			//Test Nav menu contents
+			//Nav to pages
 			//Koti-, Matkakohde-, Porukan matkat-, Omat matkat-, Omat tiedot-, Jäsenet-sivut
-			//Home
-			string actual = _webDriver.FindElement(By.PartialLinkText("Home")).GetAttribute("href").ToString();
-			expected = "";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu home link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+
 
 			//Destinations
-			actual = _webDriver.FindElement(By.PartialLinkText("Destinations")).GetAttribute("href").ToString();
+			string linkText = "Destinations";
+			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			string actual = elem.GetAttribute("href").ToString();
 			expected = "destinations";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu destinations link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			string keyElemId = "destinations-razor-auth-listing";
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to {keyElem.GetAttribute("innerHTML").ToString()} find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found. {_webDriver.PageSource.ToString()}");
+			_webDriver.Navigate().Back();
 
-			//Group Trips
-			actual = _webDriver.FindElement(By.PartialLinkText("Group's Trips")).GetAttribute("href").ToString();
+
+			//Home
+			linkText = "Home";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
+			expected = "";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu home link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "index-razor";
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			_webDriver.Navigate().Back();
+
+			//Group's Trips
+			linkText = "Group's Trips";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
 			expected = "grouptrips";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu group trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "grouptriplist-razor";
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			_webDriver.Navigate().Back();
 
 			//Own Trips
-			actual = _webDriver.FindElement(By.PartialLinkText("My Trips")).GetAttribute("href").ToString();
+			linkText = "My Trips";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
 			expected = "trips";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "owntrips-razor";
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			_webDriver.Navigate().Back();
 
 			//My Information
-			actual = _webDriver.FindElement(By.PartialLinkText("My Information")).GetAttribute("href").ToString();
+			linkText = "My Information";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
 			expected = "authentication/profile";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my information link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "identitypage-index";
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			_webDriver.Navigate().Back();
 
 			//Other Travellers
-			actual = _webDriver.FindElement(By.PartialLinkText("Travellers")).GetAttribute("href").ToString();
+			linkText = "Travellers";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
 			expected = "travellerlist";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu travellers link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "travellerlist";
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			_webDriver.Navigate().Back();
 
 			//Verify that nav menu has only 6 links
-			var navmenuHTML = _webDriver.FindElement(By.Id("navmenu-auth")).GetAttribute("innerHTML");
+			elem = _webDriver.FindElement(By.Id("navmenu-auth"));
+			var navmenuHTML = elem.GetAttribute("innerHTML");
 			int regexMatches = Regex.Matches(navmenuHTML, "<a href").Count();
 			Assert.True(regexMatches == 6, $"Expected nav menu to contain 6 links, but it contained {regexMatches} links.");
-
-
 
 			_webDriver.FindElement(By.Id("logout_button")).Click();
 
