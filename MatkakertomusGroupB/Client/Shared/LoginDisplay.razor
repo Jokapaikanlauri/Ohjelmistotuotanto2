@@ -15,11 +15,11 @@
 		@if (nickname != null)
 		{
 
-				<a id="nick-display" href="authentication/profile"><span class="oi oi-cog" aria-hidden="true"></span> Hello @nickname</a>
+			<a id="nick-display" href="authentication/profile"><span class="oi oi-cog" aria-hidden="true"></span> Hello @nickname</a>
 		}
 		else
 		{
-				<span>Loading...</span>
+			<span>Loading...</span>
 			GetUserNick();
 		}
 
@@ -27,8 +27,8 @@
 	</Authorized>
 	<NotAuthorized>
 		<span id="LoginDisplay-razor-public">
-		<a href="authentication/register"><span class="oi oi-pencil" aria-hidden="true"></span> Register</a>
-		<a href="authentication/login"> <span class="oi oi-account-login" aria-hidden="true"></span> Log in</a>
+			<a href="authentication/register"><span class="oi oi-pencil" aria-hidden="true"></span> Register</a>
+			<a href="authentication/login"> <span class="oi oi-account-login" aria-hidden="true"></span> Log in</a>
 		</span>
 	</NotAuthorized>
 </AuthorizeView>
@@ -41,7 +41,9 @@
 		try
 		{
 			//Assing name to variable for future operations
-			var name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+			var authState = await asp.GetAuthenticationStateAsync();
+			var name = authState.User.Identity.Name;
+
 			if (name != null)
 			{
 				//Fetch user data from API via POST operation

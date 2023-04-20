@@ -46,7 +46,8 @@
 	protected override async Task OnInitializedAsync()
 	{
 		//Assing name to variable for future operations
-		name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+		var authState = await asp.GetAuthenticationStateAsync();
+		name = authState.User.Identity.Name;
 
 		//var response = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/nick", userDTO);
 		if (name != null)
