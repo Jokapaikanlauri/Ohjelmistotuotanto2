@@ -53,7 +53,7 @@
 
 </div>
 <div class="right">
-    <StoryAdd tripId="@TripId" />
+    <StoryAdd TripId="@TripId" />
 </div
 <div class="left">
 
@@ -61,7 +61,7 @@
     <!--TODO UserId Should also be passed to StoryList, but how to pass it sensibly to this page?-->
 
 
-    <StoryList tripId="@TripId" />
+    <StoryList TripId="@TripId" UserId="@userId" />
 </div>
 
 
@@ -70,18 +70,31 @@
 @code {
     [Parameter]
     public int TripId { get; set; }
-    [Parameter]
-    public string UserId { get; set; }
 
+    public string? userId = null;
     public TripDTO? tDTO = new();
     public bool edited = false;
     public bool failed = false;
+
 
 
     protected override async Task OnInitializedAsync()
     {
         //Get the trip to edit
         tDTO = await Http.GetFromJsonAsync<TripDTO>($"/api/trip/{TripId}");
+        
+		//Assing name to variable for future operations
+		var authState = await asp.GetAuthenticationStateAsync();
+		string? name = authState.User.Identity.Name;
+
+        if (name != null)
+        {
+            //Fetch user data from API via POST operation
+            var res = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+            //Parse user data from API
+            var userDTO = await res.Content.ReadFromJsonAsync<UserDTO>();
+            userId = userDTO.Id;
+        }
     }
 
     async Task Save()

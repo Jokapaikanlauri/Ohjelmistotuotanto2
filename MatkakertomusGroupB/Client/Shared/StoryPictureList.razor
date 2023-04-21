@@ -18,14 +18,9 @@
             {
                 <br />
                 <br />
+                <button class="btn btn-danger" @onclick="@(() => Delete(p.PictureId))">Delete below picture from story</button>
+                <br />
                 <PictureItem Picture="@p">
-
-
-                    <!--THIS IS TODO CORRECTLY-->
-
-
-                    <!--<button class="btn btn-danger" @onclick='@Delete(@p.PictureId)'>Delete below picture from story</button>-->
-                    
                     
                     <img src="data:image/png;base64,@p.Image" style="max-width:90%" />
                 </PictureItem>
@@ -54,7 +49,7 @@ else
 
 @code {
     [Parameter]
-    public int? storyId { get; set; }
+    public int? StoryId { get; set; }
 
     private bool showPictures = false;
     private int pictures = 0;
@@ -65,7 +60,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         //Get list of pictures for a story
-        list = await Http.GetFromJsonAsync<List<PictureDTO>>($"/api/picture/story/{storyId}");
+        list = await Http.GetFromJsonAsync<List<PictureDTO>>($"/api/picture/story/{StoryId}");
         if (list != null) pictures = list.Count;
     }
 
@@ -75,11 +70,13 @@ else
         else showPictures = false;
     }
 
-    async Task Delete(int id)
+    async Task Delete(int? id)
     {
         deleted = false;
         failed = false;
+        id = Convert.ToInt32(id);
         var picres = await Http.DeleteAsync($"/api/picture/{id}");
+
         if (picres.IsSuccessStatusCode)
         {
             Console.WriteLine(picres);
