@@ -444,5 +444,269 @@ namespace MatkakertomusGroupB.Tests
 
 			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{pageContent}\"");
 		}
+		[Test, Order(3)]
+		public void Register_nav_add_LogOut()
+		{
+			//Navigate to specific URL
+			_webDriver.Navigate().GoToUrl(_baseUrl);
+
+			//Wait until a specific element is found(timeout defined in global ImplicitWait
+			_webDriver.FindElement(By.PartialLinkText("Register")).Click();
+
+			Random random = new Random();
+			int randomNumber = random.Next(100000, 999999);
+
+			//Fill out data
+			string forename = $"Test-{nameof(forename)}-{randomNumber.ToString()}";
+			string surname = $"Test-{nameof(surname)}-{randomNumber.ToString()}";
+			string nickname = $"Test-{nameof(nickname)}-{randomNumber.ToString()}";
+			string email = $"Test-{nameof(email)}-{randomNumber.ToString()}";
+			string password = $"Test-{nameof(password)}-{randomNumber.ToString()}";
+
+			_webDriver.FindElement(By.Id("Input_Forename")).SendKeys(forename);
+			_webDriver.FindElement(By.Id("Input_Surname")).SendKeys(surname);
+			_webDriver.FindElement(By.Id("Input_Nickname")).SendKeys(nickname);
+			_webDriver.FindElement(By.Id("Input_Email")).SendKeys(email);
+			_webDriver.FindElement(By.Id("Input_Password")).SendKeys(password);
+			_webDriver.FindElement(By.Id("Input_ConfirmPassword")).SendKeys(password);
+			//Proceedd
+			_webDriver.FindElement(By.Id("registerSubmit")).Click();
+
+
+
+			//User must see his NickName
+			string loginDisplayHTML = _webDriver.FindElement(By.Id("nick-display")).GetAttribute("innerHTML");
+			string expected = "Dude";
+			Assert.True(loginDisplayHTML.Contains(expected), $"Expected login box to contain nickname \"{expected}\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
+			Assert.False(loginDisplayHTML.Contains("login"), $"Expected login box to not \"login\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
+
+			//Test Nav menu contents
+			//Nav to pages
+			//Koti-, Matkakohde-, Porukan matkat-, Omat matkat-, Omat tiedot-, Jäsenet-sivut
+
+
+			//Destinations
+			string linkText = "Destinations";
+			//Find the correct anchor <a> item via link text
+			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			//Get the href of the <a>
+			string actual = elem.GetAttribute("href").ToString();
+			expected = "destinations";
+			//Compare the previous to be as expected
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu destinations link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			//Use the found link to navigate to said page
+			elem.Click();
+			//Expect to find page content
+			string keyElemId = "destinations-razor-auth-listing";
+			//Get element
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//Home
+			linkText = "Home";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
+			expected = "";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu home link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "index-razor";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//Group's Trips
+			linkText = "Group's Trips";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
+			expected = "grouptrips";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu group trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "grouptriplist-razor";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//Own Trips
+			linkText = "My Trips";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
+			expected = "trips";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "owntrips-razor";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//My Information
+			linkText = "My Information";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
+			expected = "authentication/profile";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my information link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "identitypage-index";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			//Return back to previous page
+			_webDriver.Navigate().Back();
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//Other Travellers
+			linkText = "Travellers";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			actual = elem.GetAttribute("href").ToString();
+			expected = "travellerlist";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu travellers link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "travellerlist-razor";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//Verify that nav menu has only 6 links
+			elem = _webDriver.FindElement(By.Id("navmenu-auth"));
+			var navmenuHTML = elem.GetAttribute("innerHTML");
+			int regexMatches = Regex.Matches(navmenuHTML, "<a href").Count();
+			Assert.True(regexMatches == 6, $"Expected nav menu to contain 6 links, but it contained {regexMatches} links.");
+
+			_webDriver.FindElement(By.Id("logout_button")).Click();
+
+			//Wait for built-in auth notification
+			Thread.Sleep(5000);
+			//The whole bucket, logged out notfication hardcoded
+			string pageContent = _webDriver.FindElement(By.Id("app")).Text.ToString();
+			expected = "You are logged out.";
+
+
+			Thread.Sleep(100);
+
+			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{pageContent}\"");
+		}
 	}
 }
