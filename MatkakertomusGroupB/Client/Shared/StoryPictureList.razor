@@ -57,11 +57,15 @@ else
     public bool failed = false;
     private List<PictureDTO>? list = null;
 
-    protected override async Task OnInitializedAsync()
+    private async Task GetData()
     {
         //Get list of pictures for a story
         list = await Http.GetFromJsonAsync<List<PictureDTO>>($"/api/picture/story/{StoryId}");
         if (list != null) pictures = list.Count;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
     }
 
     void ShowPictures()
@@ -80,6 +84,8 @@ else
         if (picres.IsSuccessStatusCode)
         {
             Console.WriteLine(picres);
+            await GetData();
+            StateHasChanged();
         }
         else
         {
