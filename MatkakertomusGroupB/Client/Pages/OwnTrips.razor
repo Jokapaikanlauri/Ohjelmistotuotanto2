@@ -16,7 +16,7 @@
         <div id="owntrips-razor" class="left">
             @if (userId != null)
             {
-                <OwnTripList UserId=@userId />
+                <OwnTripList UserId=@userId @ref="ownTripListReference" />
             }
         </div>
         <div class="right">
@@ -35,6 +35,9 @@
 
     public string? name = null;
     public string? userId = null;
+
+    //reference to the child component
+    private OwnTripList ownTripListReference;
 
 
     private async Task GetData()
@@ -62,11 +65,10 @@
         }
     }
 
+
     public async void RefreshList()
     {
-        await GetData();
-
-        StateHasChanged();
+        await ownTripListReference.RefreshOwnTripList();
     }
 
     protected override async Task OnInitializedAsync()

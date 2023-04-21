@@ -22,7 +22,7 @@
 				}
 				else
 				{
-					<span  class="oi oi-lock-unlocked" aria-hidden="true"> Public</span>
+					<span class="oi oi-lock-unlocked" aria-hidden="true"> Public</span>
 				}
 				<ul>
 					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
@@ -41,6 +41,7 @@
 	[Parameter]
 	public string? UserId { get; set; }
 
+
 	private int trips = 0;
 	private List<TripDTO>? list = null;
 
@@ -53,6 +54,16 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		
 		await GetData();
+	}
+
+	public async Task RefreshOwnTripList()
+	{
+		//Get new data
+		await GetData();
+
+		// Call StateHasChanged to trigger a re-render
+		StateHasChanged();
 	}
 }
