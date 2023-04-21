@@ -24,11 +24,11 @@
                 <ValidationSummary />
                 <label>Name</label>
                 <br />
-                <InputText @bind-Value="destination.Name" placeholder="Name.." style="max-width:100%" />
+                <InputText @bind-Value="destination.Name" onchange="@InputCheck()" placeholder="Name.." style="max-width:100%" />
                 <br />
                 <label>Country</label>
                 <br />
-                <InputText @bind-Value="destination.Country" placeholder="Country.." style="max-width:100%" />
+                <InputText @bind-Value="destination.Country" onchange="@InputCheck()" placeholder="Country.." style="max-width:100%" />
                 <br />
                 <label>Municipality</label>
                 <br />
@@ -48,7 +48,14 @@
 
                 }
                 <br />
-                <button type="submit" class="btn btn-success">Add</button>
+                @if(!InputCheck())
+                {
+                    <p>Insert destination Name and Country to add destination.</p>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-success">Add</button>
+                }
             </EditForm>
         </div>
     </NewDestination>
@@ -100,6 +107,7 @@
 
     async Task addDestination()
     {
+        added = failed = nameExists = false;
         search = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination/");
 
         foreach (DestinationDTO d in search)
@@ -126,7 +134,7 @@
             failed = true;
             Console.WriteLine(res);
         }
-        
+
     }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs args)
@@ -174,5 +182,12 @@
         stream.ReadAsync(bytes, 0, bytes.Length);
         stream.Dispose();
         return bytes;
+    }
+
+    bool InputCheck()
+    {
+        added = failed = nameExists = false;
+        if (string.IsNullOrEmpty(destination.Name) || string.IsNullOrEmpty(destination.Country)) return false;
+        else return true;
     }
 }
