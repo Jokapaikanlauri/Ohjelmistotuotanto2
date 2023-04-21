@@ -40,16 +40,19 @@
 @code {
 	[Parameter]
 	public string? UserId { get; set; }
-	[CascadingParameter]
-	public OwnTrips? _Parent { get; set; }
 
 	private int trips = 0;
 	private List<TripDTO>? list = null;
 
-	protected override async Task OnInitializedAsync()
+	private async Task GetData()
 	{
 		//Get list of all own trips with user id
 		list = await Http.GetFromJsonAsync<List<TripDTO>>($"/api/trip/traveller/{UserId}");
 		if (list != null) trips = list.Count;
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await GetData();
 	}
 }

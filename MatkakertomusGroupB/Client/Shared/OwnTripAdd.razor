@@ -58,8 +58,8 @@
 @code {
 	[Parameter]
 	public string? UserId { get; set; }
-	[CascadingParameter]
-	public OwnTrips? _Parent { get; set; }
+	[Parameter]
+	public Action RefreshParent { get; set; }
 
 	public TripDTO tDTO = new TripDTO();
 	public bool added = false;
@@ -76,8 +76,9 @@
 		if (res.IsSuccessStatusCode)
 		{
 			added = true;
-			_Parent.RefreshState();
 			Console.WriteLine(res);
+
+			RefreshParent?.Invoke();
 		}
 		else
 		{
