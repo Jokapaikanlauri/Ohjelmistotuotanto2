@@ -13,17 +13,15 @@
 <AuthorizeView>
     <Authorized>
         <h1>My trips</h1>
-        <CascadingValue Value="this">
-            <div id="owntrips-razor" class="left">
-                @if (userId != null)
-                {
-                    <OwnTripList UserId=@userId  />
-                }
-            </div>
-            <div class="right">
-                <OwnTripAdd UserId="@userId" />
-            </div>
-        </CascadingValue>
+        <div id="owntrips-razor" class="left">
+            @if (userId != null)
+            {
+                <OwnTripList UserId=@userId />
+            }
+        </div>
+        <div class="right">
+            <OwnTripAdd UserId="@userId" RefreshParent="@RefreshList" />
+        </div>
     </Authorized>
     <NotAuthorized>
         <div>You are a public user.</div>
@@ -34,13 +32,14 @@
 
     public UserDTO? userNickDTO = new UserDTO();
     public string? nickname = null;
-    public Func<bool>? ShouldRender;
 
     public string? name = null;
     public string? userId = null;
 
-    protected override async Task OnInitializedAsync()
+
+    private async Task GetData()
     {
+
         //Assing name to variable for future operations
         var authState = await asp.GetAuthenticationStateAsync();
         name = authState.User.Identity.Name;
@@ -63,8 +62,15 @@
         }
     }
 
-    public void RefreshState()
+    public async void RefreshList()
     {
-        this.StateHasChanged();
+        await GetData();
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
     }
 }
