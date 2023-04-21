@@ -52,9 +52,9 @@
             <br />
             <br />
 
-            <button type="submit" class="btn btn-success">Save edit</button>
+            <button class="btn btn-success" @onclick='()=>nav.NavigateTo($"/destinations")'>Back to destinations</button>
+            <button type="submit" class="btn btn-warning">Save edit</button>
             <button class="btn btn-danger" @onclick="@Delete">Delete</button>
-            <button class="btn btn-primary" @onclick='()=>nav.NavigateTo($"/destinations")'>Back to destinations</button>
             
         </EditForm>
     </EditDestination>
