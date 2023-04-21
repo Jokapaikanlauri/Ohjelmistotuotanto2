@@ -58,7 +58,8 @@
 
 @code {
 	[Parameter]
-	public int tripId { get; set; }
+	public int TripId { get; set; }
+
 	public List<DestinationDTO>? destinations = null;
 	public StoryDTO sDTO = new();
 	public bool added = false;
@@ -77,7 +78,7 @@
 	{
 		failed = false;
 		added = false;
-		sDTO.TripId = tripId;
+		sDTO.TripId = TripId;
 		//post a new story
 		var res = await Http.PostAsJsonAsync<StoryDTO>($"/api/story", sDTO);
 		sDTO = await res.Content.ReadFromJsonAsync<StoryDTO>();

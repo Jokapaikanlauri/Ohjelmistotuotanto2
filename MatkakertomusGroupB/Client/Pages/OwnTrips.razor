@@ -41,8 +41,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //Assing name to DTO for POST operation
-        name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+        //Assing name to variable for future operations
+        var authState = await asp.GetAuthenticationStateAsync();
+        name = authState.User.Identity.Name;
         userNickDTO.Username = name;
 
         //Fetch user data from API via POST operation

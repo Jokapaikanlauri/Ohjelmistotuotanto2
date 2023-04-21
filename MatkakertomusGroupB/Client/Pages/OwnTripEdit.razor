@@ -53,7 +53,7 @@
 
 </div>
 <div class="right">
-    <StoryAdd tripId="@TripId" />
+    <StoryAdd TripId="@TripId" />
 </div
 <div class="left">
 
@@ -82,7 +82,10 @@
     {
         //Get the trip to edit
         tDTO = await Http.GetFromJsonAsync<TripDTO>($"/api/trip/{TripId}");
-        string? name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+        
+		//Assing name to variable for future operations
+		var authState = await asp.GetAuthenticationStateAsync();
+		string? name = authState.User.Identity.Name;
 
         if (name != null)
         {

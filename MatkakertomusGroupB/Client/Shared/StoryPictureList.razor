@@ -18,8 +18,9 @@
             {
                 <br />
                 <br />
-                <button class="btn btn-danger" onclick='@Delete(p.PictureId)'>Delete below picture from story</button>
-                <PictureItem PictureDTO="@p">
+                <button class="btn btn-danger" @onclick="@(() => Delete(p.PictureId))">Delete below picture from story</button>
+                <br />
+                <PictureItem Picture="@p">
                     
                     <img src="data:image/png;base64,@p.Image" style="max-width:90%" />
                 </PictureItem>
