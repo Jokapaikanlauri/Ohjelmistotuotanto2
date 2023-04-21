@@ -56,7 +56,7 @@
 			}
 		</div>
 		<div class="right">
-			<DestinationAdd id="@userId" />
+			<DestinationAdd id="@userId" RefreshParent="@RefreshList" />
 		</div>
 	</Authorized>
 	<NotAuthorized>
@@ -103,6 +103,16 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		//Get data (list)
+		await GetData();
+	}
+
+	/// <summary>
+	/// Fetching of data in its seperate function
+	/// </summary>
+	/// <returns></returns>
+	private async Task GetData()
+	{
 		//Assing name to variable for future operations
 		var authState = await asp.GetAuthenticationStateAsync();
 		name = authState.User.Identity.Name;
@@ -121,6 +131,17 @@
 			nickname = userDTO.Nickname;
 		}
 	}
+
+
+	private async void RefreshList()
+	{
+		// Update the list
+		await GetData();
+
+		// Call StateHasChanged to trigger a re-render
+		StateHasChanged();
+	}
+
 
 	private async Task GetUserId()
 	{

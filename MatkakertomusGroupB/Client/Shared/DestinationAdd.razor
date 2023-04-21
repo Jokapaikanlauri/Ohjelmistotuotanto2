@@ -78,6 +78,10 @@
     [Parameter]
     public string? id { get; set; }
 
+    //Cascading parameter for refreshing parent list
+    [Parameter]
+    public Action RefreshParent { get; set; }
+
     public DestinationDTO destination = new();
 
     private List<string> fileNames = new();
@@ -112,7 +116,9 @@
         {
             added = true;
             Console.WriteLine(res);
-            StateHasChanged();
+
+            //Refresh parent by invoking this
+            RefreshParent?.Invoke();
         }
         else
         {
