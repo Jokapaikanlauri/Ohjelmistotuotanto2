@@ -38,7 +38,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 
-		[SetUp]
+		[OneTimeSetUp]
 		public void SetUp()
 		{
 
@@ -89,10 +89,11 @@ namespace MatkakertomusGroupB.Tests
 		/// <summary>
 		/// Cleans up after tests
 		/// </summary>
-		[TearDown]
+		[OneTimeTearDown]
 		public void TearDown()
 		{
 			_webDriver.Quit();
+			_webDriver.Dispose();
 			_webServerProcess.Kill();
 		}
 
@@ -533,7 +534,7 @@ namespace MatkakertomusGroupB.Tests
 
 			//Get file element and input the path to set the picture
 			var inputFileElement = _webDriver.FindElement(By.CssSelector("input[type='file']"));
-			inputFileElement.SendKeys(destImagePath);
+			inputFileElement.SendKeys(userImagePath);
 
 			if (extraDelayEnabled)
 			{
