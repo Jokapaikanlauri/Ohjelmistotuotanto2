@@ -35,4 +35,8 @@
     <ProjectReference Include="..\MatkakertomusGroupB\Shared\MatkakertomusGroupB.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestImages\" />
+  </ItemGroup>
+
 </Project>

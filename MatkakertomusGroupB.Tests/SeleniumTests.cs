@@ -12,6 +12,8 @@ using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using NUnit.Framework;
 using MatkakertomusGroupB.Client.Pages;
+using Microsoft.CodeAnalysis;
+using System;
 
 namespace MatkakertomusGroupB.Tests
 {
@@ -28,8 +30,11 @@ namespace MatkakertomusGroupB.Tests
 		private IWebDriver _webDriver;
 		private Process _webServerProcess;
 		private string _baseUrl { get; set; } = "https://localhost:7012";
+		
+		private bool debuggingMessagesEnabled = false;
 		private bool extraDelayEnabled = true;
 		private int extraDelayInMilliSeconds = 500;
+		
 
 
 		[SetUp]
@@ -164,7 +169,7 @@ namespace MatkakertomusGroupB.Tests
 			var destinationsListText = _webDriver.FindElement(By.Id("Kiuruvesi-div")).Text.ToString();
 			expected = "Country: FINLAND";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
-			expected = "Municipality: Kiuruvesi";
+			expected = "destMunicipality: Kiuruvesi";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
 			expected = "Description: Kiuruvesi tunnetaan paremmin Moravetenä tai Nistivetenä. Ota mukaan oma morasi, paikallisilta ne on jo suurimmaksi osaksi kerätty pois";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
@@ -453,39 +458,58 @@ namespace MatkakertomusGroupB.Tests
 			//Wait until a specific element is found(timeout defined in global ImplicitWait
 			_webDriver.FindElement(By.PartialLinkText("Register")).Click();
 
-			Random random = new Random();
+			//Generate the picture paths for all the tests
+            //Define get the running folder of current process(TEST)
+            //Should equate to (you repo)/ET21KM-Ohjelmistotuotanto2-GroupB\MatkakertomusGroupB.Tests\bin\Debug\net7.0\
+            string processFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
+            // Build the path to the correct pictures
+            string destImagePath = processFolder.Replace(".Tests\\bin\\Debug\\net7.0\\", ".Tests\\TestImages\\testDestPicture.png");
+            string pictureImagePath = processFolder.Replace(".Tests\\bin\\Debug\\net7.0\\", ".Tests\\TestImages\\testPicture.png");
+            string userImagePath = processFolder.Replace(".Tests\\bin\\Debug\\net7.0\\", ".Tests\\TestImages\\testUserPicture.png");
+            
+
+			if (debuggingMessagesEnabled)
+			{
+                Console.WriteLine(destImagePath);
+                Console.WriteLine(pictureImagePath);
+                Console.WriteLine(userImagePath);
+            }
+
+            Random random = new Random();
 			int randomNumber = random.Next(100000, 999999);
 
-			//Fill out data
+			//Generate Random data for User out data
 			string forename = $"Test-{nameof(forename)}-{randomNumber.ToString()}";
 			string surname = $"Test-{nameof(surname)}-{randomNumber.ToString()}";
 			string nickname = $"Test-{nameof(nickname)}-{randomNumber.ToString()}";
-			string email = $"Test-{nameof(email)}-{randomNumber.ToString()}";
+			string email = $"Test-{nameof(email)}-{randomNumber.ToString()}@Chadistan.com";
 			string password = $"Test-{nameof(password)}-{randomNumber.ToString()}";
 
-			_webDriver.FindElement(By.Id("Input_Forename")).SendKeys(forename);
+			//Generate random data for Destination
+			string destName = $"Test-{nameof(destName)}-{randomNumber.ToString()}";
+            string destCountry = $"Test-{nameof(destCountry)}-{randomNumber.ToString()}";
+            string destMunicipality = $"Test-{nameof(destMunicipality)}-{randomNumber.ToString()}";
+            string destDescription = $"Test-{nameof(destDescription)}-{randomNumber.ToString()}";
+     
+
+			//Fill out registration form
+            _webDriver.FindElement(By.Id("Input_Forename")).SendKeys(forename);
 			_webDriver.FindElement(By.Id("Input_Surname")).SendKeys(surname);
 			_webDriver.FindElement(By.Id("Input_Nickname")).SendKeys(nickname);
 			_webDriver.FindElement(By.Id("Input_Email")).SendKeys(email);
 			_webDriver.FindElement(By.Id("Input_Password")).SendKeys(password);
 			_webDriver.FindElement(By.Id("Input_ConfirmPassword")).SendKeys(password);
-			//Proceedd
+			//Proceed
 			_webDriver.FindElement(By.Id("registerSubmit")).Click();
-
-
+			
 
 			//User must see his NickName
 			string loginDisplayHTML = _webDriver.FindElement(By.Id("nick-display")).GetAttribute("innerHTML");
-			string expected = "Dude";
+			string expected = nickname;
 			Assert.True(loginDisplayHTML.Contains(expected), $"Expected login box to contain nickname \"{expected}\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
 			Assert.False(loginDisplayHTML.Contains("login"), $"Expected login box to not \"login\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
 
-			//Test Nav menu contents
-			//Nav to pages
-			//Koti-, Matkakohde-, Porukan matkat-, Omat matkat-, Omat tiedot-, Jäsenet-sivut
-
-
-			//Destinations
+			//Navigate to Destinations, wait for add element to be enabled
 			string linkText = "Destinations";
 			//Find the correct anchor <a> item via link text
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
@@ -497,7 +521,7 @@ namespace MatkakertomusGroupB.Tests
 			//Use the found link to navigate to said page
 			elem.Click();
 			//Expect to find page content
-			string keyElemId = "destinations-razor-auth-listing";
+			string keyElemId = "destinations-razor-add";
 			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Define wait time
@@ -517,6 +541,24 @@ namespace MatkakertomusGroupB.Tests
 			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
 
+			//Fill out the form
+            _webDriver.FindElement(By.Id("Input_Destination_Name")).SendKeys(destName);
+            _webDriver.FindElement(By.Id("Input_Destination_Country")).SendKeys(destCountry);
+            _webDriver.FindElement(By.Id("Input_Destination_Municipality")).SendKeys(destMunicipality);
+            _webDriver.FindElement(By.Id("Input_Destination_Description")).SendKeys(destDescription);
+
+			//Get file element and input path
+            var inputFile = _webDriver.FindElement(By.CssSelector("input[type='file']"));
+            inputFile.SendKeys(destImagePath);
+
+            //Proceed
+            _webDriver.FindElement(By.Id("addSubmit")).Click();
+
+
+            Thread.Sleep(10000);
+			Assert.Fail();
+
+            /*
 			if (extraDelayEnabled)
 			{
 				Thread.Sleep(extraDelayInMilliSeconds);
@@ -707,6 +749,8 @@ namespace MatkakertomusGroupB.Tests
 			Thread.Sleep(100);
 
 			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{pageContent}\"");
-		}
-	}
+
+			*/
+        }
+    }
 }

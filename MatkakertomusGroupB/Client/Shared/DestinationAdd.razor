@@ -17,35 +17,34 @@
         <div class="addHeader">
             <h4>Add a new destination</h4>
         </div>
-        <div class="addDetails">
+        <div id="destinations-razor-add" class="addDetails">
 
             <EditForm Model="@destination" OnValidSubmit="@addDestination">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <label>Name</label>
                 <br />
-                <InputText @bind-Value="destination.Name" onchange="@InputCheck()" placeholder="Name.." style="max-width:100%" />
+                <InputText id="Input_Destination_Name" @bind-Value="destination.Name" onchange="@InputCheck()" placeholder="Name.." style="max-width:100%" />
                 <br />
                 <label>Country</label>
                 <br />
-                <InputText @bind-Value="destination.Country" onchange="@InputCheck()" placeholder="Country.." style="max-width:100%" />
+                <InputText id="Input_Destination_Country" @bind-Value="destination.Country" onchange="@InputCheck()" placeholder="Country.." style="max-width:100%" />
                 <br />
                 <label>Municipality</label>
                 <br />
-                <InputText @bind-Value="destination.Municipality" placeholder="Municipality.." style="max-width:100%" />
+                <InputText id="Input_Destination_Municipality" @bind-Value="destination.Municipality" placeholder="Municipality.." style="max-width:100%" />
                 <br />
                 <label>Description</label>
                 <br />
-                <InputTextArea @bind-Value="destination.Description" placeholder="Description.." style="max-width:100%" />
+                <InputTextArea id="Input_Destination_Description" @bind-Value="destination.Description" placeholder="Description.." style="max-width:100%" />
                 <br />
                 <label>Image</label>
-                <InputFile OnChange="@OnInputFileChange" style="max-width:100%"/>
+                <InputFile id="Input_Destination_Image" OnChange="@OnInputFileChange" style="max-width:100%" />
                 <br />
                 <br />
                 @if (destination.Image != null)
                 {
                         <img src="data:image/png;base64,@destination.Image" style="max-width:70%"/>
-
                 }
                 <br />
                 @if(!InputCheck())
@@ -54,7 +53,7 @@
                 }
                 else
                 {
-                    <button type="submit" class="btn btn-success">Add</button>
+                    <button id="addSubmit" type="submit" class="btn btn-success">Add</button>
                 }
             </EditForm>
         </div>

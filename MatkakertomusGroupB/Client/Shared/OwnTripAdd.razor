@@ -20,14 +20,14 @@
 				<ValidationSummary />
 				<label>Start date:</label>
 				<br />
-				<InputDate @bind-Value="tDTO.DatumStart" onchange="@DateCheck()" />
+				<InputDate id="Input_Trip_StartDate" @bind-Value="tDTO.DatumStart" onchange="@DateCheck()" />
 				<br /> <br />
 				<label>End date:</label>
 				<br />
-				<InputDate @bind-Value="tDTO.DatumEnd" onchange="@DateCheck()"/>
+				<InputDate id="Input_Trip_EndDate" @bind-Value="tDTO.DatumEnd" onchange="@DateCheck()"/>
 				<br /> <br />
 				<label>Check box for private trip: </label>
-				<InputCheckbox @bind-Value="tDTO.Private" />
+				<InputCheckbox id="Input_Trip_Private" @bind-Value="tDTO.Private" />
 				<br /><br />
 				@if (!DateCheck())
 				{
