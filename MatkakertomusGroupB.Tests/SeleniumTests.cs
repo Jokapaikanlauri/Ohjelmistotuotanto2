@@ -294,15 +294,25 @@ namespace MatkakertomusGroupB.Tests
 			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
 
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 		}
+
+
 		[Test, Order(3)]
 		public void First_Logout()
 		{
 			Thread.Sleep(100);
 			_webDriver.FindElement(By.Id("logout_button")).Click();
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 		}
 
-		
 
 		[Test, Order(4)]
 		public void Re_LogIn()
@@ -332,8 +342,13 @@ namespace MatkakertomusGroupB.Tests
 			Assert.True(loginDisplayHTML.Contains(expected), $"Expected login box to contain userNickname \"{expected}\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
 			Assert.False(loginDisplayHTML.Contains("login"), $"Expected login box to not \"login\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
 
-
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 		}
+
+
 		[Test, Order(5)]
 		public void Navmenu_and_Links()
 		{
@@ -552,19 +567,16 @@ namespace MatkakertomusGroupB.Tests
 			int regexMatches = Regex.Matches(navmenuHTML, "<a href").Count();
 			Assert.True(regexMatches == 6, $"Expected nav menu to contain 6 links, but it contained {regexMatches} links.");
 
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 		}
 
 
 		[Test, Order(6)]
 		public void Add_Destination_Item()
 		{
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-
-
 			//Navigate to Destinations, wait for add element to be enabled
 			string linkText = "Destinations";
 			//Find the correct anchor <a> item via link text
@@ -611,7 +623,6 @@ namespace MatkakertomusGroupB.Tests
 			_webDriver.FindElement(By.Id("addSubmit")).Click();
 
 
-
 			//The OK message should be displayed
 			keyElemId = "destination-added-alert";
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
@@ -638,8 +649,9 @@ namespace MatkakertomusGroupB.Tests
 			{
 				Thread.Sleep(extraDelayInMilliSeconds);
 			}
-
 		}
+
+
 		[Test, Order(7)]
 		public void Added_Destination_Item_Exists()
 		{
@@ -676,18 +688,21 @@ namespace MatkakertomusGroupB.Tests
 			expected = destDescription;
 			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
 
-
-
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 		}
 
+
 		[Test, Order(8)]
-		public void LogOut()
+		public void LogOut_Again()
 		{
 
 			_webDriver.FindElement(By.Id("logout_button")).Click();
 
 			//Wait for built-in auth notification
-			Thread.Sleep(5000);
+			Thread.Sleep(1500);
 			//The whole bucket, logged out notfication hardcoded
 			string pageContent = _webDriver.FindElement(By.Id("app")).Text.ToString();
 			string expected = "You are logged out.";
@@ -696,10 +711,15 @@ namespace MatkakertomusGroupB.Tests
 			Thread.Sleep(100);
 
 			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{pageContent}\"");
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
 		}
 
-		[Test, Order(9), Description("Test public user controls")]
-		public void Public_User()
+
+		[Test, Order(9)]
+		public void Welcome_Page()
 		{
 			//Navigate to specific URL
 			_webDriver.Navigate().GoToUrl(_baseUrl);
@@ -723,10 +743,20 @@ namespace MatkakertomusGroupB.Tests
 			var welcomepic = _webDriver.FindElement(By.Id("kuva"));
 			Assert.AreEqual(true, welcomepic.Displayed);
 
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+
+		[Test, Order(10)]
+		public void Register_and_Login_Links()
+		{
 			//Test that Register and Log in exist
 			//Register
-			actual = _webDriver.FindElement(By.PartialLinkText("Register")).GetAttribute("href").ToString();
-			expected = "authentication/register";
+			var actual = _webDriver.FindElement(By.PartialLinkText("Register")).GetAttribute("href").ToString();
+			string expected = "authentication/register";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected registration link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
 			//Log in
@@ -734,11 +764,20 @@ namespace MatkakertomusGroupB.Tests
 			expected = "authentication/login";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected login link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
 
+
+		[Test, Order(10)]
+		public void Public_Navmenu()
+		{
 			//Test Nav menu contents
 			//Home
-			actual = _webDriver.FindElement(By.PartialLinkText("Home")).GetAttribute("href").ToString();
-			expected = "";
+			var actual = _webDriver.FindElement(By.PartialLinkText("Home")).GetAttribute("href").ToString();
+			string expected = "";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu home link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
 			//Destinations
@@ -754,6 +793,17 @@ namespace MatkakertomusGroupB.Tests
 			int regexMatches = Regex.Matches(navmenuHTML, "<a href").Count();
 			Assert.True(regexMatches == 2, $"Expected nav menu to contain 2 links, but it contained {regexMatches} links.");
 
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+
+		[Test, Order(11)]
+		public void Public_Destinations_List()
+		{
+			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));
 			//Navigate to Destinations page
 			destinationsButton.Click();
 
@@ -762,29 +812,34 @@ namespace MatkakertomusGroupB.Tests
 			var title = wait.Until(drv => drv.Title.Equals("Destinations"));
 
 
-			expected = "destinations-razor-public-listing";
+			string expected = "destinations-razor-public-listing";
 			var publicListingElem = _webDriver.FindElement(By.Id(expected));
 
 			Assert.AreEqual(true, publicListingElem.Enabled, $"Expected page to have element with id \"{expected}\", but it wasn't: {publicListingElem.Enabled}");
 
-			var destinationsListHTML = _webDriver.FindElement(By.Id("Kiuruvesi-div")).GetAttribute("innerHTML");
-			expected = "Kiuruvesi</h4>";
+			var destinationElem = _webDriver.FindElement(By.Id($"{destName}-div"));
+			string destinationsListHTML = destinationElem.GetAttribute("innerHTML");
+			expected = $"{destName}</h4>";
 			Assert.True(destinationsListHTML.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListHTML}\"");
 
-			var destinationsListText = _webDriver.FindElement(By.Id("Kiuruvesi-div")).Text.ToString();
-			expected = "Country: FINLAND";
+			string destinationsListText = destinationElem.Text.ToString();
+			expected = $"Country: {destCountry}";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
-			expected = "destMunicipality: Kiuruvesi";
+			expected = $"Municipality: {destMunicipality}";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
-			expected = "Description: Kiuruvesi tunnetaan paremmin Moravetenä tai Nistivetenä. Ota mukaan oma morasi, paikallisilta ne on jo suurimmaksi osaksi kerätty pois";
+			expected = $"Description: {destDescription}";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
 			//Picture 
 			//Kiuruvesi-picture
-			var destinationpic = _webDriver.FindElement(By.Id("Kiuruvesi-picture"));
+			var destinationpic = _webDriver.FindElement(By.Id($"{destName}-picture"));
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
 			Assert.AreEqual(true, destinationpic.Displayed);
+
 		}
-
-
-
 	}
 }
