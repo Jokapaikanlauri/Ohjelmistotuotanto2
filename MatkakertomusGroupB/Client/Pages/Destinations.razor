@@ -56,7 +56,7 @@
 			}
 		</div>
 		<div class="right">
-			<DestinationAdd id="@userId" RefreshParent="@RefreshList" />
+			<DestinationAdd id="@userId" RefreshParent="@RefreshList" @ref="destinationAddReference" />
 		</div>
 	</Authorized>
 	<NotAuthorized>
@@ -100,6 +100,9 @@
 	private List<Destination>? list = null;
 	public List<Picture>? pics;
 
+	//reference to the child component
+	private DestinationAdd destinationAddReference;
+
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -140,6 +143,9 @@
 
 		// Call StateHasChanged to trigger a re-render
 		StateHasChanged();
+
+		//Set the child notification value to display OK message.
+		await destinationAddReference.SetaddedAsTrue();
 	}
 
 
