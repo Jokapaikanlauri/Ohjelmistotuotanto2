@@ -63,19 +63,19 @@
 
 @if (added)
 {
-	<div class="alert alert-success fade-in" role="alert">
+	<div id="destination-added-alert" class="alert alert-success fade-in" role="alert">
 		Destination was added successfully!
 	</div>
 }
 @if (failed)
 {
-	<div class="alert alert-danger fade-in" role="alert">
+	<div id="destination-added-alert" class="alert alert-danger fade-in" role="alert">
 		It's not a destination if it does not have a name!
 	</div>
 }
 @if (nameExists)
 {
-	<div class="alert alert-danger fade-in" role="alert">
+	<div id="destination-added-alert" class="alert alert-danger fade-in" role="alert">
 		Destination with this name already exists!
 	</div>
 }

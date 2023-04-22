@@ -28,7 +28,7 @@
 			{
 				@foreach (Destination d in list)
 				{
-					<div class="list-item">
+					<div id="@($"destid-{d.DestinationId}-div")" class="list-item destination-item">
 						<DestinationItem Destination="@d">
 							<ul>
 								<h4>@d.Name</h4>

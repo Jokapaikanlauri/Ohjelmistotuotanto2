@@ -14,7 +14,7 @@
 	@foreach (TripDTO t in list)
 	{
 		<div class="list-item">
-			<TripItem TripDTO="@t">
+			<TripItem id="@($"{t.TripId}-div")" TripDTO="@t">
 				@if (t.Private)
 				{
 					<span style="color: darkgoldenrod" class="oi oi-lock-locked" aria-hidden="true" />
