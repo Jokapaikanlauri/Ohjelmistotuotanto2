@@ -1063,7 +1063,7 @@ namespace MatkakertomusGroupB.Tests
             var inputFileElement = _webDriver.FindElement(By.CssSelector("input[type='file']"));
             inputFileElement.SendKeys(pictureImagePath);
 
-            
+
             //Save Changes to Story
             _webDriver.FindElement(By.Id("editSubmit-story")).Click();
 
@@ -1101,8 +1101,69 @@ namespace MatkakertomusGroupB.Tests
         [Test, Order(13)]
         public void Added_story_Item_Exists()
         {
-            //TODO: ADD TEST
-            Assert.Pass();
+            //One reveal button to be found and clicked:
+            string keyElemId = "togglevisibility-story";
+            //Get element
+            var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+            //Define wait time
+            var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+            //Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+            wait.Until(driver =>
+            {
+                if (keyElem.Displayed)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+            //If it was actually displayed this should resolve as "true, true"
+            Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+            //Reveal stories
+            keyElem.Click();
+
+            //Expect to find the added content in the revealed list
+            string expected = DateTime.Parse(storyDate).ToString("yyyy-MM-dd"); ;
+            //Get Element
+            IWebElement divElement = _webDriver.FindElement(By.XPath($"//*[contains(text(), '{expected}')]/ancestor::div[1]"));
+
+
+            //Define wait time
+            wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+            //Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+            wait.Until(driver =>
+            {
+                if (keyElem.Displayed)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+            //If it was actually displayed this should resolve as "true, true"
+            Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page that contained the Story Desciption that was added but it wasn't found.");
+
+
+
+            //Convert element contents to string and see if the added item exists
+            string actual = keyElem.Text.ToString();
+            expected = DateTime.Parse(storyDate).ToString("yyyy-MM-dd");
+            Assert.True(actual.Contains(expected), $"Expected story listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+            expected = storyDescription;
+            Assert.True(actual.Contains(expected), $"Expected story listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+
+
+
+            Assert.Fail();
+            if (extraDelayEnabled)
+            {
+                Thread.Sleep(extraDelayInMilliSeconds);
+            }
         }
 
         [Test, Order(14)]
