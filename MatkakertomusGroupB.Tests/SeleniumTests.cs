@@ -58,6 +58,8 @@ namespace MatkakertomusGroupB.Tests
 		private string destCountry { get; set; }
 		private string destMunicipality { get; set; }
 		private string destDescription { get; set; }
+		private string tripStartDate { get; set; }
+		private string tripEndDate { get; set; }
 
 
 
@@ -109,6 +111,17 @@ namespace MatkakertomusGroupB.Tests
 			this.destCountry = $"Test-{nameof(destCountry)}-{randomNumber.ToString()}";
 			this.destMunicipality = $"Test-{nameof(destMunicipality)}-{randomNumber.ToString()}";
 			this.destDescription = $"Test-{nameof(destDescription)}-{randomNumber.ToString()}";
+
+			//Generate random data for Trip
+
+
+			// Start 2-20 before current, end 2-20 after current
+			DateTime currentDate = DateTime.Now.Date;
+			int dateRandomizer = new Random().Next(2, 20);
+
+			this.tripStartDate = currentDate.AddDays(-dateRandomizer).ToString("dd/MM/yyyy");
+			this.tripEndDate = currentDate.AddDays(dateRandomizer).ToString("dd/MM/yyyy");
+
 
 
 			try
@@ -695,7 +708,139 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
+		[Test, Order(7)]
+		public void Add_publicTrip_Item()
+		{
+			//Navigate to Own Trips, wait for add element to be enabled
+			string linkText = "My Trips";
+			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			string actual = elem.GetAttribute("href").ToString();
+			string expected = "trips";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+			elem.Click();
+			//Expect to find page content
+			string keyElemId = "trip-razor-add";
+			//Get element
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+
+			//Fill out the form
+			_webDriver.FindElement(By.Id("Input_Trip_StartDate")).SendKeys(tripStartDate);
+			_webDriver.FindElement(By.Id("Input_Trip_EndDate")).SendKeys(tripEndDate);
+			//_webDriver.FindElement(By.Id("Input_Trip_Private"));
+
+			//Proceed
+			_webDriver.FindElement(By.Id("addSubmit")).Click();
+
+
+			//The OK message should be displayed
+			keyElemId = "trip-added-alert";
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+
+			string keyElemHTML = keyElem.GetAttribute("innerHTML");
+			actual = "A new trip was created successfully!";
+			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
+			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+
 		[Test, Order(8)]
+		public void Added_Trip_Item_Exists()
+		{
+
+			//Expect to the added content in the list
+			string keyElemId = "owntriplist-razor-listing";
+			//Get element
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+			//Convert element contents to string and see if the added item exists
+			string actual = keyElem.Text.ToString();
+			string expected = DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd");
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain start date \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			expected = DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd");
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+
+			//Expect there to be a trip with privacy status of previously declared trip
+			keyElemId = $"public" +
+				$"-{DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd")}" +
+				$"-{DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd")}";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was found this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed,
+				$"Expected to find page with privete trip element \"{keyElemId}\" but it wasn't found. Listing HTML was : {keyElem.GetAttribute("innerHTML")}");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+		[Test, Order(9)]
 		public void LogOut_Again()
 		{
 
@@ -718,7 +863,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(9)]
+		[Test, Order(10)]
 		public void Welcome_Page()
 		{
 			//Navigate to specific URL
@@ -750,7 +895,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(10)]
+		[Test, Order(11)]
 		public void Register_and_Login_Links()
 		{
 			//Test that Register and Log in exist
@@ -771,7 +916,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(10)]
+		[Test, Order(12)]
 		public void Public_Navmenu()
 		{
 			//Test Nav menu contents
@@ -800,7 +945,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(11)]
+		[Test, Order(13)]
 		public void Public_Destinations_List()
 		{
 			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));

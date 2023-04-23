@@ -13,7 +13,7 @@
 	<div class="addHeader">
 		<h4>Add new trip</h4>
 	</div>
-	<div class="addDetails">
+	<div id="trip-razor-add" class="addDetails">
 		<NewTrip>
 			<EditForm Model="@tDTO" OnValidSubmit="@Save">
 				<DataAnnotationsValidator />
@@ -24,7 +24,7 @@
 				<br /> <br />
 				<label>End date:</label>
 				<br />
-				<InputDate id="Input_Trip_EndDate" @bind-Value="tDTO.DatumEnd" onchange="@DateCheck()"/>
+				<InputDate id="Input_Trip_EndDate" @bind-Value="tDTO.DatumEnd" onchange="@DateCheck()" />
 				<br /> <br />
 				<label>Check box for private trip: </label>
 				<InputCheckbox id="Input_Trip_Private" @bind-Value="tDTO.Private" />
@@ -35,7 +35,7 @@
 				}
 				else
 				{
-					<button type="submit" class="btn btn-success">Add trip</button>
+					<button id="addSubmit" type="submit" class="btn btn-success">Add trip</button>
 				}
 			</EditForm>
 		</NewTrip>
@@ -43,13 +43,13 @@
 	<br />
 	@if (added)
 	{
-		<div class="alert alert-success fade-in" role="alert">
+		<div id="trip-added-alert" class="alert alert-success fade-in" role="alert">
 			A new trip was created successfully!
 		</div>
 	}
 	@if (failed)
 	{
-		<div class="alert alert-danger fade-in" role="alert">
+		<div id="trip-added-alert" class="alert alert-danger fade-in" role="alert">
 			There was a problem creating a new trip.
 		</div>
 	}
