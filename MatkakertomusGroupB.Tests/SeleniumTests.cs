@@ -1128,9 +1128,8 @@ namespace MatkakertomusGroupB.Tests
             //Expect to find the added content in the revealed list
             string expected = DateTime.Parse(storyDate).ToString("yyyy-MM-dd"); ;
             //Get Element
-            IWebElement divElement = _webDriver.FindElement(By.XPath($"//*[contains(text(), '{expected}')]/ancestor::div[1]"));
 
-
+            keyElem = _webDriver.FindElement(By.Id("story-ul-list"));
             //Define wait time
             wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
             //Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
@@ -1157,9 +1156,6 @@ namespace MatkakertomusGroupB.Tests
             expected = storyDescription;
             Assert.True(actual.Contains(expected), $"Expected story listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
 
-
-
-            Assert.Fail();
             if (extraDelayEnabled)
             {
                 Thread.Sleep(extraDelayInMilliSeconds);
