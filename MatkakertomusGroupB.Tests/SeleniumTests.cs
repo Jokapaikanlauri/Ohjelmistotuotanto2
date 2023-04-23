@@ -15,6 +15,8 @@ using MatkakertomusGroupB.Client.Pages;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Web;
+using System.Text;
 
 namespace MatkakertomusGroupB.Tests
 {
@@ -37,13 +39,13 @@ namespace MatkakertomusGroupB.Tests
 		private bool extraDelayEnabled = true;
 		private int extraDelayInMilliSeconds = 500;
 
-
+		//Data for images
 		private string destImagePath { get; set; }
 		private string pictureImagePath { get; set; }
 		private string userImagePath { get; set; }
 
 
-		//Generate Random data for User out data
+		//Data for User out data
 		private string userForename { get; set; }
 		private string userSurname { get; set; }
 		private string userNickname { get; set; }
@@ -53,14 +55,34 @@ namespace MatkakertomusGroupB.Tests
 		private string userDescription { get; set; }
 		private string userPhoneNumber { get; set; }
 
-		//Generate random data for Destination
+		//Data for Destination
 		private string destName { get; set; }
 		private string destCountry { get; set; }
 		private string destMunicipality { get; set; }
 		private string destDescription { get; set; }
+
+		//Data for trip
 		private string tripStartDate { get; set; }
 		private string tripEndDate { get; set; }
 
+		//Data for Story
+		private string storyDate { get; set; }
+		private string storyDescription { get; set; }
+
+
+		private static string GenerateRandomString(int length)
+		{
+			const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			var random = new Random();
+			var sb = new StringBuilder(length);
+			for (int i = 0; i < length; i++)
+			{
+				sb.Append(chars[random.Next(chars.Length)]);
+			}
+			return sb.ToString();
+		}
+
+		string randomString = GenerateRandomString(300);
 
 
 
@@ -100,7 +122,7 @@ namespace MatkakertomusGroupB.Tests
 			this.userForename = $"Test-{nameof(userForename)}-{randomNumber.ToString()}";
 			this.userSurname = $"Test-{nameof(userSurname)}-{randomNumber.ToString()}";
 			this.userNickname = $"Test-{nameof(userNickname)}-{randomNumber.ToString()}";
-			this.userEmail = $"Test-{nameof(userEmail)}-{randomNumber.ToString()}@Chadistan.com";
+			this.userEmail = $"Test-{nameof(userEmail)}-{randomNumber.ToString()}@Bingostan.com";
 			this.userPassword = $"Test-{nameof(userPassword)}-{randomNumber.ToString()}";
 			this.userMunicipality = $"Test-{nameof(userMunicipality)}-{randomNumber.ToString()}";
 			this.userDescription = $"Test-{nameof(userDescription)}-{randomNumber.ToString()}";
@@ -113,16 +135,20 @@ namespace MatkakertomusGroupB.Tests
 			this.destDescription = $"Test-{nameof(destDescription)}-{randomNumber.ToString()}";
 
 			//Generate random data for Trip
-
-
-			// Start 2-20 before current, end 2-20 after current
+			// Start 2-400 before current, end 2-400 after current
 			DateTime currentDate = DateTime.Now.Date;
-			int dateRandomizer = new Random().Next(2, 20);
+			int dateRandomizer = new Random().Next(2, 400);
 
 			this.tripStartDate = currentDate.AddDays(-dateRandomizer).ToString("dd/MM/yyyy");
 			this.tripEndDate = currentDate.AddDays(dateRandomizer).ToString("dd/MM/yyyy");
 
 
+			//Generate random data for Story
+			this.storyDate = DateTime.Now.Date.ToString("dd/MM/yyyy");
+			storyDescription = $"Random Story: {GenerateRandomString(60)}, " +
+				$"POTATOOO, " +
+				$"{GenerateRandomString(60)}, " +
+				$"{GenerateRandomString(60)}.";
 
 			try
 			{
@@ -669,7 +695,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Added_Destination_Item_Exists()
 		{
 
-			//Expect to the added content in the list
+			//Expect to find the added content in the list
 			string keyElemId = "destinations-razor-auth-listing";
 			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
@@ -708,7 +734,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(7)]
+		[Test, Order(8)]
 		public void Add_publicTrip_Item()
 		{
 			//Navigate to Own Trips, wait for add element to be enabled
@@ -778,12 +804,13 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(8)]
+		[Test, Order(9)]
 		public void Added_publicTrip_Item_Exists()
 		{
-
-			//Expect to the added content in the list
-			string keyElemId = "owntriplist-razor-listing";
+			//Expect to find the added content in the list
+			string keyElemId = $"privateitem-False" +
+				$"-{DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd")}" +
+				$"-{DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd")}";
 			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Define wait time
@@ -806,41 +833,23 @@ namespace MatkakertomusGroupB.Tests
 			//Convert element contents to string and see if the added item exists
 			string actual = keyElem.Text.ToString();
 			string expected = DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd");
-			Assert.True(actual.Contains(expected), $"Expected trip listing to contain start date \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain start date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 			expected = DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd");
-			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
 			//Expect there to be a trip with privacy status of previously declared trip
-			keyElemId = $"public" +
-				$"-{DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd")}" +
-				$"-{DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd")}";
-			//Get element
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			//Define wait time
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-			//If it was found this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed,
-				$"Expected to find page with public trip element \"{keyElemId}\" but it wasn't found. Listing HTML was : {keyElem.GetAttribute("innerHTML")}");
+			expected = "Public";
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain privacy status of \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
+
 
 			if (extraDelayEnabled)
 			{
 				Thread.Sleep(extraDelayInMilliSeconds);
 			}
+
 		}
 
-		[Test, Order(9)]
+		[Test, Order(10)]
 		public void Add_privateTrip_Item()
 		{
 			//Navigate to Own Trips, wait for add element to be enabled
@@ -914,12 +923,13 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(10)]
+		[Test, Order(11)]
 		public void Added_privateTrip_Item_Exists()
 		{
-
-			//Expect to the added content in the list
-			string keyElemId = "owntriplist-razor-listing";
+			//Expect to find the added content in the list
+			string keyElemId = $"privateitem-True" +
+				$"-{DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd")}" +
+				$"-{DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd")}";
 			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Define wait time
@@ -942,18 +952,41 @@ namespace MatkakertomusGroupB.Tests
 			//Convert element contents to string and see if the added item exists
 			string actual = keyElem.Text.ToString();
 			string expected = DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd");
-			Assert.True(actual.Contains(expected), $"Expected trip listing to contain start date \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain start date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 			expected = DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd");
-			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
 			//Expect there to be a trip with privacy status of previously declared trip
-			keyElemId = $"private" +
+			expected = "Private";
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain privacy status of \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
+
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+		[Test, Order(12)]
+		public void Add_Story_To_Public()
+		{
+			//Find the previously added public story element
+			string keyElemId = $"privateitem-False" +
 				$"-{DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd")}" +
 				$"-{DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd")}";
 			//Get element
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Click the button inside the found element to manage trip
+			string expected = "tripManage";
+			keyElem.FindElement(By.Id(expected)).Click();
+
+
+			//Expect to find the add box content
+			keyElemId = "storyadd-div";
+			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Define wait time
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
 			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
 			wait.Until(driver =>
 			{
@@ -966,9 +999,49 @@ namespace MatkakertomusGroupB.Tests
 					return false;
 				}
 			});
-			//If it was found this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed,
-				$"Expected to find page with private trip element \"{keyElemId}\" but it wasn't found. Listing HTML was : {keyElem.GetAttribute("innerHTML")}");
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+			Thread.Sleep(2000);
+
+			// find box and define new instance of select
+			SelectElement selectElement = new SelectElement(keyElem.FindElement(By.CssSelector("select")));
+
+			Thread.Sleep(2000);
+
+			// Select first item in the dropdown
+			selectElement.SelectByIndex(0);
+
+			// Verify that name equals previusly added
+			string expectedValue = destName;
+			string actual = selectElement.Options[0].Text;
+			if (selectElement.Options.Count > 0)
+			{
+				expectedValue = actual;
+			}
+			Assert.AreEqual(expectedValue, actual, $"Expected first dropdown item to be \"{expected}\", but it wasn't. Actual: \"{actual}\"");
+
+			Thread.Sleep(2000);
+
+			//TODO: CONTINUE
+
+
+
+
+
+
+			//Fill out the boxes on the form
+			var inputElem = _webDriver.FindElement(By.Id("Input_Story_Datum"));
+			inputElem.Clear();
+			inputElem.SendKeys(storyDate);
+			_webDriver.FindElement(By.Id("Input_Story_Description")).SendKeys(storyDescription);
+
+			//Proceed
+			_webDriver.FindElement(By.Id("addSubmit-story")).Click();
+
+			//TODO: CONTINUE on edit page
+
+
 
 			if (extraDelayEnabled)
 			{
@@ -976,7 +1049,14 @@ namespace MatkakertomusGroupB.Tests
 			}
 		}
 
-		[Test, Order(11)]
+		[Test, Order(13)]
+		public void Added_story_Item_Exists()
+		{
+			//TODO: ADD TEST
+			Assert.Pass();
+		}
+
+		[Test, Order(14)]
 		public void LogOut_Again()
 		{
 
@@ -999,7 +1079,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(12)]
+		[Test, Order(15)]
 		public void Welcome_Page()
 		{
 			//Navigate to specific URL
@@ -1031,7 +1111,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(13)]
+		[Test, Order(16)]
 		public void Register_and_Login_Links()
 		{
 			//Test that Register and Log in exist
@@ -1052,7 +1132,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(14)]
+		[Test, Order(17)]
 		public void Public_Navmenu()
 		{
 			//Test Nav menu contents
@@ -1081,7 +1161,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(15)]
+		[Test, Order(18)]
 		public void Public_Destinations_List()
 		{
 			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));

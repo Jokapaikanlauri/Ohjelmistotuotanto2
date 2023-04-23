@@ -13,22 +13,22 @@
 {
 	@foreach (TripDTO t in list)
 	{
-		<div id="owntriplist-razor-listing" class="list-item">
+		<div id="@($"privateitem-{t.Private.ToString()}-{t.DatumStart.Value.ToString("yyyy-MM-dd")}-{t.DatumEnd.Value.ToString("yyyy-MM-dd")}")" class="list-item">
 			<TripItem TripDTO="@t">
 				@if (t.Private)
 				{
-					<span id="@($"private-{t.DatumStart.Value.ToString("yyyy-MM-dd")}-{t.DatumEnd.Value.ToString("yyyy-MM-dd")}")" style="color: darkgoldenrod" class="oi oi-lock-locked" aria-hidden="true" />
+					<span style="color: darkgoldenrod" class="oi oi-lock-locked" aria-hidden="true" />
 					<span> Private</span>
 				}
 				else
 				{
-					<span id="@($"public-{t.DatumStart.Value.ToString("yyyy-MM-dd")}-{t.DatumEnd.Value.ToString("yyyy-MM-dd")}")" class="oi oi-lock-unlocked" aria-hidden="true"> Public</span>
+					<span class="oi oi-lock-unlocked" aria-hidden="true"> Public</span>
 				}
 				<ul>
 					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
 					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
 					<br />
-					<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>Edit trip</button>
+					<button id="tripManage" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'><span class="oi oi-book" aria-hidden="true"> Manage trip</span></button>
 					<StoryList TripId="@t.TripId" UserId="@UserId" />
 				</ul>
 			</TripItem>

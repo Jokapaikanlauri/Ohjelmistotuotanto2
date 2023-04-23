@@ -32,25 +32,25 @@
 		<br /> <br />
 		<label>Date:</label>
 		<br />
-		<InputDate @bind-Value="sDTO.Datum" />
+		<InputDate id="Input_Story_Datum" @bind-Value="sDTO.Datum" />
 		<br /> <br />
 		<label>Tell your story: </label> <br />
-		<InputTextArea @bind-Value="sDTO.Description" style="width:100%" />
+		<InputTextArea id="Input_Story_Description" @bind-Value="sDTO.Description" style="width:100%" />
 		<br /><br />
-		<button type="submit" class="btn btn-success">Add story to your trip</button>
+		<button id="addSubmit-story" type="submit" class="btn btn-success">Add story to your trip</button>
 	</EditForm>
 </NewStory>
 <p>Once you have added the story, you can add pictures.</p>
 
 @if (added)
 {
-	<div class="alert alert-success fade-in" role="alert">
+	<div id="story-added-alert" class="alert alert-success fade-in" role="alert">
 		A new trip was created successfully!
 	</div>
 }
 @if (failed)
 {
-	<div class="alert alert-danger fade-in" role="alert">
+	<div id="story-added-alert"  class="alert alert-danger fade-in" role="alert">
 		This is a failed alert—check it out!
 	</div>
 }
