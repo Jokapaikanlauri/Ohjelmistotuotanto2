@@ -62,8 +62,10 @@ namespace MatkakertomusGroupB.Tests
         private string destDescription { get; set; }
 
         //Data for trip
-        private string tripStartDate { get; set; }
-        private string tripEndDate { get; set; }
+        private string tripPubStartDate { get; set; }
+        private string tripPubEndDate { get; set; }
+        private string tripPrivStartDate { get; set; }
+        private string tripPrivEndDate { get; set; }
 
         //Data for Story
         private string storyDate { get; set; }
@@ -138,9 +140,10 @@ namespace MatkakertomusGroupB.Tests
             // Start 2-400 before current, end 2-400 after current
             DateTime currentDate = DateTime.Now.Date;
             int dateRandomizer = new Random().Next(2, 400);
-
-            this.tripStartDate = currentDate.AddDays(-dateRandomizer).ToString("dd/MM/yyyy");
-            this.tripEndDate = currentDate.AddDays(dateRandomizer).ToString("dd/MM/yyyy");
+            this.tripPubStartDate = currentDate.AddDays(-dateRandomizer).ToString("dd/MM/yyyy");
+            this.tripPubEndDate = currentDate.AddDays(dateRandomizer).ToString("dd/MM/yyyy");
+            this.tripPrivStartDate = currentDate.AddDays(-dateRandomizer - 20).ToString("dd/MM/yyyy");
+            this.tripPrivEndDate = currentDate.AddDays(dateRandomizer + 20).ToString("dd/MM/yyyy");
 
 
             //Generate random data for Story
@@ -767,8 +770,8 @@ namespace MatkakertomusGroupB.Tests
 
 
             //Fill out the form
-            _webDriver.FindElement(By.Id("Input_Trip_StartDate")).SendKeys(tripStartDate);
-            _webDriver.FindElement(By.Id("Input_Trip_EndDate")).SendKeys(tripEndDate);
+            _webDriver.FindElement(By.Id("Input_Trip_StartDate")).SendKeys(tripPubStartDate);
+            _webDriver.FindElement(By.Id("Input_Trip_EndDate")).SendKeys(tripPubEndDate);
             //_webDriver.FindElement(By.Id("Input_Trip_Private"));
 
             //Proceed
@@ -809,8 +812,8 @@ namespace MatkakertomusGroupB.Tests
         {
             //Expect to find the added content in the list
             string keyElemId = $"privateitem-False" +
-                $"-{DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd")}" +
-                $"-{DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd")}";
+                $"-{DateTime.Parse(tripPubStartDate).ToString("yyyy-MM-dd")}" +
+                $"-{DateTime.Parse(tripPubEndDate).ToString("yyyy-MM-dd")}";
             //Get element
             var keyElem = _webDriver.FindElement(By.Id(keyElemId));
             //Define wait time
@@ -832,9 +835,9 @@ namespace MatkakertomusGroupB.Tests
 
             //Convert element contents to string and see if the added item exists
             string actual = keyElem.Text.ToString();
-            string expected = DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd");
+            string expected = DateTime.Parse(tripPubStartDate).ToString("yyyy-MM-dd");
             Assert.True(actual.Contains(expected), $"Expected trip listing to contain start date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
-            expected = DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd");
+            expected = DateTime.Parse(tripPubEndDate).ToString("yyyy-MM-dd");
             Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
             //Expect there to be a trip with privacy status of previously declared trip
@@ -884,10 +887,10 @@ namespace MatkakertomusGroupB.Tests
             //Fill out the form
             var inputElem = _webDriver.FindElement(By.Id("Input_Trip_StartDate"));
             inputElem.Clear();
-            inputElem.SendKeys(tripStartDate);
+            inputElem.SendKeys(tripPrivStartDate);
             inputElem = _webDriver.FindElement(By.Id("Input_Trip_EndDate"));
             inputElem.Clear();
-            inputElem.SendKeys(tripEndDate);
+            inputElem.SendKeys(tripPrivEndDate);
             _webDriver.FindElement(By.Id("Input_Trip_Private")).Click();
 
             //Proceed
@@ -928,8 +931,8 @@ namespace MatkakertomusGroupB.Tests
         {
             //Expect to find the added content in the list
             string keyElemId = $"privateitem-True" +
-                $"-{DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd")}" +
-                $"-{DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd")}";
+                $"-{DateTime.Parse(tripPrivStartDate).ToString("yyyy-MM-dd")}" +
+                $"-{DateTime.Parse(tripPrivEndDate).ToString("yyyy-MM-dd")}";
             //Get element
             var keyElem = _webDriver.FindElement(By.Id(keyElemId));
             //Define wait time
@@ -951,9 +954,9 @@ namespace MatkakertomusGroupB.Tests
 
             //Convert element contents to string and see if the added item exists
             string actual = keyElem.Text.ToString();
-            string expected = DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd");
+            string expected = DateTime.Parse(tripPrivStartDate).ToString("yyyy-MM-dd");
             Assert.True(actual.Contains(expected), $"Expected trip listing to contain start date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
-            expected = DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd");
+            expected = DateTime.Parse(tripPrivEndDate).ToString("yyyy-MM-dd");
             Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
             //Expect there to be a trip with privacy status of previously declared trip
@@ -972,8 +975,8 @@ namespace MatkakertomusGroupB.Tests
         {
             //Find the previously added public story element
             string keyElemId = $"privateitem-False" +
-                $"-{DateTime.Parse(tripStartDate).ToString("yyyy-MM-dd")}" +
-                $"-{DateTime.Parse(tripEndDate).ToString("yyyy-MM-dd")}";
+                $"-{DateTime.Parse(tripPubStartDate).ToString("yyyy-MM-dd")}" +
+                $"-{DateTime.Parse(tripPubEndDate).ToString("yyyy-MM-dd")}";
             //Get element
             var keyElem = _webDriver.FindElement(By.Id(keyElemId));
             //Click the button inside the found element to manage trip
@@ -1156,6 +1159,61 @@ namespace MatkakertomusGroupB.Tests
             expected = storyDescription;
             Assert.True(actual.Contains(expected), $"Expected story listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
 
+            //One reveal pictures button to be found and clicked:
+            keyElemId = "togglevisibility-story-pictures";
+            //Get element
+            keyElem = _webDriver.FindElement(By.Id(keyElemId));
+            //Define wait time
+            wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+            //Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+            wait.Until(driver =>
+            {
+                if (keyElem.Displayed)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+            //If it was actually displayed this should resolve as "true, true"
+            Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+            //Reveal pictures
+            keyElem.Click();
+
+            //Story must contain a picture
+
+            Assert.AreEqual(true, keyElem.Displayed, $"Expected story to display a picture, but it wasn't.");
+
+
+            //Get element
+            keyElem = _webDriver.FindElement(By.CssSelector("img[src^='data:image/png;base64']"));
+            //Define wait time
+            wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+            //Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+            wait.Until(driver =>
+            {
+                if (keyElem.Displayed)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+            //If it was actually displayed this should resolve as "true, true"
+            Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with a story picture but it wasn't found.");
+
+
+            //Verify that listing only has 1 picture
+            var navmenuHTML = _webDriver.FindElement(By.Id("story-ul-list")).GetAttribute("innerHTML");
+            int regexMatches = Regex.Matches(navmenuHTML, "<img src").Count();
+            Assert.True(regexMatches == 1, $"Expected story to have only 1 picture, but it contained {regexMatches} pictures.");
+
+
             if (extraDelayEnabled)
             {
                 Thread.Sleep(extraDelayInMilliSeconds);
@@ -1208,7 +1266,7 @@ namespace MatkakertomusGroupB.Tests
 
             //Index must contain a welcoming picture
             var welcomepic = _webDriver.FindElement(By.Id("kuva"));
-            Assert.AreEqual(true, welcomepic.Displayed);
+            Assert.AreEqual(true, welcomepic.Displayed, $"Expected index to display a welcoming picture, but it wasn't.");
 
             if (extraDelayEnabled)
             {
