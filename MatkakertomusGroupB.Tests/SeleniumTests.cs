@@ -840,7 +840,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 		}
 
-		[Test, Order(7)]
+		[Test, Order(9)]
 		public void Add_privateTrip_Item()
 		{
 			//Navigate to Own Trips, wait for add element to be enabled
@@ -914,7 +914,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(8)]
+		[Test, Order(10)]
 		public void Added_privateTrip_Item_Exists()
 		{
 
@@ -976,7 +976,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 		}
 
-		[Test, Order(9)]
+		[Test, Order(11)]
 		public void LogOut_Again()
 		{
 
@@ -999,7 +999,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(10)]
+		[Test, Order(12)]
 		public void Welcome_Page()
 		{
 			//Navigate to specific URL
@@ -1031,7 +1031,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(11)]
+		[Test, Order(13)]
 		public void Register_and_Login_Links()
 		{
 			//Test that Register and Log in exist
@@ -1052,7 +1052,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(12)]
+		[Test, Order(14)]
 		public void Public_Navmenu()
 		{
 			//Test Nav menu contents
@@ -1081,7 +1081,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(13)]
+		[Test, Order(15)]
 		public void Public_Destinations_List()
 		{
 			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));
