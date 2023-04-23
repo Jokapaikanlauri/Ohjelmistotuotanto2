@@ -8,8 +8,9 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
+<PageTitle>Edit Story</PageTitle>
 
-<div class="left">
+<div id="editstory-div" class="left">
     <br />
     <h4>Edit your story</h4>
     <NewStory>
@@ -44,24 +45,24 @@
             <br /><br />
             @if (sDTO.TripId != null)
             {
-                <button class="btn btn-success" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
+                <button id="editReturn-story" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
             }
-            <button type="submit" class="btn btn-warning">Edit story</button>
-            <button class="btn btn-danger" @onclick="@Delete">Delete</button>
+            <button id="editSubmit-story" type="submit" class="btn btn-success">Save Changes</button>
+            <button id="delete-story" class="btn btn-danger" @onclick="@Delete">Delete</button>
             <br/><br/>
             <PictureUpload id="@StoryId" />
         </EditForm>
     </NewStory>
     @if (edited)
     {
-        <div class="alert alert-success fade-in" role="alert">
-            A new trip was created successfully!
+        <div id="story-saved-alert" class="alert alert-success fade-in" role="alert">
+            Changes to Story saved successfully!
         </div>
     }
     @if (failed)
     {
-        <div class="alert alert-danger fade-in" role="alert">
-            This is a failed alert—check it out!
+        <div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
+            Saving new Story failed. If the problem persists contact support!
         </div>
     }
 </div>
