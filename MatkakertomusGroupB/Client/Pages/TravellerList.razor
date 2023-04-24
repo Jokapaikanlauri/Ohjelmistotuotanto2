@@ -15,24 +15,26 @@
 
 @if (list != null)
 {
-	@foreach (Traveller t in list)
-	{
-		<TravellerItem Traveller="@t">
-			<div id="travellerlist-razor" class="list-item">
-				<ul>
-					<li>First name: @t.Forename</li>
-					<li>Last name: @t.Surname</li>
-					<li>Nickname: @t.Nickname</li>
-					<li>Municipality: @t.Municipality</li>
-					<li>Description: @t.Description</li>
-				</ul>
-				<img src="data:image/png;base64,@t.Image" style="max-width:70%" />
-			</div>
-		</TravellerItem>
-		<br />
-		<hr />
-		<br />
-	}
+	<div id ="traveller-listing-razor">
+		@foreach (Traveller t in list)
+		{
+			<TravellerItem Traveller="@t">
+				<div id="traveller-listing-item-@t.Nickname" class="list-item">
+					<ul>
+						<li>First name: @t.Forename</li>
+						<li>Last name: @t.Surname</li>
+						<li>Nickname: @t.Nickname</li>
+						<li>Municipality: @t.Municipality</li>
+						<li>Description: @t.Description</li>
+					</ul>
+					<img src="data:image/png;base64,@t.Image" style="max-width:70%" />
+				</div>
+			</TravellerItem>
+			<br />
+			<hr />
+			<br />
+		}
+	</div>
 }
 
 
