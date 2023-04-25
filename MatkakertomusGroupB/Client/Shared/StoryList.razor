@@ -27,7 +27,7 @@
 						{
 							<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
 						}
-						<StoryPictureList StoryId=@s.StoryId />
+						<StoryPictureList StoryId=@s.StoryId GroupList=@GroupList />
 					</ul>
 					<br />
 				</StoryItem>
@@ -56,6 +56,8 @@ else
 	public int? TripId { get; set; }
 	[Parameter]
 	public string? UserId { get; set; }
+	[Parameter]
+	public bool GroupList { get; set; }
 
 	private int stories = 0;
 	private List<StoryDTO>? list = null;
