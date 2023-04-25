@@ -13,7 +13,7 @@
 		@foreach (TripDTO t in list)
 		{
 			<TripItem Trip="@t">
-				<ul class="list-item">
+				<ul id="@($"privateitem-{t.Private.ToString()}-{t.DatumStart.Value.ToString("yyyy-MM-dd")}-{t.DatumEnd.Value.ToString("yyyy-MM-dd")}")" class="list-item">
 					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
 					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
 					<br />
