@@ -182,7 +182,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 			}
 			if (Input.Nickname != user.Nickname)
 			{
-				user.Nickname = Input.Surname;
+				user.Nickname = Input.Nickname;
 			}
 			if (Input.Municipality != user.Municipality)
 			{

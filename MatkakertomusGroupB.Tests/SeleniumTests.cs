@@ -234,7 +234,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 		[Test, Order(2)]
-		public void User_Details_Management()
+		public void Edit_User_Details()
 		{
 
 			//Navigate to user details management and add the rest of the information
@@ -265,6 +265,20 @@ namespace MatkakertomusGroupB.Tests
 			});
 			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+			//Edit Existing data in the USERDATA form
+			userForename = "Edited-" + userForename;
+			userSurname = "Edited-" + userSurname;
+			userNickname = "Edited-" + userNickname;
+			var formInput = _webDriver.FindElement(By.Id("Input_Forename"));
+			formInput.Clear();
+			formInput.SendKeys(userForename);
+			formInput = _webDriver.FindElement(By.Id("Input_Surname"));
+			formInput.Clear();
+			formInput.SendKeys(userSurname);
+			formInput = _webDriver.FindElement(By.Id("Input_Nickname"));
+			formInput.Clear();
+			formInput.SendKeys(userNickname);
 
 
 			//Fill out the missing bits in the USERDATA form
@@ -665,6 +679,7 @@ namespace MatkakertomusGroupB.Tests
 			Assert.True(actual.Contains(expected), $"Expected traveller listing to contain \"{expected}\", but it wasn't found as text. Listing was: \"{actual}\"");
 
 
+
 			//Get element
 			keyElem = _webDriver.FindElement(By.CssSelector("img[src^='data:image/png;base64']"));
 			//Define wait time
@@ -687,6 +702,13 @@ namespace MatkakertomusGroupB.Tests
 			//Verify that listing only has 1 picture
 			int regexMatches = Regex.Matches(listingHTML, "<img src").Count();
 			Assert.True(regexMatches == 1, $"Expected user to have 1 picture, but it contained {regexMatches} pictures.");
+
+			//Expect to NOT to find password and email anywhere in the listing.
+			expected = userPassword;
+			Assert.False(listingHTML.Contains(expected), $"Expected traveller listing to NOT contain \"{expected}\", but it wasn found as. Listing was: \"{actual}\"");
+			expected = userEmail;
+			Assert.False(listingHTML.Contains(expected), $"Expected traveller listing to NOT contain \"{expected}\", but it wasn found as. Listing was: \"{actual}\"");
+
 
 
 			if (extraDelayEnabled)
@@ -1188,12 +1210,6 @@ namespace MatkakertomusGroupB.Tests
 
 			//Proceed
 			_webDriver.FindElement(By.Id("addSubmit-story")).Click();
-
-			//TODO: CONTINUE on edit page
-
-
-
-
 
 			//Expect to find the edit story content
 			keyElemId = "editstory-div";
