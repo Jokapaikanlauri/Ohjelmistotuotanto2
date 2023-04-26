@@ -1669,10 +1669,10 @@ namespace MatkakertomusGroupB.Tests
 
 
 
-			//Find the previously added public trip element
-			keyElemId = $"privateitem-False" +
-			   $"-{DateTime.Parse(tripPubStartDate).ToString("yyyy-MM-dd")}" +
-			   $"-{DateTime.Parse(tripPubEndDate).ToString("yyyy-MM-dd")}";
+			//Find the previously added private trip element
+			keyElemId = $"privateitem-True" +
+			   $"-{DateTime.Parse(tripPrivStartDate).ToString("yyyy-MM-dd")}" +
+			   $"-{DateTime.Parse(tripPrivEndDate).ToString("yyyy-MM-dd")}";
 			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Click the button inside the found element to manage trip
@@ -1703,15 +1703,15 @@ namespace MatkakertomusGroupB.Tests
 
 
 
-			tripPrivStartDate = (DateTime.Parse(tripPrivStartDate).AddDays(-1)).ToString("dd/MM/yyyy");
+			tripPrivStartDate = (DateTime.Parse(tripPrivStartDate).AddDays(-365)).ToString("dd/MM/yyyy");
 			tripPrivEndDate = (DateTime.Parse(tripPrivEndDate).AddDays(+1)).ToString("dd/MM/yyyy");
 
 			var formInput = _webDriver.FindElement(By.Id("Input_Trip_Edit_StartDate"));
 			formInput.Clear();
-			formInput.SendKeys(destName);
+			formInput.SendKeys(tripPrivStartDate);
 			formInput = _webDriver.FindElement(By.Id("Input_Trip_Edit_EndDate"));
 			formInput.Clear();
-			formInput.SendKeys(destCountry);
+			formInput.SendKeys(tripPrivEndDate);
 			formInput = _webDriver.FindElement(By.Id("Input_Trip_Edit_Private"));
 			formInput.Click();
 
@@ -1754,19 +1754,10 @@ namespace MatkakertomusGroupB.Tests
 		public void Edited_OwnTrip_Private_Updated()
 		{
 
-
-			//Boilerplate
-			Assert.Ignore();
-			/*
-			//Navigate to Own Trips, wait for add element to be enabled
-			string linkText = "My Trips";
-			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
-			string actual = elem.GetAttribute("href").ToString();
-			string expected = "trips";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-			elem.Click();
-			//Expect to find page content
-			string keyElemId = "trip-razor-add";
+			//Expect to find the added content in the list
+			string keyElemId = $"privateitem-False" +
+				$"-{DateTime.Parse(tripPrivStartDate).ToString("yyyy-MM-dd")}" +
+				$"-{DateTime.Parse(tripPrivEndDate).ToString("yyyy-MM-dd")}";
 			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Define wait time
@@ -1784,45 +1775,24 @@ namespace MatkakertomusGroupB.Tests
 				}
 			});
 			//If it was actually displayed this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
 
+			//Convert element contents to string and see if the added item exists
+			string actual = keyElem.Text.ToString();
+			string expected = DateTime.Parse(tripPrivStartDate).ToString("yyyy-MM-dd");
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain start date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
+			expected = DateTime.Parse(tripPrivEndDate).ToString("yyyy-MM-dd");
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
-			//Fill out the form
-			_webDriver.FindElement(By.Id("Input_Trip_StartDate")).SendKeys(tripPubStartDate);
-			_webDriver.FindElement(By.Id("Input_Trip_EndDate")).SendKeys(tripPubEndDate);
-			//_webDriver.FindElement(By.Id("Input_Trip_Private"));
+			//Expect there to be a trip with privacy status of previously declared trip
+			expected = "Public";
+			Assert.True(actual.Contains(expected), $"Expected trip listing to contain privacy status of \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
-			//Proceed
-			_webDriver.FindElement(By.Id("addSubmit")).Click();
-
-
-			//The OK message should be displayed
-			keyElemId = "trip-added-alert";
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-
-			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "A new trip was created successfully!";
-			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
-			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
 			if (extraDelayEnabled)
 			{
 				Thread.Sleep(extraDelayInMilliSeconds);
 			}
-			*/
 		}
 
 		[Test, Order(20)]
