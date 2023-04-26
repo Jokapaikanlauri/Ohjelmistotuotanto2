@@ -38,7 +38,7 @@
 								<br>
 								@if (d.Image != null)
 								{
-									<img src="data:image/png;base64,@d.Image" style="max-width:70%" />
+									<img id="@($"destpic-{d.Name}")" src="data:image/png;base64,@d.Image" style="max-width:70%" />
 
 									<br>
 									<br>
@@ -46,7 +46,7 @@
 
 								@if (@d.Stories == null)
 								{
-									<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>Edit</button>
+									<button id="editDestButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>Edit</button>
 								}
 							</ul>
 						</DestinationItem>
