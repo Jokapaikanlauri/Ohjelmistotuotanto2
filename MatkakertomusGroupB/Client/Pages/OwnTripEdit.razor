@@ -10,7 +10,7 @@
 
 <h1>Edit trip</h1>
 
-<div class="left">
+<div id="ownTripEdit-razor" class="left">
     @if (@tDTO != null)
     {
         <EditTrip>
@@ -19,20 +19,20 @@
                 <ValidationSummary />
                 <label>Start date:</label>
                 <br />
-                <InputDate @bind-Value="tDTO.DatumStart" />
+                <InputDate id="Input_Trip_Edit_StartDate" @bind-Value="tDTO.DatumStart" />
                 <br /> <br />
                 <label>End date:</label>
                 <br />
-                <InputDate @bind-Value="tDTO.DatumEnd" />
+                <InputDate id="Input_Trip_Edit_EndDate" @bind-Value="tDTO.DatumEnd" />
                 <br /> <br />
                 <label>Check the box if trip is private: </label>
-                <InputCheckbox @bind-Value="tDTO.Private" />
+                <InputCheckbox id="Input_Trip_Edit_Private" @bind-Value="tDTO.Private" />
                 <br /><br />
                 <p>NOTE: Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
                 <br />
-                <button class="btn btn-success" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
-                <button type="submit" class="btn btn-warning">Save Changes</button>
-                <button class="btn btn-danger" @onclick="@Delete">Delete</button>
+                <button id="navbackButton" class="btn btn-success" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
+                <button id="editSubmit-trip" type="submit" class="btn btn-warning">Save Changes</button>
+                <button id="deleteTripButton" class="btn btn-danger" @onclick="@Delete">Delete</button>
                 <br /><br/>
             </EditForm>
         </EditTrip>
@@ -40,13 +40,13 @@
     }
     @if (edited)
     {
-        <div class="alert alert-success fade-in" role="alert">
+        <div id="trip-edit-saved-alert" class="alert alert-success fade-in" role="alert">
             Trip was edited successfully!
         </div>
     }
     @if (failed)
     {
-        <div class="alert alert-danger fade-in" role="alert">
+        <div id="trip-edit-saved-alert" class="alert alert-danger fade-in" role="alert">
             Saving new Trip failed. If the problem persists contact support
         </div>
     }
