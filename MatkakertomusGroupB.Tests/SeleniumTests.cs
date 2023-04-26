@@ -1325,10 +1325,8 @@ namespace MatkakertomusGroupB.Tests
 			//Reveal stories
 			keyElem.Click();
 
-			//Expect to find the added content in the revealed list
-			string expected = DateTime.Parse(storyDate).ToString("yyyy-MM-dd"); ;
-			//Get Element
 
+			//Get Element
 			keyElem = _webDriver.FindElement(By.Id("story-ul-list"));
 			//Define wait time
 			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
@@ -1351,7 +1349,7 @@ namespace MatkakertomusGroupB.Tests
 
 			//Convert element contents to string and see if the added item exists
 			string actual = keyElem.Text.ToString();
-			expected = DateTime.Parse(storyDate).ToString("yyyy-MM-dd");
+			string expected = DateTime.Parse(storyDate).ToString("yyyy-MM-dd");
 			Assert.True(actual.Contains(expected), $"Expected story listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
 			expected = storyDescription;
 			Assert.True(actual.Contains(expected), $"Expected story listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
@@ -1974,6 +1972,57 @@ namespace MatkakertomusGroupB.Tests
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
+			//Navigate back to Trips edit:
+			_webDriver.FindElement(By.Id("editReturn-story")).Click();
+
+			//Expect to find page content
+			keyElemId = "ownTripEdit-razor";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+			//Navigate back to Trips edit:
+			_webDriver.FindElement(By.Id("navbackButton")).Click();
+
+			//Expect to find the modified content mother in the list
+			keyElemId = $"privateitem-False" +
+			   $"-{DateTime.Parse(tripPubStartDate).ToString("yyyy-MM-dd")}" +
+			   $"-{DateTime.Parse(tripPubEndDate).ToString("yyyy-MM-dd")}";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+
 
 			if (extraDelayEnabled)
 			{
@@ -1984,20 +2033,14 @@ namespace MatkakertomusGroupB.Tests
 		[Test, Order(21)]
 		public void Edited_OwnStory_Updated()
 		{
-
-
-			//Boilerplate
-			Assert.Ignore();
-			/*
-			//Navigate to Own Trips, wait for add element to be enabled
+			//Own Trips
 			string linkText = "My Trips";
-			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
-			string actual = elem.GetAttribute("href").ToString();
-			string expected = "trips";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-			elem.Click();
-			//Expect to find page content
-			string keyElemId = "trip-razor-add";
+			_webDriver.FindElement(By.PartialLinkText(linkText)).Click();
+
+			//Expect to find the modified content mother in the list
+			string keyElemId = $"privateitem-False" +
+				$"-{DateTime.Parse(tripPubStartDate).ToString("yyyy-MM-dd")}" +
+				$"-{DateTime.Parse(tripPubEndDate).ToString("yyyy-MM-dd")}";
 			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Define wait time
@@ -2015,45 +2058,42 @@ namespace MatkakertomusGroupB.Tests
 				}
 			});
 			//If it was actually displayed this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
 
 
-			//Fill out the form
-			_webDriver.FindElement(By.Id("Input_Trip_StartDate")).SendKeys(tripPubStartDate);
-			_webDriver.FindElement(By.Id("Input_Trip_EndDate")).SendKeys(tripPubEndDate);
-			//_webDriver.FindElement(By.Id("Input_Trip_Private"));
-
-			//Proceed
-			_webDriver.FindElement(By.Id("addSubmit")).Click();
 
 
-			//The OK message should be displayed
-			keyElemId = "trip-added-alert";
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
+			//Find all story toggle buttons
+			var toggleButtons = _webDriver.FindElements(By.XPath("//button[@id='togglevisibility-story']"));
+			//Click all dem buttons
+			foreach (IWebElement toggleButton in toggleButtons)
 			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-
-			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "A new trip was created successfully!";
-			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
-			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
+				// Scroll to the button before attempting to click
+				((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+				Thread.Sleep(200);
+				toggleButton.Click();
 			}
-			*/
+
+			//Find all picture toggle buttons
+			toggleButtons = _webDriver.FindElements(By.XPath("//button[@id='togglevisibility-story-pictures']"));
+			//Click all dem buttons
+			foreach (IWebElement toggleButton in toggleButtons)
+			{
+				// Scroll to the button before attempting to click
+				((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+				Thread.Sleep(200);
+				toggleButton.Click();
+			}
+
+
+			//Convert mother element's contents to string and see if the added item exists
+			string actual = keyElem.Text.ToString();
+			string expected = DateTime.Parse(storyDate).ToString("yyyy-MM-dd");
+			Assert.True(actual.Contains(expected), $"Expected story listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			expected = storyDescription;
+			Assert.True(actual.Contains(expected), $"Expected story listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+
+
 		}
 
 		[Test, Order(22)]
