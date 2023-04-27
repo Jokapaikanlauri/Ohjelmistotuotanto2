@@ -25,7 +25,7 @@
 						<li>Story: @s.Description</li>
 						@if (UserId != null)
 						{
-							<button class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
+							<button id="editStoryButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
 						}
 						<StoryPictureList StoryId=@s.StoryId GroupList=@GroupList />
 					</ul>

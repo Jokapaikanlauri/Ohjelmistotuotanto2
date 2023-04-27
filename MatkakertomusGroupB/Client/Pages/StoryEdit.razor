@@ -11,126 +11,126 @@
 <PageTitle>Edit Story</PageTitle>
 
 <div id="editstory-div" class="left">
-    <br />
-    <h4>Edit your story</h4>
-    <NewStory>
-        <EditForm Model="@sDTO" OnValidSubmit="@Save">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+	<br />
+	<h4>Edit your story</h4>
+	<NewStory>
+		<EditForm Model="@sDTO" OnValidSubmit="@Save">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
 
-            <label>Destination:</label>
-            <br />
-            <InputSelect @bind-Value="sDTO.DestinationId">
-                @if (destinations == null)
-                {
-                    <option selected value="">No destinations available</option>
-                }
-                else
-                {
-                    @foreach (DestinationDTO d in destinations)
-                    {
-                        <option value="@d.DestinationId">@d.Name</option>
-                    }
-                }
-            </InputSelect>
-            <br /> <br />
-            <label>Date:</label>
-            <br />
-            <InputDate @bind-Value="sDTO.Datum" />
-            <br /> <br />
-            <label>Tell your story: </label> <br />
-            <InputTextArea @bind-Value="sDTO.Description" style="width:97%" />
-            <br />
-            <p>NOTE: Deleting the story will also delete all the pictures attached to it!!!</p>
-            <br /><br />
-            @if (sDTO.TripId != null)
-            {
-                <button id="editReturn-story" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
-            }
-            <button id="editSubmit-story" type="submit" class="btn btn-success">Save Changes</button>
-            <button id="delete-story" class="btn btn-danger" @onclick="@Delete">Delete</button>
-            <br/><br/>
-            <PictureUpload id="@StoryId" />
-        </EditForm>
-    </NewStory>
-    @if (edited)
-    {
-        <div id="story-saved-alert" class="alert alert-success fade-in" role="alert">
-            Changes to Story saved successfully!
-        </div>
-    }
-    @if (failed)
-    {
-        <div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
-            Saving new Story failed. If the problem persists contact support!
-        </div>
-    }
+			<label>Destination:</label>
+			<br />
+			<InputSelect @bind-Value="sDTO.DestinationId">
+				@if (destinations == null)
+				{
+					<option selected value="">No destinations available</option>
+				}
+				else
+				{
+					@foreach (DestinationDTO d in destinations)
+					{
+						<option value="@d.DestinationId">@d.Name</option>
+					}
+				}
+			</InputSelect>
+			<br /> <br />
+			<label>Date:</label>
+			<br />
+			<InputDate id="Input_Story_Edit_Datum" @bind-Value="sDTO.Datum" />
+			<br /> <br />
+			<label>Tell your story: </label> <br />
+			<InputTextArea id="Input_Story_Edit_Description" @bind-Value="sDTO.Description" style="width:97%" />
+			<br />
+			<p>NOTE: Deleting the story will also delete all the pictures attached to it!!!</p>
+			<br /><br />
+			@if (sDTO.TripId != null)
+			{
+				<button id="editReturn-story" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
+			}
+			<button id="editSubmit-story" type="submit" class="btn btn-success">Save Changes</button>
+			<button id="delete-story" class="btn btn-danger" @onclick="@Delete">Delete</button>
+			<br /><br />
+			<PictureUpload id="@StoryId" />
+		</EditForm>
+	</NewStory>
+	@if (edited)
+	{
+		<div id="story-saved-alert" class="alert alert-success fade-in" role="alert">
+			Changes to Story saved successfully!
+		</div>
+	}
+	@if (failed)
+	{
+		<div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
+			Saving new Story failed. If the problem persists contact support!
+		</div>
+	}
 </div>
 
 
 @code {
-    [Parameter]
-    public int StoryId { get; set; }
+	[Parameter]
+	public int StoryId { get; set; }
 
-    public StoryDTO sDTO = new();
-    public List<DestinationDTO>? destinations = null;
-    public bool edited = false;
-    public bool failed = false;
+	public StoryDTO sDTO = new();
+	public List<DestinationDTO>? destinations = null;
+	public bool edited = false;
+	public bool failed = false;
 
 
-    protected override async Task OnInitializedAsync()
-    {
-        //Get list of all destinations
-        destinations = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination");
-        sDTO = await Http.GetFromJsonAsync<StoryDTO>($"/api/story/{StoryId}");
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		//Get list of all destinations
+		destinations = await Http.GetFromJsonAsync<List<DestinationDTO>>($"/api/destination");
+		sDTO = await Http.GetFromJsonAsync<StoryDTO>($"/api/story/{StoryId}");
+	}
 
-    async Task Save()
-    {
-        edited = false;
-        failed = false;
-        sDTO.StoryId = StoryId;
-        //post a new trip
-        var res = await Http.PutAsJsonAsync<StoryDTO>($"/api/story/{StoryId}", sDTO);
-        if (res.IsSuccessStatusCode)
-        {
-            edited = true;
-            Console.WriteLine(res);
-        }
-        else
-        {
-            failed = true;
-            Console.WriteLine(res);
-        }
-        StateHasChanged();
-    }
+	async Task Save()
+	{
+		edited = false;
+		failed = false;
+		sDTO.StoryId = StoryId;
+		//post a new trip
+		var res = await Http.PutAsJsonAsync<StoryDTO>($"/api/story/{StoryId}", sDTO);
+		if (res.IsSuccessStatusCode)
+		{
+			edited = true;
+			Console.WriteLine(res);
+		}
+		else
+		{
+			failed = true;
+			Console.WriteLine(res);
+		}
+		StateHasChanged();
+	}
 
-    async Task Delete()
-    {
-        edited = false;
-        failed = false;
-        var picres = await Http.DeleteAsync($"/api/picture/story/{sDTO.StoryId}");
-        if (picres.IsSuccessStatusCode)
-        {
-            Console.WriteLine(picres);
+	async Task Delete()
+	{
+		edited = false;
+		failed = false;
+		var picres = await Http.DeleteAsync($"/api/picture/story/{sDTO.StoryId}");
+		if (picres.IsSuccessStatusCode)
+		{
+			Console.WriteLine(picres);
 
-            var res = await Http.DeleteAsync($"/api/story/{StoryId}");
-            if (res.IsSuccessStatusCode)
-            {
-                Console.WriteLine(res);
-                nav.NavigateTo($"/trip/edit/{sDTO.TripId}");
-            }
-            else
-            {
-                failed = true;
-                Console.WriteLine(res);
-            }
-        }
-        else
-        {
-            failed = true;
-            Console.WriteLine(picres);
-        }
-        
-    }
+			var res = await Http.DeleteAsync($"/api/story/{StoryId}");
+			if (res.IsSuccessStatusCode)
+			{
+				Console.WriteLine(res);
+				nav.NavigateTo($"/trip/edit/{sDTO.TripId}");
+			}
+			else
+			{
+				failed = true;
+				Console.WriteLine(res);
+			}
+		}
+		else
+		{
+			failed = true;
+			Console.WriteLine(picres);
+		}
+
+	}
 }
