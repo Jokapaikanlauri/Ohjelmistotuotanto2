@@ -151,19 +151,19 @@ namespace MatkakertomusGroupB.Server.Controllers
 
         // delete all pictures from a certain story
         // DELETE: api/Picture/story/5
-        [HttpDelete("/story/{id}")]
+        [HttpDelete("story/{id}")]
         public async Task<IActionResult> DeleteStoryPictures(int storyId)
         {
             if (_context.Pictures == null)
             {
                 return NotFound();
             }
-
-            IEnumerable<Picture> pictureList = (IEnumerable<Picture>)GetStoryPictures(storyId);
+            List<Picture>? pictureList = null;
+            pictureList = await _context.Pictures.Where(x => x.StoryId == storyId).ToListAsync();
 
             if (pictureList == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             foreach (Picture picture in pictureList)
