@@ -2590,20 +2590,12 @@ namespace MatkakertomusGroupB.Tests
 		[Test, Order(25)]
 		public void Delete_Empty_Destination()
 		{
-
-
-			//Boilerplate
-			Assert.Ignore();
-			/*
-			//Navigate to Own Trips, wait for add element to be enabled
-			string linkText = "My Trips";
+			//Nav and wait for render
+			string linkText = "Destinations";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
-			string actual = elem.GetAttribute("href").ToString();
-			string expected = "trips";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 			elem.Click();
 			//Expect to find page content
-			string keyElemId = "trip-razor-add";
+			string keyElemId = "destinations-razor-auth-listing";
 			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Define wait time
@@ -2624,18 +2616,32 @@ namespace MatkakertomusGroupB.Tests
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
 
 
-			//Fill out the form
-			_webDriver.FindElement(By.Id("Input_Trip_StartDate")).SendKeys(tripPubStartDate);
-			_webDriver.FindElement(By.Id("Input_Trip_EndDate")).SendKeys(tripPubEndDate);
-			//_webDriver.FindElement(By.Id("Input_Trip_Private"));
+			// Find the parent <ul> element
+			keyElem = _webDriver.FindElement(By.XPath($"//ul[li[contains(., '{destDescription}')]]"));
+			//Click da button
+			keyElemId = "editDestButton";
+			keyElem = keyElem.FindElement(By.Id(keyElemId));
+			// Scroll to the button before attempting to click
+			((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+			Thread.Sleep(2000);
+			keyElem.Click();
 
-			//Proceed
-			_webDriver.FindElement(By.Id("addSubmit")).Click();
+
+			//Try and remove the Destiantion
+			_webDriver.FindElement(By.Id("deleteDestinationButton")).Click();
 
 
-			//The OK message should be displayed
-			keyElemId = "trip-added-alert";
+
+			//Should re reoute but we doing it manually
+			//Nav and wait for render
+			linkText = "Destinations";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "destinations-razor-auth-listing";
+			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
 			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
 			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
 			wait.Until(driver =>
@@ -2649,17 +2655,23 @@ namespace MatkakertomusGroupB.Tests
 					return false;
 				}
 			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find Destinations page with element \"{keyElemId}\" via return button but it wasn't found.");
 
-			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "A new trip was created successfully!";
-			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
-			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
+			Thread.Sleep(2000);
+
+			// Find the parent <ul> element
+			var keyElems = _webDriver.FindElements(By.XPath($"//ul[li[contains(., '{destDescription}')]]"));
+			int expectedInt = 0;
+			int actualInt = keyElems.Count;
+
+			Assert.AreEqual(0, keyElems.Count, $"Expected to find page without any destinations added by us but they were found on the page. {keyElems[0].Text.ToString()}");
 
 			if (extraDelayEnabled)
 			{
 				Thread.Sleep(extraDelayInMilliSeconds);
 			}
-			*/
+
 		}
 
 
