@@ -117,11 +117,12 @@ namespace MatkakertomusGroupB.Server.Controllers
         public async Task<IActionResult> DeleteDestination(int id)
         {
            
-            if (_context.Destinations == null)
+            if (_context.Destinations == null || _context.Stories == null)
             {
                 return NotFound();
             }
-            if (_context.Trip != null)
+            var stories = await _context.Stories.Where(x => x.DestinationId == id).ToListAsync();
+            if (stories.Count > 0)
             {
                 return BadRequest();
             }
