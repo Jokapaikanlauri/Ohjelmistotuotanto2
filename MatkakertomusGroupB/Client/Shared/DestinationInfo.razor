@@ -8,22 +8,22 @@
 
 @if (d != null)
 {
-    <li><b>Destination:</b> @d.Name</li>
-    <li><b>Country:</b> @d.Country</li>
-    <li><b>Municipality:</b> @d.Municipality</li>
+	<li><b>Destination:</b> @d.Name</li>
+	<li><b>Country:</b> @d.Country</li>
+	<li><b>Municipality:</b> @d.Municipality</li>
 }
 
 
 @code {
-    [Parameter]
-    public int destinationId { get; set; }
+	[Parameter]
+	public int destinationId { get; set; }
 
-    private Destination? d = null;
+	private Destination? d = null;
 
 
-    protected override async Task OnInitializedAsync()
-    {
-        //Get destination by id
-        d = await Http.GetFromJsonAsync<Destination>($"/api/destination/{destinationId}");
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		//Get destination by id
+		d = await Http.GetFromJsonAsync<Destination>($"/api/destination/{destinationId}");
+	}
 }

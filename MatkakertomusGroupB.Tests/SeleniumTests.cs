@@ -2202,6 +2202,9 @@ namespace MatkakertomusGroupB.Tests
 		[Test, Order(23)]
 		public void Delete_OwnStory()
 		{
+			//Change the  Global Implicit wait before failing (waits for element to be found)
+			_webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+
 			//Navigate back to own trips
 			string linkText = "My Trips";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
@@ -2287,7 +2290,7 @@ namespace MatkakertomusGroupB.Tests
 
 			keyElem = null;
 
-
+			Thread.Sleep(2000);
 			//Expect to find the delete button div
 			keyElemId = "editstory-div";
 			//Get element
@@ -2309,14 +2312,12 @@ namespace MatkakertomusGroupB.Tests
 			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
 
-
 			//Try and remove the Story
 			//Expect to find the delete button
 			keyElemId = "delete-story";
 			//Get element
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			keyElem.Click();
-
 
 
 
@@ -2347,8 +2348,6 @@ namespace MatkakertomusGroupB.Tests
 			});
 			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-
-
 
 			//Find the previously added public trip element
 			keyElemId = $"privateitem-False" +
