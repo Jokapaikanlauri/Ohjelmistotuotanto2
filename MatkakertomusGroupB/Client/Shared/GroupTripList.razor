@@ -14,8 +14,8 @@
 		{
 			<TripItem Trip="@t">
 				<ul id="@($"privateitem-{t.Private.ToString()}-{t.DatumStart.Value.ToString("yyyy-MM-dd")}-{t.DatumEnd.Value.ToString("yyyy-MM-dd")}")" class="list-item">
-					<li>Trip start: @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
-					<li>Trip end: @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
+					<li><b>Trip start:</b> @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
+					<li><b>Trip end:</b> @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
 					<br />
 					<StoryList tripId="@t.TripId" GroupList=true />
 				</ul>

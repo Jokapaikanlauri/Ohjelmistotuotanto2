@@ -20,9 +20,9 @@
 				<br />
 				<StoryItem Story="@s">
 					<ul id="story-ul-list" class="list-item">
-						<li>Date: @s.Datum.ToString("yyyy-MM-dd")</li>
+						<li><b>Date:</b> @s.Datum.ToString("yyyy-MM-dd")</li>
 						<DestinationInfo destinationId=@s.DestinationId />
-						<li>Story: @s.Description</li>
+						<li><b>Story:</b> @s.Description</li>
 						@if (UserId != null)
 						{
 							<button id="editStoryButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>

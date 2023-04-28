@@ -32,9 +32,9 @@
 						<DestinationItem Destination="@d">
 							<ul>
 								<h4>@d.Name</h4>
-								<li>Country: @d.Country</li>
-								<li>Municipality: @d.Municipality</li>
-								<li>Description: @d.Description</li>
+								<li><b>Country:</b> @d.Country</li>
+								<li><b>Municipality:</b> @d.Municipality</li>
+								<li><b>Description:</b> @d.Description</li>
 								<br>
 								@if (d.Image != null)
 								{
@@ -73,9 +73,9 @@
 					<div id="@($"{d.Name}-div")" class="list-item">
 						<DestinationItem Destination="@d">
 							<h4>@d.Name</h4>
-							<li>Country: @d.Country</li>
-							<li>Municipality: @d.Municipality</li>
-							<li>Description: @d.Description</li>
+							<li><b>Country:</b> @d.Country</li>
+							<li><b>Municipality:</b> @d.Municipality</li>
+							<li><b>Description:</b> @d.Description</li>
 							<br>
 							@if (d.Image != null)
 							{
