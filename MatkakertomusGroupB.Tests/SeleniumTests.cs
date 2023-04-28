@@ -2097,22 +2097,14 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 		[Test, Order(22)]
-		public void Delete_OwnStory()
+		public void Delete_Active_Destination_Blocked()
 		{
-
-
-			//Boilerplate
-			Assert.Ignore();
-			/*
-			//Navigate to Own Trips, wait for add element to be enabled
-			string linkText = "My Trips";
+			//Nav and wait for render
+			string linkText = "Destinations";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
-			string actual = elem.GetAttribute("href").ToString();
-			string expected = "trips";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 			elem.Click();
 			//Expect to find page content
-			string keyElemId = "trip-razor-add";
+			string keyElemId = "destinations-razor-auth-listing";
 			//Get element
 			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//Define wait time
@@ -2133,17 +2125,23 @@ namespace MatkakertomusGroupB.Tests
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
 
 
-			//Fill out the form
-			_webDriver.FindElement(By.Id("Input_Trip_StartDate")).SendKeys(tripPubStartDate);
-			_webDriver.FindElement(By.Id("Input_Trip_EndDate")).SendKeys(tripPubEndDate);
-			//_webDriver.FindElement(By.Id("Input_Trip_Private"));
+			// Find the parent <ul> element
+			keyElem = _webDriver.FindElement(By.XPath($"//ul[li[contains(., '{destDescription}')]]"));
+			//Click da button
+			keyElemId = "editDestButton";
+			keyElem = keyElem.FindElement(By.Id(keyElemId));
+			// Scroll to the button before attempting to click
+			((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+			Thread.Sleep(2000);
+			keyElem.Click();
 
-			//Proceed
-			_webDriver.FindElement(By.Id("addSubmit")).Click();
+
+			//Try and remove the Destiantion
+			_webDriver.FindElement(By.Id("deleteDestinationButton")).Click();
 
 
 			//The OK message should be displayed
-			keyElemId = "trip-added-alert";
+			keyElemId = "destinationd-edited-alert";
 			keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
 			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
@@ -2160,7 +2158,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "A new trip was created successfully!";
+			string actual = "Error while deleting, destination has stories!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -2168,10 +2166,238 @@ namespace MatkakertomusGroupB.Tests
 			{
 				Thread.Sleep(extraDelayInMilliSeconds);
 			}
-			*/
+
+			//Return to Destination listings
+			_webDriver.FindElement(By.Id("navbackButton")).Click();
+
+
+			//Expect to find page content
+			keyElemId = "destinations-razor-auth-listing";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find Destinations page with element \"{keyElemId}\" via return button but it wasn't found.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
 		}
 
 		[Test, Order(23)]
+		public void Delete_OwnStory()
+		{
+			//Navigate back to own trips
+			string linkText = "My Trips";
+			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			elem.Click();
+			//Expect to find page content
+			string keyElemId = "owntrips-razor";
+			//Get element
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+
+
+			//Find the previously added public trip element
+			keyElemId = $"privateitem-False" +
+			   $"-{DateTime.Parse(tripPubStartDate).ToString("yyyy-MM-dd")}" +
+			   $"-{DateTime.Parse(tripPubEndDate).ToString("yyyy-MM-dd")}";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Click the button inside the found element to manage trip
+			string expected = "tripManage";
+			keyElem.FindElement(By.Id(expected)).Click();
+
+
+
+			//Expect to find the story LIST parent div
+			keyElemId = "storylist-div";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+			//Find all story toggle buttons
+			var toggleButtons = _webDriver.FindElements(By.XPath("//button[@id='togglevisibility-story']"));
+
+			//Click all dem buttons
+			foreach (IWebElement toggleButton in toggleButtons)
+			{
+				// Scroll to the button before attempting to click
+				((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+				Thread.Sleep(200);
+				toggleButton.Click();
+			}
+
+
+			// Find the parent <ul> element of our story
+			keyElem = _webDriver.FindElement(By.XPath($"//ul[li[contains(., '{storyDescription}')]]"));
+			//Click da button
+			keyElemId = "editStoryButton";
+			keyElem = keyElem.FindElement(By.Id(keyElemId));
+			// Scroll to the button before attempting to click
+			((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+			Thread.Sleep(2000);
+			keyElem.Click();
+
+			keyElem = null;
+
+
+			//Expect to find the delete button
+			keyElemId = "editstory-div";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+
+			//Try and remove the Story
+			//Expect to find the delete button
+			keyElemId = "delete-story";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			keyElem.Click();
+
+
+
+
+			//Should reroute back to trip edit, but we doing it manually
+
+
+			//Navigate back to own trips
+			linkText = "My Trips";
+			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			elem.Click();
+			//Expect to find page content
+			keyElemId = "owntrips-razor";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+
+
+			//Find the previously added public trip element
+			keyElemId = $"privateitem-False" +
+			   $"-{DateTime.Parse(tripPubStartDate).ToString("yyyy-MM-dd")}" +
+			   $"-{DateTime.Parse(tripPubEndDate).ToString("yyyy-MM-dd")}";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Click the button inside the found element to manage trip
+			expected = "tripManage";
+			keyElem.FindElement(By.Id(expected)).Click();
+
+
+
+			//Expect to find the story LIST parent div
+			keyElemId = "storylist-div";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+			//Find all story toggle buttons
+			toggleButtons = _webDriver.FindElements(By.XPath("//button[@id='togglevisibility-story']"));
+			int expectedInt = 0;
+			int actualInt = toggleButtons.Count;
+
+			Assert.AreEqual(0, toggleButtons.Count, $"Expected to find page without togglebuttons related to stories but found \"{actualInt}\" of the buttons on the page.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+		}
+
+		[Test, Order(24)]
 		public void Delete_OwnTrip()
 		{
 
@@ -2246,7 +2472,7 @@ namespace MatkakertomusGroupB.Tests
 			*/
 		}
 
-		[Test, Order(24)]
+		[Test, Order(25)]
 		public void Delete_Empty_Destination()
 		{
 
@@ -2321,80 +2547,6 @@ namespace MatkakertomusGroupB.Tests
 			*/
 		}
 
-		[Test, Order(25)]
-		public void Delete_Active_Destination_Blocked()
-		{
-
-
-			//Boilerplate
-			Assert.Ignore();
-			/*
-			//Navigate to Own Trips, wait for add element to be enabled
-			string linkText = "My Trips";
-			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
-			string actual = elem.GetAttribute("href").ToString();
-			string expected = "trips";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu my trips link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-			elem.Click();
-			//Expect to find page content
-			string keyElemId = "trip-razor-add";
-			//Get element
-			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			//Define wait time
-			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-			//If it was actually displayed this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-
-
-			//Fill out the form
-			_webDriver.FindElement(By.Id("Input_Trip_StartDate")).SendKeys(tripPubStartDate);
-			_webDriver.FindElement(By.Id("Input_Trip_EndDate")).SendKeys(tripPubEndDate);
-			//_webDriver.FindElement(By.Id("Input_Trip_Private"));
-
-			//Proceed
-			_webDriver.FindElement(By.Id("addSubmit")).Click();
-
-
-			//The OK message should be displayed
-			keyElemId = "trip-added-alert";
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-
-			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "A new trip was created successfully!";
-			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
-			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-			*/
-		}
 
 		[Test, Order(26)]
 		public void LogOut_Again()
@@ -2420,7 +2572,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 		[Test, Order(27)]
-		public void Welcome_Page()
+		public void Welcome_Page_Checks()
 		{
 			//Navigate to specific URL
 			_webDriver.Navigate().GoToUrl(_baseUrl);
@@ -2473,7 +2625,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 		[Test, Order(29)]
-		public void Public_Navmenu()
+		public void Public_Navmenu_Contents()
 		{
 			//Test Nav menu contents
 			//Home

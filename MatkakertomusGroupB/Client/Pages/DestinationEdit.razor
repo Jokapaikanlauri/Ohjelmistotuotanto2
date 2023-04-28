@@ -52,9 +52,9 @@
 				<br />
 				<br />
 
-				<button id="navbackButton" class="btn btn-success" @onclick='()=>nav.NavigateTo($"/destinations")'>Back to destinations</button>
+				<button id="navbackButton" class="btn btn-success" type="button" @onclick='()=>nav.NavigateTo($"/destinations")'>Back to destinations</button>
 				<button id="editSubmitButton" type="submit" class="btn btn-warning">Save edit</button>
-				<button id="deleteDestinationButton" class="btn btn-danger" @onclick="@Delete">Delete</button>
+				<button id="deleteDestinationButton" class="btn btn-danger" type="button" @onclick="@Delete">Delete</button>
 
 			</EditForm>
 		</EditDestination>
@@ -69,7 +69,7 @@
 }
 @if (deleted)
 {
-	<div class="alert alert-success fade-in" role="alert">
+	<div id="destinationd-edited-alert" class="alert alert-success fade-in" role="alert">
 		Destination was deleted successfully!
 	</div>
 }
@@ -77,17 +77,19 @@
 
 @if (failed)
 {
-	<div class="alert alert-danger fade-in" role="alert">
+	<div id="destinationd-edited-alert" class="alert alert-danger fade-in" role="alert">
 		Unexpected error while editing!
 	</div>
 }
 
 @if (deleteFailed)
 {
-	<div class="alert alert-danger fade-in" role="alert">
+	<div id="destinationd-edited-alert" class="alert alert-danger fade-in" role="alert">
 		Error while deleting, destination has stories!
 	</div>
 }
+
+
 @code {
 	[Parameter]
 	public int DestinationId { get; set; }
@@ -120,11 +122,13 @@
 		if (res.IsSuccessStatusCode)
 		{
 			edited = true;
+			deleteFailed = failed = deleted = false;
 			Console.WriteLine(res);
 		}
 		else
 		{
 			failed = true;
+			edited = failed = deleted = false;
 			Console.WriteLine(res);
 		}
 		StateHasChanged();
@@ -139,14 +143,14 @@
 			Console.WriteLine(res);
 			nav.NavigateTo($"/destinations");
 			deleted = true;
+			edited = failed = deleteFailed = false;
 		}
 
 		else
 		{
-			
 			deleteFailed = true;
 			Console.WriteLine(res);
-			deleteFailed = edited = failed = deleted = false;
+			edited = failed = deleted = false;
 		}
 	}
 

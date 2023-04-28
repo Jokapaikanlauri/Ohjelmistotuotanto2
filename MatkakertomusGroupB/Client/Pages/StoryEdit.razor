@@ -45,10 +45,10 @@
 			<br /><br />
 			@if (sDTO.TripId != null)
 			{
-				<button id="editReturn-story" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
+				<button id="editReturn-story" class="btn btn-warning" type="button" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
 			}
 			<button id="editSubmit-story" type="submit" class="btn btn-success">Save Changes</button>
-			<button id="delete-story" class="btn btn-danger" @onclick="@Delete">Delete</button>
+			<button id="delete-story" class="btn btn-danger" type="button" @onclick="@Delete">Delete</button>
 			<br /><br />
 			<PictureUpload id="@StoryId" />
 		</EditForm>
@@ -59,12 +59,31 @@
 			Changes to Story saved successfully!
 		</div>
 	}
+	@if (deleted)
+	{
+		<div id="story-saved-alert" class="alert alert-success fade-in" role="alert">
+			Story was deleted successfully!
+		</div>
+	}
 	@if (failed)
 	{
 		<div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
 			Saving new Story failed. If the problem persists contact support!
 		</div>
 	}
+	@if (deleteFailed)
+	{
+		<div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
+			Error while deleting. If the problem persists contact support!
+		</div>
+	}
+	@if (picDeleteFailed)
+	{
+		<div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
+			Error while deleting pictures related to the story. If the problem persists contact support!
+		</div>
+	}
+
 </div>
 
 
@@ -76,6 +95,9 @@
 	public List<DestinationDTO>? destinations = null;
 	public bool edited = false;
 	public bool failed = false;
+	public bool deleted = false;
+	public bool deleteFailed = false;
+	public bool picDeleteFailed = false;
 
 
 	protected override async Task OnInitializedAsync()
@@ -95,11 +117,13 @@
 		if (res.IsSuccessStatusCode)
 		{
 			edited = true;
+			deleteFailed = failed = deleted = picDeleteFailed = false;
 			Console.WriteLine(res);
 		}
 		else
 		{
 			failed = true;
+			edited = failed = deleted = picDeleteFailed = false;
 			Console.WriteLine(res);
 		}
 		StateHasChanged();
@@ -119,16 +143,19 @@
 			{
 				Console.WriteLine(res);
 				nav.NavigateTo($"/trip/edit/{sDTO.TripId}");
+				deleted = true;
+				edited = failed = deleteFailed = picDeleteFailed = false;
 			}
 			else
 			{
-				failed = true;
+				deleteFailed = true;
 				Console.WriteLine(res);
+				edited = failed = deleted = false;
 			}
 		}
 		else
 		{
-			failed = true;
+			picDeleteFailed = true;
 			Console.WriteLine(picres);
 		}
 
