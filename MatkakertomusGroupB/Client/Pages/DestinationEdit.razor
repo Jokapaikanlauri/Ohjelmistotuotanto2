@@ -73,6 +73,8 @@
 		Destination was deleted successfully!
 	</div>
 }
+
+
 @if (failed)
 {
 	<div class="alert alert-danger fade-in" role="alert">
@@ -80,6 +82,12 @@
 	</div>
 }
 
+@if (deleteFailed)
+{
+	<div class="alert alert-danger fade-in" role="alert">
+		Error while deleting, destination has stories!
+	</div>
+}
 @code {
 	[Parameter]
 	public int DestinationId { get; set; }
@@ -98,7 +106,7 @@
 	public bool edited = false;
 	public bool failed = false;
 	public bool deleted = false;
-
+	public bool deleteFailed = false;
 	protected override async Task OnInitializedAsync()
 	{
 
@@ -124,6 +132,7 @@
 
 	async Task Delete()
 	{
+
 		var res = await Http.DeleteAsync($"/api/destination/{DestinationId}");
 		if (res.IsSuccessStatusCode)
 		{
@@ -131,10 +140,13 @@
 			nav.NavigateTo($"/destinations");
 			deleted = true;
 		}
+
 		else
 		{
-			failed = true;
+			
+			deleteFailed = true;
 			Console.WriteLine(res);
+			deleteFailed = edited = failed = deleted = false;
 		}
 	}
 

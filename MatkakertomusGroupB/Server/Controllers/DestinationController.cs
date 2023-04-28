@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using MatkakertomusGroupB.Server.Data;
 using MatkakertomusGroupB.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis.CodeStyle;
+using Azure.Messaging;
 
 namespace MatkakertomusGroupB.Server.Controllers
 {
@@ -114,9 +116,14 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDestination(int id)
         {
+           
             if (_context.Destinations == null)
             {
                 return NotFound();
+            }
+            if (_context.Trip != null)
+            {
+                return BadRequest();
             }
             var destination = await _context.Destinations.FindAsync(id);
             if (destination == null)
