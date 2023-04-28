@@ -2569,6 +2569,9 @@ namespace MatkakertomusGroupB.Tests
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
 
 
+			//Change the  Global Implicit wait before failing (waits for element to be found)
+			_webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+
 			//Find all if any
 			string keyElemClass = "list-item";
 			//Get element

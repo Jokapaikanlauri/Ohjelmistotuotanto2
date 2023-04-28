@@ -30,9 +30,9 @@
                 <br /><br />
                 <p>NOTE: Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
                 <br />
-                <button id="navbackButton" class="btn btn-success" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
+                <button id="navbackButton" class="btn btn-success" type="button" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
                 <button id="editSubmit-trip" type="submit" class="btn btn-warning">Save Changes</button>
-                <button id="deleteTripButton" class="btn btn-danger" @onclick="@Delete">Delete</button>
+                <button id="deleteTripButton" class="btn btn-danger" type="button" @onclick="@Delete">Delete</button>
                 <br /><br/>
             </EditForm>
         </EditTrip>
@@ -44,10 +44,23 @@
             Trip was edited successfully!
         </div>
     }
-    @if (failed)
+
+        @if (deleted)
+    {
+        <div id="trip-edit-saved-alert" class="alert alert-success fade-in" role="alert">
+            Trip was deleted successfully!
+        </div>
+    }
+        @if (failed)
     {
         <div id="trip-edit-saved-alert" class="alert alert-danger fade-in" role="alert">
             Saving new Trip failed. If the problem persists contact support
+        </div>
+    }
+    @if (deleteFailed)
+    {
+        <div id="trip-edit-saved-alert" class="alert alert-danger fade-in" role="alert">
+            Deleting Trip failed. If the problem persists contact support
         </div>
     }
 
@@ -70,7 +83,8 @@
     public TripDTO? tDTO = new();
     public bool edited = false;
     public bool failed = false;
-
+    public bool deleted = false;
+	public bool deleteFailed = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -100,11 +114,13 @@
         if (res.IsSuccessStatusCode)
         {
             edited = true;
+            deleteFailed = failed = deleted = false;
             Console.WriteLine(res);
         }
         else
         {
             failed = true;
+            edited = failed = deleted = false;
             Console.WriteLine(res);
         }
         StateHasChanged();
@@ -131,11 +147,14 @@
         {
             Console.WriteLine(res);
             nav.NavigateTo($"/trips");
+            			deleted = true;
+			edited = failed = deleteFailed = false;
         }
         else
         {
-            failed = true;
+            deleteFailed = true;
             Console.WriteLine(res);
+            edited = failed = deleted = false;
         }
     }
 }
