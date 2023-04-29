@@ -18,15 +18,17 @@
 @code {
 
     public UserDTO? userNickDTO = new UserDTO();
-    public UserDTO? userNickDTO2 = new UserDTO();
-    public string? nickname = null;
 
+    public string? nickname = null;
     public string? name = null;
+    public string? userId = null;
 
     protected override async Task OnInitializedAsync()
     {
-        //Assing name to DTO for POST operation
-        name = asp.GetAuthenticationStateAsync().Result.User.Identity.Name;
+
+        //Assing name to variable for future operations
+        var authState = await asp.GetAuthenticationStateAsync();
+        name = authState.User.Identity.Name;
         userNickDTO.Username = name;
 
         //Fetch user data from API via POST operation
@@ -36,5 +38,13 @@
         userNickDTO = await response.Content.ReadFromJsonAsync<UserDTO>();
         nickname = userNickDTO.Nickname;
 
+        if (name != null)
+        {
+            //Fetch user data from API via POST operation
+            var res = await Http.PostAsJsonAsync<UserDTO>($"/api/traveller/id", new UserDTO(name));
+            //Parse user data from API
+            var userDTO = await res.Content.ReadFromJsonAsync<UserDTO>();
+            userId = userDTO.Id;
+        }
     }
 }
