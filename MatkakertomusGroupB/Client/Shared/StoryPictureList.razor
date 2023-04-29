@@ -9,93 +9,97 @@
 
 @if (list != null)
 {
-    @if (list.Count != 0)
-    {
-        <button id="togglevisibility-story-pictures" class="btn btn-success" @onclick=@ShowPictures>Show or hide story pictures</button>
-        @if (showPictures)
-        {
-            @foreach (PictureDTO p in list)
-            {
-                <br />
-                <br />
-                @if (!GroupList)
-                {
-                    <button class="btn btn-danger" @onclick="@(() => Delete(p.PictureId))">Delete below picture from story</button>
-                }
-                <br />
-                <PictureItem Picture="@p">
+	@if (list.Count != 0)
+	{
+		<button id="togglevisibility-story-pictures" class="btn btn-success" @onclick=@ShowPictures>
+			<span class="oi oi-eye" aria-hidden="true"> Show or hide story pictures</span>
+		</button>
+		@if (showPictures)
+		{
+			@foreach (PictureDTO p in list)
+			{
+				<br />
+				<br />
+				@if (!GroupList)
+				{
+					<button class="btn btn-danger" @onclick="@(() => Delete(p.PictureId))">
+						<span class="oi oi-delete" aria-hidden="true"> Delete below picture from story</span>
+					</button>
+				}
+				<br />
+				<PictureItem Picture="@p">
 
-                    <img src="data:image/png;base64,@p.Image" style="max-width:90%" />
-                </PictureItem>
-            }
-        }
-        else
-        {
-            <br />
-            <br />
-            <h6>Story picture count: @pictures</h6>
-        }
-    }
-    else
-    {
-        <br />
-        <br />
-        <h6>Story picture count: @pictures</h6>
-    }
+					<img src="data:image/png;base64,@p.Image" style="max-width:90%" />
+				</PictureItem>
+			}
+		}
+		else
+		{
+			<br />
+			<br />
+			<h6>Story picture count: @pictures</h6>
+		}
+	}
+	else
+	{
+		<br />
+		<br />
+		<h6>Story picture count: @pictures</h6>
+	}
 }
 else
 {
-    <br />
-    <br />
-    <h6>No pictures could be fetched</h6>
+	<br />
+	<br />
+	<h6>No pictures could be fetched</h6>
 }
 
 @code {
-    [Parameter]
-    public int? StoryId { get; set; }
-    [Parameter]
-    public bool GroupList { get; set; }
+	[Parameter]
+	public int? StoryId { get; set; }
+	[Parameter]
+	public bool GroupList { get; set; }
 
-    private bool showPictures = false;
-    private int pictures = 0;
-    public bool deleted = false;
-    public bool failed = false;
-    private List<PictureDTO>? list = null;
+	private bool showPictures = false;
+	private int pictures = 0;
+	public bool deleted = false;
+	public bool failed = false;
+	private List<PictureDTO>? list = null;
 
-    private async Task GetData()
-    {
-        //Get list of pictures for a story
-        list = await Http.GetFromJsonAsync<List<PictureDTO>>($"/api/picture/story/{StoryId}");
-        if (list != null) pictures = list.Count;
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        await GetData();
-    }
+	private async Task GetData()
+	{
+		//Get list of pictures for a story
+		list = await Http.GetFromJsonAsync<List<PictureDTO>>($"/api/picture/story/{StoryId}");
+		if (list != null) pictures = list.Count;
+	}
+	protected override async Task OnInitializedAsync()
+	{
+		await GetData();
+	}
 
-    void ShowPictures()
-    {
-        if (!showPictures) showPictures = true;
-        else showPictures = false;
-    }
+	void ShowPictures()
+	{
+		if (!showPictures) showPictures = true;
+		else showPictures = false;
+	}
 
-    async Task Delete(int? id)
-    {
-        deleted = false;
-        failed = false;
-        id = Convert.ToInt32(id);
-        var picres = await Http.DeleteAsync($"/api/picture/{id}");
+	async Task Delete(int? id)
+	{
+		deleted = false;
+		failed = false;
+		id = Convert.ToInt32(id);
+		var picres = await Http.DeleteAsync($"/api/picture/{id}");
 
-        if (picres.IsSuccessStatusCode)
-        {
-            Console.WriteLine(picres);
-            await GetData();
-            StateHasChanged();
-        }
-        else
-        {
-            failed = true;
-            Console.WriteLine(picres);
-        }
-    }
+		if (picres.IsSuccessStatusCode)
+		{
+			Console.WriteLine(picres);
+			await GetData();
+			StateHasChanged();
+		}
+		else
+		{
+			failed = true;
+			Console.WriteLine(picres);
+		}
+	}
 }

@@ -45,10 +45,16 @@
 			<br /><br />
 			@if (sDTO.TripId != null)
 			{
-				<button id="editReturn-story" class="btn btn-warning" type="button" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>Back to trip edit</button>
+				<button id="editReturn-story" class="btn btn-warning" type="button" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>
+					<span class="oi oi-eject" aria-hidden="true"> Back to trip edit</span>
+				</button>
 			}
-			<button id="editSubmit-story" type="submit" class="btn btn-success">Save Changes</button>
-			<button id="delete-story" class="btn btn-danger" type="button" @onclick="@Delete">Delete</button>
+			<button id="editSubmit-story" type="submit" class="btn btn-success">
+				<span class="oi oi-check" aria-hidden="true"> Save Changes</span>
+			</button>
+			<button id="delete-story" class="btn btn-danger" type="button" @onclick="@Delete">
+				<span class="oi oi-delete" aria-hidden="true"> Delete</span>
+			</button>
 			<br /><br />
 			<PictureUpload id="@StoryId" />
 		</EditForm>

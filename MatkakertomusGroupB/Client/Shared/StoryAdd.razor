@@ -37,7 +37,9 @@
 		<label>Tell your story: </label> <br />
 		<InputTextArea id="Input_Story_Description" @bind-Value="sDTO.Description" style="width:100%" />
 		<br /><br />
-		<button id="addSubmit-story" type="submit" class="btn btn-success">Add story to your trip</button>
+		<button id="addSubmit-story" type="submit" class="btn btn-success">
+			<span class="oi oi-plus" aria-hidden="true"> Add story to your trip</span>
+		</button>
 	</EditForm>
 </NewStory>
 <p>Once you have added the story, you can add pictures.</p>
@@ -50,7 +52,7 @@
 }
 @if (failed)
 {
-	<div id="story-added-alert"  class="alert alert-danger fade-in" role="alert">
+	<div id="story-added-alert" class="alert alert-danger fade-in" role="alert">
 		Saving changes failed. If the problem persists contact support
 	</div>
 }

@@ -28,8 +28,10 @@
 					<li><b>Trip start:</b> @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
 					<li><b>Trip end:</b> @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
 					<br />
-					<button id="tripManage" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'><span class="oi oi-book" aria-hidden="true"> Manage trip</span></button>
-					<StoryList TripId="@t.TripId" UserId="@UserId" GroupList=false/>
+					<button id="tripManage" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>
+						<span class="oi oi-book" aria-hidden="true"> Manage trip</span>
+					</button>
+					<StoryList TripId="@t.TripId" UserId="@UserId" GroupList=false />
 				</ul>
 			</TripItem>
 		</div>

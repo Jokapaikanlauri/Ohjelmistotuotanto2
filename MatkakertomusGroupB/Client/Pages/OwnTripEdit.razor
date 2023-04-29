@@ -30,9 +30,15 @@
                 <br /><br />
                 <p>NOTE: Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
                 <br />
-                <button id="navbackButton" class="btn btn-success" type="button" @onclick='()=>nav.NavigateTo($"/trips")'>Back to trips</button>
-                <button id="editSubmit-trip" type="submit" class="btn btn-warning">Save Changes</button>
-                <button id="deleteTripButton" class="btn btn-danger" type="button" @onclick="@Delete">Delete</button>
+                <button id="navbackButton" class="btn btn-success" type="button" @onclick='()=>nav.NavigateTo($"/trips")'>
+                    <span class="oi oi-eject" aria-hidden="true"> Back to trips</span>
+                    </button>
+                <button id="editSubmit-trip" type="submit" class="btn btn-warning">
+                    <span class="oi oi-check" aria-hidden="true"> Save Changes</span>
+                    </button>
+                <button id="deleteTripButton" class="btn btn-danger" type="button" @onclick="@Delete">
+                    <span class="oi oi-delete" aria-hidden="true"> Delete</span>
+                    </button>
                 <br /><br/>
             </EditForm>
         </EditTrip>

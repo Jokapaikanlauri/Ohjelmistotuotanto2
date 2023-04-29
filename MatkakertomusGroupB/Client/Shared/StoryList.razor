@@ -12,7 +12,9 @@
 {
 	if (list.Count != 0)
 	{
-		<button id="togglevisibility-story" class="btn btn-success" @onclick=@ShowStories>Show or hide trip stories</button>
+		<button id="togglevisibility-story" class="btn btn-success" @onclick=@ShowStories>
+			<span class="oi oi-eye" aria-hidden="true"> Show or hide trip stories</span>
+		</button>
 		if (showStories)
 		{
 			@foreach (StoryDTO s in list)
@@ -25,7 +27,9 @@
 						<li><b>Story:</b> @s.Description</li>
 						@if (UserId != null)
 						{
-							<button id="editStoryButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>Edit story</button>
+							<button id="editStoryButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>
+								<span class="oi oi-pencil" aria-hidden="true"> Edit story</span>
+							</button>
 						}
 						<StoryPictureList StoryId=@s.StoryId GroupList=@GroupList />
 					</ul>

@@ -52,9 +52,15 @@
 				<br />
 				<br />
 
-				<button id="navbackButton" class="btn btn-success" type="button" @onclick='()=>nav.NavigateTo($"/destinations")'>Back to destinations</button>
-				<button id="editSubmitButton" type="submit" class="btn btn-warning">Save edit</button>
-				<button id="deleteDestinationButton" class="btn btn-danger" type="button" @onclick="@Delete">Delete</button>
+				<button id="navbackButton" class="btn btn-success" type="button" @onclick='()=>nav.NavigateTo($"/destinations")'>
+					<span class="oi oi-eject" aria-hidden="true"> Back to destinations</span>
+				</button>
+				<button id="editSubmitButton" type="submit" class="btn btn-warning">
+					<span class="oi oi-check" aria-hidden="true"> Save Changes</span>
+				</button>
+				<button id="deleteDestinationButton" class="btn btn-danger" type="button" @onclick="@Delete">
+					<span class="oi oi-delete" aria-hidden="true"> Delete</span>
+				</button>
 
 			</EditForm>
 		</EditDestination>

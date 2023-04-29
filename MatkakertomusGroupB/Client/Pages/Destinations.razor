@@ -46,7 +46,9 @@
 
 								@if (@d.Stories == null)
 								{
-									<button id="editDestButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>Edit</button>
+									<button id="editDestButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>
+										<span class="oi oi-pencil" aria-hidden="true"> Edit</span>
+									</button>
 								}
 							</ul>
 						</DestinationItem>
