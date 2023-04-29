@@ -136,7 +136,7 @@ namespace MatkakertomusGroupB.Tests
 			this.userPassword = $"{userEmail}-{nameof(userPassword)}";
 			this.userMunicipality = $"Test-{nameof(userMunicipality)}-{randomNumber.ToString()}";
 			this.userDescription = $"Test-{nameof(userDescription)}-{randomNumber.ToString()}";
-			this.userPhoneNumber = $"{randomNumber.ToString()}{randomNumber.ToString()}";
+			this.userPhoneNumber = $"+{randomNumber.ToString()}{randomNumber.ToString()}";
 
 			//Generate random data for Destination
 			this.destName = $"Test-{nameof(destName)}-{randomNumber.ToString()}";
@@ -366,7 +366,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 		[Test, Order(3)]
-		public void First_Logout()
+		public void Logout_StartOfTests()
 		{
 			Thread.Sleep(100);
 			_webDriver.FindElement(By.Id("logout_button")).Click();
@@ -379,7 +379,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 		[Test, Order(4)]
-		public void Re_LogIn()
+		public void Re_LogIn_StartOfTests()
 		{
 			//Navigate to specific URL
 			_webDriver.Navigate().GoToUrl(_baseUrl);
@@ -2097,6 +2097,173 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 		[Test, Order(22)]
+		public void Logout_ForPublicUserTests()
+		{
+			Thread.Sleep(100);
+			_webDriver.FindElement(By.Id("logout_button")).Click();
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+		[Test, Order(23)]
+		public void Public_Welcome_Page_Checks()
+		{
+			//Navigate to specific URL
+			_webDriver.Navigate().GoToUrl(_baseUrl);
+
+			//TODO: Add an logout if logged in
+			//_webDriver.FindElement(By.Id("logout_button")).Click();
+
+
+			//Test the Welcome page contents
+			//Wait until a specific element is found(timeout defined in global ImplicitWait
+			_webDriver.FindElement(By.Id("index-razor-public"));
+			//Or wait a specific time
+			//Thread.Sleep(5000);
+
+			//Index must contain a welcome text
+			string actual = _webDriver.FindElement(By.Id("index-razor-public")).Text.ToString();
+			string expected = "Welcome";
+			Assert.True(actual.Contains(expected), $"Expected index to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+
+			//Index must contain a welcoming picture
+			var welcomepic = _webDriver.FindElement(By.Id("kuva"));
+			Assert.AreEqual(true, welcomepic.Displayed, $"Expected index to display a welcoming picture, but it wasn't.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+		[Test, Order(24)]
+		public void Public_Register_and_Login_Links()
+		{
+			//Test that Register and Log in exist
+			//Register
+			var actual = _webDriver.FindElement(By.PartialLinkText("Register")).GetAttribute("href").ToString();
+			string expected = "authentication/register";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected registration link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+
+			//Log in
+			actual = _webDriver.FindElement(By.PartialLinkText("Log in")).GetAttribute("href").ToString();
+			expected = "authentication/login";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected login link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+		[Test, Order(25)]
+		public void Public_Navmenu_Contents()
+		{
+			//Test Nav menu contents
+			//Home
+			var actual = _webDriver.FindElement(By.PartialLinkText("Home")).GetAttribute("href").ToString();
+			string expected = "";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu home link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+
+			//Destinations
+			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));
+
+			actual = destinationsButton.GetAttribute("href").ToString();
+			expected = "destinations";
+			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu destinations link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
+
+
+			//Verify that nav menu has only 2 links
+			var navmenuHTML = _webDriver.FindElement(By.Id("navmenu-public")).GetAttribute("innerHTML");
+			int regexMatches = Regex.Matches(navmenuHTML, "<a href").Count();
+			Assert.True(regexMatches == 2, $"Expected nav menu to contain 2 links, but it contained {regexMatches} links.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+		[Test, Order(26)]
+		public void Public_Destinations_List()
+		{
+			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));
+			//Navigate to Destinations page
+			destinationsButton.Click();
+
+			//Wait until page title matches
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(10));
+			var title = wait.Until(drv => drv.Title.Equals("Destinations"));
+
+
+			string expected = "destinations-razor-public-listing";
+			var publicListingElem = _webDriver.FindElement(By.Id(expected));
+
+			Assert.AreEqual(true, publicListingElem.Enabled, $"Expected page to have element with id \"{expected}\", but it wasn't: {publicListingElem.Enabled}");
+
+			var destinationElem = _webDriver.FindElement(By.Id($"{destName}-div"));
+			string destinationsListHTML = destinationElem.GetAttribute("innerHTML");
+			expected = $"{destName}</h4>";
+			Assert.True(destinationsListHTML.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListHTML}\"");
+
+			string destinationsListText = destinationElem.Text.ToString();
+			expected = $"Country: {destCountry}";
+			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
+			expected = $"Municipality: {destMunicipality}";
+			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
+			expected = $"Description: {destDescription}";
+			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
+			//Picture 
+			//Kiuruvesi-picture
+			var destinationpic = _webDriver.FindElement(By.Id($"{destName}-picture"));
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			Assert.AreEqual(true, destinationpic.Displayed);
+
+		}
+
+		[Test, Order(27)]
+		public void Re_LogIn_AfterPublicUserTests()
+		{
+			//Navigate to specific URL
+			_webDriver.Navigate().GoToUrl(_baseUrl);
+
+			//TODO: Add an logout if logged in
+			//_webDriver.FindElement(By.Id("logout_button")).Click()
+
+			//Wait until a specific element is found(timeout defined in global ImplicitWait
+			_webDriver.FindElement(By.PartialLinkText("Log in")).Click();
+			//Or wait a specific time
+			//Thread.Sleep(5000);
+
+			//https://www.browserstack.com/guide/sendkeys-in-selenium
+			//On the login page fill out the form and proceed
+			_webDriver.FindElement(By.Id("Input_Email")).SendKeys(userEmail);
+			_webDriver.FindElement(By.Id("Input_Password")).SendKeys(userPassword);
+			_webDriver.FindElement(By.Id("login-submit")).Click();
+
+
+
+			//User must see his NickName
+			string loginDisplayHTML = _webDriver.FindElement(By.Id("nick-display")).GetAttribute("innerHTML");
+			string expected = userNickname;
+			Assert.True(loginDisplayHTML.Contains(expected), $"Expected login box to contain userNickname \"{expected}\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
+			Assert.False(loginDisplayHTML.Contains("login"), $"Expected login box to not \"login\", but it wasn't found. Actual: \"{loginDisplayHTML}\"");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+		}
+
+		[Test, Order(28)]
 		public void Delete_Active_Destination_Blocked()
 		{
 			//Nav and wait for render
@@ -2197,7 +2364,7 @@ namespace MatkakertomusGroupB.Tests
 
 		}
 
-		[Test, Order(23)]
+		[Test, Order(29)]
 		public void Delete_OwnStory()
 		{
 			//Change the  Global Implicit wait before failing (waits for element to be found)
@@ -2394,7 +2561,7 @@ namespace MatkakertomusGroupB.Tests
 
 		}
 
-		[Test, Order(24)]
+		[Test, Order(30)]
 		public void Delete_OwnTrips()
 		{
 			//Navigate back to own trips
@@ -2587,7 +2754,7 @@ namespace MatkakertomusGroupB.Tests
 
 		}
 
-		[Test, Order(25)]
+		[Test, Order(31)]
 		public void Delete_Empty_Destination()
 		{
 			//Nav and wait for render
@@ -2674,152 +2841,5 @@ namespace MatkakertomusGroupB.Tests
 
 		}
 
-
-		[Test, Order(26)]
-		public void LogOut_Again()
-		{
-
-			_webDriver.FindElement(By.Id("logout_button")).Click();
-
-			//Wait for built-in auth notification
-			Thread.Sleep(1500);
-			//The whole bucket, logged out notfication hardcoded
-			string pageContent = _webDriver.FindElement(By.Id("app")).Text.ToString();
-			string expected = "You are logged out.";
-
-
-			Thread.Sleep(100);
-
-			Assert.True(pageContent.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{pageContent}\"");
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-		}
-
-
-		[Test, Order(27)]
-		public void Welcome_Page_Checks()
-		{
-			//Navigate to specific URL
-			_webDriver.Navigate().GoToUrl(_baseUrl);
-
-			//TODO: Add an logout if logged in
-			//_webDriver.FindElement(By.Id("logout_button")).Click();
-
-
-			//Test the Welcome page contents
-			//Wait until a specific element is found(timeout defined in global ImplicitWait
-			_webDriver.FindElement(By.Id("index-razor-public"));
-			//Or wait a specific time
-			//Thread.Sleep(5000);
-
-			//Index must contain a welcome text
-			string actual = _webDriver.FindElement(By.Id("index-razor-public")).Text.ToString();
-			string expected = "Welcome";
-			Assert.True(actual.Contains(expected), $"Expected index to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-
-			//Index must contain a welcoming picture
-			var welcomepic = _webDriver.FindElement(By.Id("kuva"));
-			Assert.AreEqual(true, welcomepic.Displayed, $"Expected index to display a welcoming picture, but it wasn't.");
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-		}
-
-
-		[Test, Order(28)]
-		public void Register_and_Login_Links()
-		{
-			//Test that Register and Log in exist
-			//Register
-			var actual = _webDriver.FindElement(By.PartialLinkText("Register")).GetAttribute("href").ToString();
-			string expected = "authentication/register";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected registration link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-
-			//Log in
-			actual = _webDriver.FindElement(By.PartialLinkText("Log in")).GetAttribute("href").ToString();
-			expected = "authentication/login";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected login link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-		}
-
-
-		[Test, Order(29)]
-		public void Public_Navmenu_Contents()
-		{
-			//Test Nav menu contents
-			//Home
-			var actual = _webDriver.FindElement(By.PartialLinkText("Home")).GetAttribute("href").ToString();
-			string expected = "";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu home link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-
-			//Destinations
-			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));
-
-			actual = destinationsButton.GetAttribute("href").ToString();
-			expected = "destinations";
-			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu destinations link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
-
-
-			//Verify that nav menu has only 2 links
-			var navmenuHTML = _webDriver.FindElement(By.Id("navmenu-public")).GetAttribute("innerHTML");
-			int regexMatches = Regex.Matches(navmenuHTML, "<a href").Count();
-			Assert.True(regexMatches == 2, $"Expected nav menu to contain 2 links, but it contained {regexMatches} links.");
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-		}
-
-
-		[Test, Order(30)]
-		public void Public_Destinations_List()
-		{
-			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));
-			//Navigate to Destinations page
-			destinationsButton.Click();
-
-			//Wait until page title matches
-			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(10));
-			var title = wait.Until(drv => drv.Title.Equals("Destinations"));
-
-
-			string expected = "destinations-razor-public-listing";
-			var publicListingElem = _webDriver.FindElement(By.Id(expected));
-
-			Assert.AreEqual(true, publicListingElem.Enabled, $"Expected page to have element with id \"{expected}\", but it wasn't: {publicListingElem.Enabled}");
-
-			var destinationElem = _webDriver.FindElement(By.Id($"{destName}-div"));
-			string destinationsListHTML = destinationElem.GetAttribute("innerHTML");
-			expected = $"{destName}</h4>";
-			Assert.True(destinationsListHTML.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListHTML}\"");
-
-			string destinationsListText = destinationElem.Text.ToString();
-			expected = $"Country: {destCountry}";
-			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
-			expected = $"Municipality: {destMunicipality}";
-			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
-			expected = $"Description: {destDescription}";
-			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
-			//Picture 
-			//Kiuruvesi-picture
-			var destinationpic = _webDriver.FindElement(By.Id($"{destName}-picture"));
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-
-			Assert.AreEqual(true, destinationpic.Displayed);
-
-		}
 	}
 }
