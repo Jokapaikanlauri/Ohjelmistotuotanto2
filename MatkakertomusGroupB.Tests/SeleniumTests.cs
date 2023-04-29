@@ -133,7 +133,7 @@ namespace MatkakertomusGroupB.Tests
 			this.userSurname = $"Test-{nameof(userSurname)}-{randomNumber.ToString()}";
 			this.userNickname = $"Test-{nameof(userNickname)}-{randomNumber.ToString()}";
 			this.userEmail = $"Test-{nameof(userEmail)}-{randomNumber.ToString()}@Bingostan.com";
-			this.userPassword = $"Test-{nameof(userPassword)}-{randomNumber.ToString()}";
+			this.userPassword = $"{userEmail}-{nameof(userPassword)}";
 			this.userMunicipality = $"Test-{nameof(userMunicipality)}-{randomNumber.ToString()}";
 			this.userDescription = $"Test-{nameof(userDescription)}-{randomNumber.ToString()}";
 			this.userPhoneNumber = $"{randomNumber.ToString()}{randomNumber.ToString()}";
@@ -1212,7 +1212,7 @@ namespace MatkakertomusGroupB.Tests
 			SelectElement selectElement = new SelectElement(keyElem.FindElement(By.CssSelector("select")));
 
 			// Select first item in the dropdown
-			selectElement.SelectByIndex(0);
+			selectElement.SelectByText(destName);
 
 			// Verify that name equals previusly added
 			string expectedValue = destName;
@@ -1917,8 +1917,8 @@ namespace MatkakertomusGroupB.Tests
 			// find box and define new instance of select
 			SelectElement selectElement = new SelectElement(keyElem.FindElement(By.CssSelector("select")));
 
-			// Select first item in the dropdown
-			selectElement.SelectByIndex(0);
+			// Dont change the dropdown
+			selectElement.SelectByText(destName);
 
 			// Verify that name equals previusly added
 			string expectedValue = destName;
@@ -2135,7 +2135,6 @@ namespace MatkakertomusGroupB.Tests
 			Thread.Sleep(2000);
 			keyElem.Click();
 
-
 			//Try and remove the Destiantion
 			_webDriver.FindElement(By.Id("deleteDestinationButton")).Click();
 
@@ -2169,7 +2168,6 @@ namespace MatkakertomusGroupB.Tests
 
 			//Return to Destination listings
 			_webDriver.FindElement(By.Id("navbackButton")).Click();
-
 
 			//Expect to find page content
 			keyElemId = "destinations-razor-auth-listing";
@@ -2667,7 +2665,7 @@ namespace MatkakertomusGroupB.Tests
 			int expectedInt = 0;
 			int actualInt = keyElems.Count;
 
-			Assert.AreEqual(0, keyElems.Count, $"Expected to find page without any destinations added by us but they were found on the page. {keyElems[0].Text.ToString()}");
+			Assert.AreEqual(0, keyElems.Count, $"Expected to find page without any destinations added by us but they were found on the page.");
 
 			if (extraDelayEnabled)
 			{
