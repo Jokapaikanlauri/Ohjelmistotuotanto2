@@ -303,8 +303,13 @@ namespace MatkakertomusGroupB.Tests
 				Thread.Sleep(extraDelayInMilliSeconds);
 			}
 
-			//Proceed
-			_webDriver.FindElement(By.Id("update-profile-button")).Click();
+			//Click da button
+			keyElemId = "update-profile-button";
+			keyElem = keyElem.FindElement(By.Id(keyElemId));
+			// Scroll to the button before attempting to click
+			((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+			Thread.Sleep(2000);
+			keyElem.Click();
 
 			//The OK message should be displayed
 			keyElemId = "user-update-messagebox";
@@ -2494,6 +2499,7 @@ namespace MatkakertomusGroupB.Tests
 			linkText = "My Trips";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
+			Thread.Sleep(999);
 			//Expect to find page content
 			keyElemId = "owntrips-razor";
 			//Get element
