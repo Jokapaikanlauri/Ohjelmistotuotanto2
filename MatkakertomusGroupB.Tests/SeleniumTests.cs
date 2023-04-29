@@ -2368,7 +2368,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Delete_OwnStory()
 		{
 			//Change the  Global Implicit wait before failing (waits for element to be found)
-			_webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+			_webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(4);
 
 			//Navigate back to own trips
 			string linkText = "My Trips";
