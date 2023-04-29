@@ -40,6 +40,8 @@ namespace MatkakertomusGroupB.Tests
 		private bool debuggingMessagesEnabled = false;
 		private bool extraDelayEnabled = true;
 		private int extraDelayInMilliSeconds = 500;
+		private bool extraRefreshDelayEnabled = true;
+		private int extraRefreshDelayInMilliSeconds = 1000;
 		private int waitB4FailSeconds = 5;
 
 		//Data for images
@@ -1264,9 +1266,13 @@ namespace MatkakertomusGroupB.Tests
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
 
 
+            if (extraRefreshDelayEnabled)
+            {
+                Thread.Sleep(extraRefreshDelayInMilliSeconds);
+            }
 
-			//Get file element and input the path to set the picture
-			var inputFileElement = _webDriver.FindElement(By.CssSelector("input[type='file']"));
+            //Get file element and input the path to set the picture
+            var inputFileElement = _webDriver.FindElement(By.CssSelector("input[type='file']"));
 			inputFileElement.SendKeys(pictureImagePath);
 
 
@@ -1380,14 +1386,24 @@ namespace MatkakertomusGroupB.Tests
 			});
 			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+            
+			if (extraRefreshDelayEnabled)
+            {
+                Thread.Sleep(extraRefreshDelayInMilliSeconds);
+            }
 
-			//Reveal pictures
-			keyElem.Click();
+            //Reveal pictures
 
-			//Story must contain a picture
+            //Click da button
+            // Scroll to the button before attempting to click
+            ((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+            Thread.Sleep(2000);
+            keyElem.Click();
 
-			//Get element
-			keyElem = _webDriver.FindElement(By.CssSelector("img[src^='data:image/png;base64']"));
+            //Story must contain a picture
+
+            //Get element
+            keyElem = _webDriver.FindElement(By.CssSelector("img[src^='data:image/png;base64']"));
 			//Define wait time
 			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
 			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
@@ -1918,7 +1934,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 
-
+			if (extraRefreshDelayEnabled) Thread.Sleep(extraRefreshDelayInMilliSeconds);
 
 			// find box and define new instance of select
 			SelectElement selectElement = new SelectElement(keyElem.FindElement(By.CssSelector("select")));
