@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Text;
 using System.Xml.Linq;
+using OpenQA.Selenium.Edge;
 
 namespace MatkakertomusGroupB.Tests
 {
@@ -174,16 +175,16 @@ namespace MatkakertomusGroupB.Tests
 				Thread.Sleep(7000);
 
 				// Create a new Selenium WebDriver manager instance
-				new DriverManager().SetUpDriver(new ChromeConfig());
+				new DriverManager().SetUpDriver(new EdgeConfig());
 
-				// Create Chrome options
-				var chromeOptions = new ChromeOptions();
+				// Create Edge options
+				var edgeOptions = new EdgeOptions();
 
 				// Set the "ignore-certificate-errors" flag to bypass the SSL cert failure
-				chromeOptions.AddArgument("--ignore-certificate-errors");
+				edgeOptions.AddArgument("--ignore-certificate-errors");
 
 				// Create a new Selenium WebDriver
-				_webDriver = new ChromeDriver(chromeOptions);
+				_webDriver = new EdgeDriver(edgeOptions);
 			}
 			catch (Exception ex)
 			{
