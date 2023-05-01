@@ -67,36 +67,36 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 			// Added in accordance with https://learn.microsoft.com/en-us/aspnet/core/security/authentication/add-user-data?view=aspnetcore-7.0&tabs=netcore-cli
 			[Required]
 			[DataType(DataType.Text)]
-			[Display(Name = "Forename")]
+			[Display(Name = "Etunimi")]
 			public string Forename { get; set; }
 
 			[Required]
 			[DataType(DataType.Text)]
-			[Display(Name = "Surname")]
+			[Display(Name = "Sukunimi")]
 			public string Surname { get; set; }
 
 			[Required]
 			[DataType(DataType.Text)]
-			[Display(Name = "Nickname")]
+			[Display(Name = "Nimimerkki")]
 			public string Nickname { get; set; }
 
 			[Required]
 			[DataType(DataType.Text)]
-			[Display(Name = "Municipality")]
+			[Display(Name = "Paikkakunta")]
 			public string Municipality { get; set; }
 
 			[Required]
 			[DataType(DataType.Text)]
-			[Display(Name = "Description")]
+			[Display(Name = "Kuvaus")]
 			public string Description { get; set; }
 
 			//[Required]
 			[DataType(DataType.Text)]
-			[Display(Name = "Image")]
+			[Display(Name = "Kuva")]
 			public string Image { get; set; }
 
 			[Phone]
-			[Display(Name = "Phone number")]
+			[Display(Name = "Puhelinnumero")]
 			public string PhoneNumber { get; set; }
 		}
 

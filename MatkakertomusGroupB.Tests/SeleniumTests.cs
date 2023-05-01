@@ -219,7 +219,7 @@ namespace MatkakertomusGroupB.Tests
 			_webDriver.Navigate().GoToUrl(_baseUrl);
 
 			//Wait until a specific element is found(timeout defined in global ImplicitWait
-			_webDriver.FindElement(By.PartialLinkText("Register")).Click();
+			_webDriver.FindElement(By.PartialLinkText("Rekisteröidy")).Click();
 
 
 
@@ -249,7 +249,7 @@ namespace MatkakertomusGroupB.Tests
 
 			//Navigate to user details management and add the rest of the information
 			//My Information
-			string linkText = "My Information";
+			string linkText = "Tietoni";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			string actual = elem.GetAttribute("href").ToString();
 			var expected = "authentication/profile";
@@ -342,7 +342,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 			//Navigate back to Main Page
-			linkText = "Return to Main Page";
+			linkText = "Takaisin pääsivulle";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -396,7 +396,7 @@ namespace MatkakertomusGroupB.Tests
 			//_webDriver.FindElement(By.Id("logout_button")).Click()
 
 			//Wait until a specific element is found(timeout defined in global ImplicitWait
-			_webDriver.FindElement(By.PartialLinkText("Log in")).Click();
+			_webDriver.FindElement(By.PartialLinkText("Kirjaudu sisään")).Click();
 			//Or wait a specific time
 			//Thread.Sleep(5000);
 
@@ -426,11 +426,11 @@ namespace MatkakertomusGroupB.Tests
 		{
 			//Test Nav menu contents
 			//Nav to pages
-			//Koti-, Matkakohde-, Porukan matkat-, Omat matkat-, Omat tiedot-, Jäsenet-sivut
+			//Etusivu-, Matkakohde-, Porukan matkat-, Omat matkat-, Omat tiedot-, Jäsenet-sivut
 
 
 			//Destinations
-			string linkText = "Destinations";
+			string linkText = "Matkakohteet";
 			//Find the correct anchor <a> item via link text
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			//Get the href of the <a>
@@ -467,7 +467,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 
 			//Home
-			linkText = "Home";
+			linkText = "Etusivu";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			actual = elem.GetAttribute("href").ToString();
 			expected = "";
@@ -500,7 +500,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 
 			//Group's Trips
-			linkText = "Group's Trips";
+			linkText = "Porukan matkat";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			actual = elem.GetAttribute("href").ToString();
 			expected = "grouptrips";
@@ -533,7 +533,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 
 			//Own Trips
-			linkText = "My Trips";
+			linkText = "Minun matkani";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			actual = elem.GetAttribute("href").ToString();
 			expected = "trips";
@@ -566,7 +566,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 
 			//My Information
-			linkText = "My Information";
+			linkText = "Tietoni";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			actual = elem.GetAttribute("href").ToString();
 			expected = "authentication/profile";
@@ -601,7 +601,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 
 			//Other Travellers
-			linkText = "Travellers";
+			linkText = "Jäsenet";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			actual = elem.GetAttribute("href").ToString();
 			expected = "travellerlist";
@@ -650,7 +650,7 @@ namespace MatkakertomusGroupB.Tests
 		{
 
 			//Navigate to Travellers listing
-			string linkText = "Travellers";
+			string linkText = "Jäsenet";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			string actual = elem.GetAttribute("href").ToString();
 			string expected = "travellerlist";
@@ -737,7 +737,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Add_Destination_Item()
 		{
 			//Navigate to Destinations, wait for add element to be enabled
-			string linkText = "Destinations";
+			string linkText = "Matkakohteet";
 			//Find the correct anchor <a> item via link text
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			//Get the href of the <a>
@@ -870,7 +870,7 @@ namespace MatkakertomusGroupB.Tests
 		{
 
 			//Nav and wait for render
-			string linkText = "Destinations";
+			string linkText = "Matkakohteet";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -1020,7 +1020,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Edited_Destination_Updated()
 		{
 			//Nav and wait for render
-			string linkText = "Destinations";
+			string linkText = "Matkakohteet";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -1096,7 +1096,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Add_publicTrip_Item()
 		{
 			//Navigate to Own Trips, wait for add element to be enabled
-			string linkText = "My Trips";
+			string linkText = "Minun matkani";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			string actual = elem.GetAttribute("href").ToString();
 			string expected = "trips";
@@ -1196,7 +1196,7 @@ namespace MatkakertomusGroupB.Tests
 			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
 			//Expect there to be a trip with privacy status of previously declared trip
-			expected = "Public";
+			expected = "Julkinen";
 			Assert.True(actual.Contains(expected), $"Expected trip listing to contain privacy status of \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
 
@@ -1211,7 +1211,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Add_privateTrip_Item()
 		{
 			//Navigate to Own Trips, wait for add element to be enabled
-			string linkText = "My Trips";
+			string linkText = "Minun matkani";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			string actual = elem.GetAttribute("href").ToString();
 			string expected = "trips";
@@ -1315,7 +1315,7 @@ namespace MatkakertomusGroupB.Tests
 			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
 			//Expect there to be a trip with privacy status of previously declared trip
-			expected = "Private";
+			expected = "Yksityinen";
 			Assert.True(actual.Contains(expected), $"Expected trip listing to contain privacy status of \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
 
@@ -1330,7 +1330,7 @@ namespace MatkakertomusGroupB.Tests
 		{
 
 			//Group's Trips
-			string linkText = "Group's Trips";
+			string linkText = "Porukan matkat";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -1384,7 +1384,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Add_Story_To_Public()
 		{
 			//Navigate back to own trips
-			string linkText = "My Trips";
+			string linkText = "Minun matkani";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -1492,13 +1492,13 @@ namespace MatkakertomusGroupB.Tests
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
 
 
-            if (extraRefreshDelayEnabled)
-            {
-                Thread.Sleep(extraRefreshDelayInMilliSeconds);
-            }
+			if (extraRefreshDelayEnabled)
+			{
+				Thread.Sleep(extraRefreshDelayInMilliSeconds);
+			}
 
-            //Get file element and input the path to set the picture
-            var inputFileElement = _webDriver.FindElement(By.CssSelector("input[type='file']"));
+			//Get file element and input the path to set the picture
+			var inputFileElement = _webDriver.FindElement(By.CssSelector("input[type='file']"));
 			inputFileElement.SendKeys(pictureImagePath);
 
 
@@ -1612,24 +1612,24 @@ namespace MatkakertomusGroupB.Tests
 			});
 			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
-            
+
 			if (extraRefreshDelayEnabled)
-            {
-                Thread.Sleep(extraRefreshDelayInMilliSeconds);
-            }
+			{
+				Thread.Sleep(extraRefreshDelayInMilliSeconds);
+			}
 
-            //Reveal pictures
+			//Reveal pictures
 
-            //Click da button
-            // Scroll to the button before attempting to click
-            ((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
-            Thread.Sleep(2000);
-            keyElem.Click();
+			//Click da button
+			// Scroll to the button before attempting to click
+			((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+			Thread.Sleep(2000);
+			keyElem.Click();
 
-            //Story must contain a picture
+			//Story must contain a picture
 
-            //Get element
-            keyElem = _webDriver.FindElement(By.CssSelector("img[src^='data:image/png;base64']"));
+			//Get element
+			keyElem = _webDriver.FindElement(By.CssSelector("img[src^='data:image/png;base64']"));
 			//Define wait time
 			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
 			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
@@ -1664,7 +1664,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Edit_OwnTrip_Private()
 		{
 			//Navigate back to own trips
-			string linkText = "My Trips";
+			string linkText = "Minun matkani";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -1806,7 +1806,7 @@ namespace MatkakertomusGroupB.Tests
 			Assert.True(actual.Contains(expected), $"Expected trip listing to contain end date \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
 			//Expect there to be a trip with privacy status of previously declared trip
-			expected = "Public";
+			expected = "Julkinen";
 			Assert.True(actual.Contains(expected), $"Expected trip listing to contain privacy status of \"{expected}\", but it wasn't found as text. Listing: \"{actual}\"");
 
 
@@ -1821,7 +1821,7 @@ namespace MatkakertomusGroupB.Tests
 		{
 
 			//Navigate back to own trips
-			string linkText = "My Trips";
+			string linkText = "Minun matkani";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -2055,7 +2055,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Edited_OwnStory_Updated()
 		{
 			//Own Trips
-			string linkText = "My Trips";
+			string linkText = "Minun matkani";
 			_webDriver.FindElement(By.PartialLinkText(linkText)).Click();
 
 			//Expect to find the modified content mother in the list
@@ -2147,7 +2147,7 @@ namespace MatkakertomusGroupB.Tests
 
 			//Index must contain a welcome text
 			string actual = _webDriver.FindElement(By.Id("index-razor-public")).Text.ToString();
-			string expected = "Welcome";
+			string expected = "Tervetuloa";
 			Assert.True(actual.Contains(expected), $"Expected index to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
 			//Index must contain a welcoming picture
@@ -2165,12 +2165,12 @@ namespace MatkakertomusGroupB.Tests
 		{
 			//Test that Register and Log in exist
 			//Register
-			var actual = _webDriver.FindElement(By.PartialLinkText("Register")).GetAttribute("href").ToString();
+			var actual = _webDriver.FindElement(By.PartialLinkText("Rekisteröidy")).GetAttribute("href").ToString();
 			string expected = "authentication/register";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected registration link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
 			//Log in
-			actual = _webDriver.FindElement(By.PartialLinkText("Log in")).GetAttribute("href").ToString();
+			actual = _webDriver.FindElement(By.PartialLinkText("Kirjaudu sisään")).GetAttribute("href").ToString();
 			expected = "authentication/login";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected login link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
@@ -2185,12 +2185,12 @@ namespace MatkakertomusGroupB.Tests
 		{
 			//Test Nav menu contents
 			//Home
-			var actual = _webDriver.FindElement(By.PartialLinkText("Home")).GetAttribute("href").ToString();
+			var actual = _webDriver.FindElement(By.PartialLinkText("Etusivu")).GetAttribute("href").ToString();
 			string expected = "";
 			Assert.AreEqual(true, (actual.Contains(expected)), $"Expected nav menu home link to contain \"{expected}\", but it wasn't found. Actual: \"{actual}\"");
 
 			//Destinations
-			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));
+			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Matkakohteet"));
 
 			actual = destinationsButton.GetAttribute("href").ToString();
 			expected = "destinations";
@@ -2211,13 +2211,13 @@ namespace MatkakertomusGroupB.Tests
 		[Test, Order(26)]
 		public void Public_Destinations_List()
 		{
-			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Destinations"));
+			var destinationsButton = _webDriver.FindElement(By.PartialLinkText("Matkakohteet"));
 			//Navigate to Destinations page
 			destinationsButton.Click();
 
 			//Wait until page title matches
 			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(10));
-			var title = wait.Until(drv => drv.Title.Equals("Destinations"));
+			var title = wait.Until(drv => drv.Title.Equals("Matkakohteet"));
 
 
 			string expected = "destinations-razor-public-listing";
@@ -2231,11 +2231,11 @@ namespace MatkakertomusGroupB.Tests
 			Assert.True(destinationsListHTML.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListHTML}\"");
 
 			string destinationsListText = destinationElem.Text.ToString();
-			expected = $"Country: {destCountry}";
+			expected = $"Maa: {destCountry}";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
-			expected = $"Municipality: {destMunicipality}";
+			expected = $"Paikkakunta: {destMunicipality}";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
-			expected = $"Description: {destDescription}";
+			expected = $"Kuvaus: {destDescription}";
 			Assert.True(destinationsListText.Contains(expected), $"Expected page to contain \"{expected}\", but it wasn't found. Actual: \"{destinationsListText}\"");
 			//Picture 
 			//Kiuruvesi-picture
@@ -2260,7 +2260,7 @@ namespace MatkakertomusGroupB.Tests
 			//_webDriver.FindElement(By.Id("logout_button")).Click()
 
 			//Wait until a specific element is found(timeout defined in global ImplicitWait
-			_webDriver.FindElement(By.PartialLinkText("Log in")).Click();
+			_webDriver.FindElement(By.PartialLinkText("Kirjaudu sisään")).Click();
 			//Or wait a specific time
 			//Thread.Sleep(5000);
 
@@ -2289,7 +2289,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Edit_Active_Destination_Blocked()
 		{
 			//Nav and wait for render
-			string linkText = "Destinations";
+			string linkText = "Matkakohteet";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -2420,7 +2420,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Delete_Active_Destination_Blocked()
 		{
 			//Nav and wait for render
-			string linkText = "Destinations";
+			string linkText = "Matkakohteet";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -2516,7 +2516,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 
 		}
-		
+
 		[Test, Order(30)]
 		public void Delete_OwnStory()
 		{
@@ -2524,7 +2524,7 @@ namespace MatkakertomusGroupB.Tests
 			_webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(4);
 
 			//Navigate back to own trips
-			string linkText = "My Trips";
+			string linkText = "Minun matkani";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -2643,20 +2643,19 @@ namespace MatkakertomusGroupB.Tests
 
 
 			//Navigate back to own trips
-			linkText = "My Trips";
+			linkText = "Minun matkani";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			Thread.Sleep(999);
 			//Expect to find page content
 			keyElemId = "owntrips-razor";
-			//Get element
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+
 			//Define wait time
 			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
 			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
 			wait.Until(driver =>
 			{
-				if (keyElem.Displayed)
+				if (_webDriver.FindElement(By.Id(keyElemId)).Displayed)
 				{
 					return true;
 				}
@@ -2665,6 +2664,8 @@ namespace MatkakertomusGroupB.Tests
 					return false;
 				}
 			});
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
 			//If it was actually displayed this should resolve as "true, true"
 			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
 
@@ -2719,7 +2720,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Delete_OwnTrips()
 		{
 			//Navigate back to own trips
-			string linkText = "My Trips";
+			string linkText = "Minun matkani";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -2792,7 +2793,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 			//Navigate back to own trips
-			linkText = "My Trips";
+			linkText = "Minun matkani";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -2862,7 +2863,7 @@ namespace MatkakertomusGroupB.Tests
 
 
 			//Navigate back to own trips
-			linkText = "My Trips";
+			linkText = "Minun matkani";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -2912,7 +2913,7 @@ namespace MatkakertomusGroupB.Tests
 		public void Delete_Empty_Destination()
 		{
 			//Nav and wait for render
-			string linkText = "Destinations";
+			string linkText = "Matkakohteet";
 			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
@@ -2955,7 +2956,7 @@ namespace MatkakertomusGroupB.Tests
 
 			//Should re reoute but we doing it manually
 			//Nav and wait for render
-			linkText = "Destinations";
+			linkText = "Matkakohteet";
 			elem = _webDriver.FindElement(By.PartialLinkText(linkText));
 			elem.Click();
 			//Expect to find page content
