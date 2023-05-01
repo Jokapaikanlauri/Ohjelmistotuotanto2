@@ -138,11 +138,11 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
                 await _userManager.UpdateNormalizedUserNameAsync(user);
 
 
-                StatusMessage = "Change completed succesfully.";
+                StatusMessage = "Muutos suoritettu onnistuneesti.";
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "Sähköpostiosoitteesi ei muuttunut.";
             return RedirectToPage();
         }
 
@@ -174,7 +174,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = "Vahvistusviesti lähetetty.";
             return RedirectToPage();
         }
     }

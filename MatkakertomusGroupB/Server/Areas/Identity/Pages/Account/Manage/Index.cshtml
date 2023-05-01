@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-	ViewData["Title"] = "Profile";
+	ViewData["Title"] = "Profiilini";
 	ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
@@ -12,37 +12,37 @@
 		<form id="profile-form" method="post">
 			<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 			<div class="form-floating mb-3">
-				<input asp-for="Input.Forename" class="form-control" placeholder="Please enter your forename." />
+				<input asp-for="Input.Forename" class="form-control" placeholder="Syötä etunimesi." />
 				<label asp-for="Input.Forename" class="form-label"></label>
 			</div>
 			<div class="form-floating mb-3">
-				<input asp-for="Input.Surname" class="form-control" placeholder="Please enter your surname." />
+				<input asp-for="Input.Surname" class="form-control" placeholder="Syötä sukunimesi." />
 				<label asp-for="Input.Surname" class="form-label"></label>
 			</div>
 			<div class="form-floating mb-3">
-				<input asp-for="Input.Nickname" class="form-control" placeholder="Please enter your nickname." />
+				<input asp-for="Input.Nickname" class="form-control" placeholder="Syötä nimimerkkisi." />
 				<label asp-for="Input.Nickname" class="form-label"></label>
 			</div>
 			<div class="form-floating mb-3">
-				<input asp-for="Input.Municipality" class="form-control" placeholder="Please enter your municipality." />
+				<input asp-for="Input.Municipality" class="form-control" placeholder="Syötä paikkakuntasi." />
 				<label asp-for="Input.Municipality" class="form-label"></label>
 			</div>
 			<div class="form-floating mb-3">
-				<input asp-for="Input.Description" class="form-control" placeholder="Please enter your description." />
+				<input asp-for="Input.Description" class="form-control" placeholder="Syötä kuvauksesi." />
 				<label asp-for="Input.Description" class="form-label"></label>
 			</div>
 			<div class="form-floating mb-3">
-				<img style="max-height: 240px" id="img-preview" src="data:image/png;base64,@Model.Input.Image" alt="Image Preview" onerror="this.onerror=null;this.src='';this.alt='Please Upload a new profile picture';" />
+				<img style="max-height: 240px" id="img-preview" src="data:image/png;base64,@Model.Input.Image" alt="Image Preview" onerror="this.onerror=null;this.src='';this.alt='Ole hyvä ja lataa uusi profiilikuva';" />
 				<input asp-for="Input.Image" class="form-control" type="hidden" id="Input_Image" />
 				<input type="file" name="ImageFile" id="ImageFile" accept="image/*" />
-				<button type="button" onclick="removeImage()">Remove Image</button>
+				<button type="button" onclick="removeImage()">Poista kuva</button>
 			</div>
 			<div class="form-floating mb-3">
-				<input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
+				<input asp-for="Input.PhoneNumber" class="form-control" placeholder="Syötä puhelinnumerosi." />
 				<label asp-for="Input.PhoneNumber" class="form-label"></label>
 				<span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
 			</div>
-			<button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+			<button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Tallenna</button>
 		</form>
 	</div>
 </div>

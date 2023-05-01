@@ -331,7 +331,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			var keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "Your profile has been updated";
+			actual = "Profiilisi on päivitetty";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 

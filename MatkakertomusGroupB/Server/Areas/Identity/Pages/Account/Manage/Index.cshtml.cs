@@ -166,7 +166,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 				if (!setPhoneResult.Succeeded)
 				{
 					//_logger.LogWarning("OnPostAsync phone number change failed");
-					StatusMessage = "Unexpected error when trying to set phone number.";
+					StatusMessage = "Odottamaton virhe päivittäessä puhelinnumeroasi";
 					return RedirectToPage();
 				}
 			}
@@ -203,7 +203,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account.Manage
 			await _signInManager.RefreshSignInAsync(user);
 
 			//_logger.LogInformation("OnPostAsync user was refreshed");
-			StatusMessage = "Your profile has been updated";
+			StatusMessage = "Profiilisi on päivitetty";
 
 			//_logger.LogInformation("OnPostAsync profile was refreshed and message delivered, returning to page");
 			return RedirectToPage();

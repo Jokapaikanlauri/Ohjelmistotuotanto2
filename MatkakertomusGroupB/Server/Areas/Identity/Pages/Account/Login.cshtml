@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Kirjaudu sisään";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -10,17 +10,17 @@
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
-                <h2>Log in with your Traveller account.</h2>
+                <h2>Kirjaudu sisään.</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
                     <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <label asp-for="Input.Email" class="form-label">Sähköposti</label>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="salasana" />
+                    <label asp-for="Input.Password" class="form-label">Salasana</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="checkbox mb-3">
@@ -30,11 +30,11 @@
                     </label>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Kirjaudu sisään</button>
                 </div>
                 <div>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Rekisteröidy uutena käyttäjänä</a>
                     </p>
                 </div>
             </form>
@@ -42,9 +42,9 @@
     </div>
     <div class="col-md-6 col-md-offset-2">
         <section>
-            <h3>Welcome back Traveller!</h3>
+            <h3>Tervetuloa takaisin matkaaja!</h3>
             <hr />
-            <div>Let's get you signed in and sharing stories!</div>
+            <div>Eiköhän kirjauduta sisään ja jaetaan matkustamisen riemu yhdessä!</div>
         </section>
     </div>
 </div>

@@ -49,7 +49,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account
             var result = await _userManager.ChangeEmailAsync(user, email, code);
             if (!result.Succeeded)
             {
-                StatusMessage = "Error changing email.";
+                StatusMessage = "Virhe muutettaessa sähköpostiasi.";
                 return Page();
             }
 
@@ -58,12 +58,12 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account
             var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
             if (!setUserNameResult.Succeeded)
             {
-                StatusMessage = "Error changing user name.";
+                StatusMessage = "Virhe muutettaessa käyttäjänimeäsi.";
                 return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Thank you for confirming your email change.";
+            StatusMessage = "Kiitos sähköpostimuutoksesi vahvistamisesta.";
             return Page();
         }
     }
