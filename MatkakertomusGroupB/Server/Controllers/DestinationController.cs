@@ -66,7 +66,17 @@ namespace MatkakertomusGroupB.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDestination(int id, DestinationDTO destinationDTO)
         {
-            Destination destination = DestinationDTOToDestination(destinationDTO);
+            if (_context.Destinations == null || _context.Stories == null)
+            {
+                return NotFound();
+            }
+            var stories = await _context.Stories.Where(x => x.DestinationId == id).ToListAsync();
+            if (stories.Count > 0)
+            {
+                return BadRequest();
+            }
+
+                Destination destination = DestinationDTOToDestination(destinationDTO);
             if (id != destinationDTO.DestinationId)
             {
                 return BadRequest();

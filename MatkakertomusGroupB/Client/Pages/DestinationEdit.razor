@@ -95,6 +95,13 @@
 	</div>
 }
 
+@if (editFailed)
+{
+	<div id="destinationd-edited-alert" class="alert alert-danger fade-in" role="alert">
+		Error while editing, destination has stories!
+	</div>
+}
+
 
 @code {
 	[Parameter]
@@ -112,6 +119,7 @@
 
 	public bool nameExists = false;
 	public bool edited = false;
+	public bool editFailed = false;
 	public bool failed = false;
 	public bool deleted = false;
 	public bool deleteFailed = false;
@@ -123,18 +131,18 @@
 
 	async Task Save()
 	{
+		editFailed = deleteFailed = failed = deleted = edited = false;
 		dDTO.DestinationId = DestinationId;
 		var res = await Http.PutAsJsonAsync<DestinationDTO>($"/api/destination/{DestinationId}", dDTO);
 		if (res.IsSuccessStatusCode)
 		{
 			edited = true;
-			deleteFailed = failed = deleted = false;
+			
 			Console.WriteLine(res);
 		}
 		else
 		{
-			failed = true;
-			edited = failed = deleted = false;
+			editFailed = true;
 			Console.WriteLine(res);
 		}
 		StateHasChanged();
@@ -142,21 +150,20 @@
 
 	async Task Delete()
 	{
-
+		editFailed = deleteFailed = failed = deleted = edited = false;
 		var res = await Http.DeleteAsync($"/api/destination/{DestinationId}");
 		if (res.IsSuccessStatusCode)
 		{
 			Console.WriteLine(res);
 			nav.NavigateTo($"/destinations");
 			deleted = true;
-			edited = failed = deleteFailed = false;
 		}
 
 		else
 		{
 			deleteFailed = true;
 			Console.WriteLine(res);
-			edited = failed = deleted = false;
+			
 		}
 	}
 
