@@ -865,8 +865,234 @@ namespace MatkakertomusGroupB.Tests
 			}
 		}
 
-
 		[Test, Order(9)]
+		public void Edit_Destination()
+		{
+
+			//Nav and wait for render
+			string linkText = "Destinations";
+			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			elem.Click();
+			//Expect to find page content
+			string keyElemId = "destinations-razor-auth-listing";
+			//Get element
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+
+			// Find the parent <ul> element
+			keyElem = _webDriver.FindElement(By.XPath($"//ul[li[contains(., '{destDescription}')]]"));
+			//Click da button
+			keyElemId = "editDestButton";
+			keyElem = keyElem.FindElement(By.Id(keyElemId));
+			// Scroll to the button before attempting to click
+			((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+			Thread.Sleep(2000);
+			keyElem.Click();
+
+
+
+			//Expect to find page content
+			keyElemId = "destinationEdit-razor-form";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+
+			//Edit Existing data in the DESTINATION form
+			destName = "Edited-" + destName;
+			destCountry = "Edited-" + destCountry;
+			destMunicipality = "Edited-" + destMunicipality;
+			destDescription = "Edited-" + destDescription;
+
+
+			var formInput = _webDriver.FindElement(By.Id("Input_Name"));
+			formInput.Clear();
+			formInput.SendKeys(destName);
+			formInput = _webDriver.FindElement(By.Id("Input_Country"));
+			formInput.Clear();
+			formInput.SendKeys(destCountry);
+			formInput = _webDriver.FindElement(By.Id("Input_Municipality"));
+			formInput.Clear();
+			formInput.SendKeys(destMunicipality);
+			formInput = _webDriver.FindElement(By.Id("Input_Description"));
+			formInput.Clear();
+			formInput.SendKeys(destDescription);
+
+
+			//Get file element and input the path to set the picture
+			var inputFileElement = _webDriver.FindElement(By.CssSelector("input[type='file']"));
+			inputFileElement.SendKeys(destImagePathEdited);
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//Proceed
+			_webDriver.FindElement(By.Id("editSubmitButton")).Click();
+
+
+			//The OK message should be displayed
+			keyElemId = "destinationd-edited-alert";
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+
+			string keyElemHTML = keyElem.GetAttribute("innerHTML");
+			string actual = "Destination was edited successfully!";
+			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
+			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//Return to Destination listings
+			_webDriver.FindElement(By.Id("navbackButton")).Click();
+
+
+			//Expect to find page content
+			keyElemId = "destinations-razor-auth-listing";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find Destinations page with element \"{keyElemId}\" via return button but it wasn't found.");
+		}
+
+		[Test, Order(10)]
+		public void Edited_Destination_Updated()
+		{
+			//Nav and wait for render
+			string linkText = "Destinations";
+			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			elem.Click();
+			//Expect to find page content
+			string keyElemId = "destinations-razor-auth-listing";
+			//Get element
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+
+
+			//Expect to find the added content in the list
+			keyElemId = "destinations-razor-auth-listing";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
+
+			//Convert element contents to string and see if the added item exists
+			string actual = keyElem.Text.ToString();
+			string expected = destName;
+			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			expected = destCountry;
+			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			expected = destMunicipality;
+			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+			expected = destDescription;
+			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
+
+			//test for picturelement
+			string keyElemHTML = keyElem.GetAttribute("innerHTML").ToString();
+			expected = $"destpic-{destName}";
+			var welcomepic = _webDriver.FindElement(By.Id(expected));
+			Assert.AreEqual(true, welcomepic.Displayed, $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{keyElemHTML}\"");
+
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+		}
+
+		[Test, Order(11)]
 		public void Add_publicTrip_Item()
 		{
 			//Navigate to Own Trips, wait for add element to be enabled
@@ -936,7 +1162,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(10)]
+		[Test, Order(12)]
 		public void Added_publicTrip_Item_Exists()
 		{
 			//Expect to find the added content in the list
@@ -981,7 +1207,7 @@ namespace MatkakertomusGroupB.Tests
 
 		}
 
-		[Test, Order(11)]
+		[Test, Order(13)]
 		public void Add_privateTrip_Item()
 		{
 			//Navigate to Own Trips, wait for add element to be enabled
@@ -1055,7 +1281,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(12)]
+		[Test, Order(14)]
 		public void Added_privateTrip_Item_Exists()
 		{
 			//Expect to find the added content in the list
@@ -1099,7 +1325,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 		}
 
-		[Test, Order(13)]
+		[Test, Order(15)]
 		public void Added_privateTrip_Item_Not_Visible_To_All()
 		{
 
@@ -1154,7 +1380,7 @@ namespace MatkakertomusGroupB.Tests
 		}
 
 
-		[Test, Order(14)]
+		[Test, Order(16)]
 		public void Add_Story_To_Public()
 		{
 			//Navigate back to own trips
@@ -1310,7 +1536,7 @@ namespace MatkakertomusGroupB.Tests
 			}
 		}
 
-		[Test, Order(15)]
+		[Test, Order(17)]
 		public void Added_story_Item_Exists()
 		{
 			//One reveal button to be found and clicked:
@@ -1432,233 +1658,6 @@ namespace MatkakertomusGroupB.Tests
 			{
 				Thread.Sleep(extraDelayInMilliSeconds);
 			}
-		}
-
-		[Test, Order(16)]
-		public void Edit_Destination()
-		{
-
-			//Nav and wait for render
-			string linkText = "Destinations";
-			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
-			elem.Click();
-			//Expect to find page content
-			string keyElemId = "destinations-razor-auth-listing";
-			//Get element
-			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			//Define wait time
-			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-			//If it was actually displayed this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-
-
-			// Find the parent <ul> element
-			keyElem = _webDriver.FindElement(By.XPath($"//ul[li[contains(., '{destDescription}')]]"));
-			//Click da button
-			keyElemId = "editDestButton";
-			keyElem = keyElem.FindElement(By.Id(keyElemId));
-			// Scroll to the button before attempting to click
-			((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
-			Thread.Sleep(2000);
-			keyElem.Click();
-
-
-
-			//Expect to find page content
-			keyElemId = "destinationEdit-razor-form";
-			//Get element
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			//Define wait time
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-			//If it was actually displayed this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-
-
-			//Edit Existing data in the DESTINATION form
-			destName = "Edited-" + destName;
-			destCountry = "Edited-" + destCountry;
-			destMunicipality = "Edited-" + destMunicipality;
-			destDescription = "Edited-" + destDescription;
-
-
-			var formInput = _webDriver.FindElement(By.Id("Input_Name"));
-			formInput.Clear();
-			formInput.SendKeys(destName);
-			formInput = _webDriver.FindElement(By.Id("Input_Country"));
-			formInput.Clear();
-			formInput.SendKeys(destCountry);
-			formInput = _webDriver.FindElement(By.Id("Input_Municipality"));
-			formInput.Clear();
-			formInput.SendKeys(destMunicipality);
-			formInput = _webDriver.FindElement(By.Id("Input_Description"));
-			formInput.Clear();
-			formInput.SendKeys(destDescription);
-
-
-			//Get file element and input the path to set the picture
-			var inputFileElement = _webDriver.FindElement(By.CssSelector("input[type='file']"));
-			inputFileElement.SendKeys(destImagePathEdited);
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-
-			//Proceed
-			_webDriver.FindElement(By.Id("editSubmitButton")).Click();
-
-
-			//The OK message should be displayed
-			keyElemId = "destinationd-edited-alert";
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-
-			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			string actual = "Destination was edited successfully!";
-			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
-			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-
-			//Return to Destination listings
-			_webDriver.FindElement(By.Id("navbackButton")).Click();
-
-
-			//Expect to find page content
-			keyElemId = "destinations-razor-auth-listing";
-			//Get element
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			//Define wait time
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-			//If it was actually displayed this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find Destinations page with element \"{keyElemId}\" via return button but it wasn't found.");
-		}
-
-		[Test, Order(17)]
-		public void Edited_Destination_Updated()
-		{
-			//Nav and wait for render
-			string linkText = "Destinations";
-			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
-			elem.Click();
-			//Expect to find page content
-			string keyElemId = "destinations-razor-auth-listing";
-			//Get element
-			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			//Define wait time
-			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-			//If it was actually displayed this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
-
-
-
-			//Expect to find the added content in the list
-			keyElemId = "destinations-razor-auth-listing";
-			//Get element
-			keyElem = _webDriver.FindElement(By.Id(keyElemId));
-			//Define wait time
-			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
-			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
-			wait.Until(driver =>
-			{
-				if (keyElem.Displayed)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			});
-			//If it was actually displayed this should resolve as "true, true"
-			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" but it wasn't found.");
-
-			//Convert element contents to string and see if the added item exists
-			string actual = keyElem.Text.ToString();
-			string expected = destName;
-			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
-			expected = destCountry;
-			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
-			expected = destMunicipality;
-			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
-			expected = destDescription;
-			Assert.True(actual.Contains(expected), $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{actual}\"");
-
-			//test for picturelement
-			string keyElemHTML = keyElem.GetAttribute("innerHTML").ToString();
-			expected = $"destpic-{destName}";
-			var welcomepic = _webDriver.FindElement(By.Id(expected));
-			Assert.AreEqual(true, welcomepic.Displayed, $"Expected destination listing to contain \"{expected}\", but it wasn't found as text. Actual: \"{keyElemHTML}\"");
-
-
-			if (extraDelayEnabled)
-			{
-				Thread.Sleep(extraDelayInMilliSeconds);
-			}
-
 		}
 
 		[Test, Order(18)]
@@ -2285,7 +2284,139 @@ namespace MatkakertomusGroupB.Tests
 			}
 		}
 
+
 		[Test, Order(28)]
+		public void Edit_Active_Destination_Blocked()
+		{
+			//Nav and wait for render
+			string linkText = "Destinations";
+			var elem = _webDriver.FindElement(By.PartialLinkText(linkText));
+			elem.Click();
+			//Expect to find page content
+			string keyElemId = "destinations-razor-auth-listing";
+			//Get element
+			var keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+
+			// Find the parent <ul> element
+			keyElem = _webDriver.FindElement(By.XPath($"//ul[li[contains(., '{destDescription}')]]"));
+			//Click da button
+			keyElemId = "editDestButton";
+			keyElem = keyElem.FindElement(By.Id(keyElemId));
+			// Scroll to the button before attempting to click
+			((IJavaScriptExecutor)_webDriver).ExecuteScript("arguments[0].scrollIntoView(true);", keyElem);
+			Thread.Sleep(2000);
+			keyElem.Click();
+
+
+
+			//Expect to find page content
+			keyElemId = "destinationEdit-razor-form";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find page with element \"{keyElemId}\" via link with text \"{linkText}\" but it wasn't found.");
+
+
+			var formInput = _webDriver.FindElement(By.Id("Input_Name"));
+			formInput.Clear();
+			formInput.SendKeys("DEST_NAME_SHOULD_NOT_BE_SAVED");
+
+
+			//Try and save the Destiantion
+			_webDriver.FindElement(By.Id("editSubmitButton")).Click();
+
+
+			//The OK message should be displayed
+			keyElemId = "destinationd-edited-alert";
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+
+			string keyElemHTML = keyElem.GetAttribute("innerHTML");
+			string actual = "Error while editing, destination has stories!";
+			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
+			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+			//Return to Destination listings
+			_webDriver.FindElement(By.Id("navbackButton")).Click();
+
+			//Expect to find page content
+			keyElemId = "destinations-razor-auth-listing";
+			//Get element
+			keyElem = _webDriver.FindElement(By.Id(keyElemId));
+			//Define wait time
+			wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(waitB4FailSeconds));
+			//Wait for the Blazor to actually display the element (it's hidden initially due to loading...)
+			wait.Until(driver =>
+			{
+				if (keyElem.Displayed)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			});
+			//If it was actually displayed this should resolve as "true, true"
+			Assert.AreEqual(true, keyElem.Displayed, $"Expected to find Destinations page with element \"{keyElemId}\" via return button but it wasn't found.");
+
+			if (extraDelayEnabled)
+			{
+				Thread.Sleep(extraDelayInMilliSeconds);
+			}
+
+		}
+
+
+		[Test, Order(29)]
 		public void Delete_Active_Destination_Blocked()
 		{
 			//Nav and wait for render
@@ -2385,8 +2516,8 @@ namespace MatkakertomusGroupB.Tests
 			}
 
 		}
-
-		[Test, Order(29)]
+		
+		[Test, Order(30)]
 		public void Delete_OwnStory()
 		{
 			//Change the  Global Implicit wait before failing (waits for element to be found)
@@ -2584,7 +2715,7 @@ namespace MatkakertomusGroupB.Tests
 
 		}
 
-		[Test, Order(30)]
+		[Test, Order(31)]
 		public void Delete_OwnTrips()
 		{
 			//Navigate back to own trips
@@ -2777,7 +2908,7 @@ namespace MatkakertomusGroupB.Tests
 
 		}
 
-		[Test, Order(31)]
+		[Test, Order(32)]
 		public void Delete_Empty_Destination()
 		{
 			//Nav and wait for render
