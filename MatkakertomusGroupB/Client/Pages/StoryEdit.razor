@@ -8,22 +8,22 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
-<PageTitle>Edit Story</PageTitle>
+<PageTitle>Muokkaa tarinaa</PageTitle>
 
 <div id="editstory-div" class="left">
 	<br />
-	<h4>Edit your story</h4>
+	<h4>Muokkaa omaa tarinaasi</h4>
 	<NewStory>
 		<EditForm Model="@sDTO" OnValidSubmit="@Save">
 			<DataAnnotationsValidator />
 			<ValidationSummary />
 
-			<label>Destination:</label>
+			<label>Matkakohde:</label>
 			<br />
 			<InputSelect @bind-Value="sDTO.DestinationId">
 				@if (destinations == null)
 				{
-					<option selected value="">No destinations available</option>
+					<option selected value="">Matkakohteita ei saatavilla</option>
 				}
 				else
 				{
@@ -34,26 +34,26 @@
 				}
 			</InputSelect>
 			<br /> <br />
-			<label>Date:</label>
+			<label>Päivämäärä:</label>
 			<br />
 			<InputDate id="Input_Story_Edit_Datum" @bind-Value="sDTO.Datum" />
 			<br /> <br />
-			<label>Tell your story: </label> <br />
+			<label>Kerro tarinasi: </label> <br />
 			<InputTextArea id="Input_Story_Edit_Description" @bind-Value="sDTO.Description" style="width:97%" />
 			<br />
-			<p>NOTE: Deleting the story will also delete all the pictures attached to it!!!</p>
+			<p>HUOM! Tarinan poistaminen poistaa myös kaikki siihen liittyvät kuvat!!!</p>
 			<br /><br />
 			@if (sDTO.TripId != null)
 			{
 				<button id="editReturn-story" class="btn btn-warning" type="button" @onclick='()=>nav.NavigateTo($"/trip/edit/{sDTO.TripId}")'>
-					<span class="oi oi-eject" aria-hidden="true"> Back to trip edit</span>
+					<span class="oi oi-eject" aria-hidden="true"> Takaisin matkan muokkauseen</span>
 				</button>
 			}
 			<button id="editSubmit-story" type="submit" class="btn btn-success">
-				<span class="oi oi-check" aria-hidden="true"> Save Changes</span>
+				<span class="oi oi-check" aria-hidden="true"> Tallenna muutokset</span>
 			</button>
 			<button id="delete-story" class="btn btn-danger" type="button" @onclick="@Delete">
-				<span class="oi oi-delete" aria-hidden="true"> Delete</span>
+				<span class="oi oi-delete" aria-hidden="true"> Poista</span>
 			</button>
 			<br /><br />
 			<PictureUpload id="@StoryId" />
@@ -62,31 +62,31 @@
 	@if (edited)
 	{
 		<div id="story-saved-alert" class="alert alert-success fade-in" role="alert">
-			Changes to Story saved successfully!
+			Muutokset tarinaan tallennettiin onnistuneesti!
 		</div>
 	}
 	@if (deleted)
 	{
 		<div id="story-saved-alert" class="alert alert-success fade-in" role="alert">
-			Story was deleted successfully!
+			Tarina poistettiin onnistuneesti!
 		</div>
 	}
 	@if (failed)
 	{
 		<div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
-			Saving new Story failed. If the problem persists contact support!
+			Tarinan muutosten tallentaminen epäonnistui. Ota yhteys tukeen jos vika toistuu!
 		</div>
 	}
 	@if (deleteFailed)
 	{
 		<div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
-			Error while deleting. If the problem persists contact support!
+			Matkakhoteen poistaminen epäonnistui. Ota yhteys tukeen jos vika toistuu!
 		</div>
 	}
 	@if (picDeleteFailed)
 	{
 		<div id="story-saved-alert" class="alert alert-danger fade-in" role="alert">
-			Error while deleting pictures related to the story. If the problem persists contact support!
+			Tarinaan liittyvien kuvien poistaminen epäonnistui. Ota yhteys tukeen jos vika toistuu!
 		</div>
 	}
 

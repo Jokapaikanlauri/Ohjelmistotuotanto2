@@ -8,7 +8,7 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
-<h5>List of your trips, current count: @trips</h5>
+<h5>Lista matkoistasi, lukumäärä: @trips</h5>
 	@if (list != null)
 {
 	@foreach (TripDTO t in list)
@@ -18,18 +18,18 @@
 				@if (t.Private)
 				{
 					<span style="color: darkgoldenrod" class="oi oi-lock-locked" aria-hidden="true" />
-					<span> Private</span>
+					<span> Yksityinen</span>
 				}
 				else
 				{
-					<span class="oi oi-lock-unlocked" aria-hidden="true"> Public</span>
+					<span class="oi oi-lock-unlocked" aria-hidden="true"> Julkinen</span>
 				}
 				<ul>
-					<li><b>Trip start:</b> @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
-					<li><b>Trip end:</b> @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
+					<li><b>Matkan alku:</b> @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
+					<li><b>Matkan loppu:</b> @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
 					<br />
 					<button id="tripManage" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/trip/edit/{t.TripId}")'>
-						<span class="oi oi-book" aria-hidden="true"> Manage trip</span>
+						<span class="oi oi-book" aria-hidden="true"> Matkan hallintaan</span>
 					</button>
 					<StoryList TripId="@t.TripId" UserId="@UserId" GroupList=false />
 				</ul>

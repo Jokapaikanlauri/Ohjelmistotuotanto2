@@ -800,7 +800,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "Destination was added successfully!";
+			actual = "Matkakakohde lisättiin onnistuneest!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -981,7 +981,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			string actual = "Destination was edited successfully!";
+			string actual = "Muutokset matkakohteeseen tallennettu onnistuneesti!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -1151,7 +1151,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "A new trip was created successfully!";
+			actual = "Uusi matka lisätty onnistuneesti!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -1270,7 +1270,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "A new trip was created successfully!";
+			actual = "Uusi matka lisätty onnistuneesti!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -1523,7 +1523,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "Changes to Story saved successfully!";
+			actual = "Muutokset tarinaan tallennettiin onnistuneesti!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -1757,7 +1757,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			string actual = "Trip was edited successfully!";
+			string actual = "Muutokset matkaan tallennettiin onnistuneesti!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -1989,7 +1989,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			actual = "Changes to Story saved successfully!";
+			actual = "Muutokset tarinaan tallennettiin onnistuneesti!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -2375,7 +2375,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			string actual = "Error while editing, destination has stories!";
+			string actual = "Virhe tallennettaessa muutoksia, matkakohteeseen liittyy tarinoita!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 
@@ -2477,7 +2477,7 @@ namespace MatkakertomusGroupB.Tests
 			});
 
 			string keyElemHTML = keyElem.GetAttribute("innerHTML");
-			string actual = "Error while deleting, destination has stories!";
+			string actual = "Virhe poistettaessa, matkakohteeseen liittyy tarinoita!";
 			//If it was actually displayed and contained OK TEXT this should resolve as "true, true"
 			Assert.AreEqual(true, keyElemHTML.Contains(actual), $"Expected the page to display the OK message but it didn't. Messagebox HTML was:\n {keyElemHTML}");
 

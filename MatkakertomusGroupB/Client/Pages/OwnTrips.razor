@@ -8,11 +8,11 @@
 @inject AuthenticationStateProvider asp
 @inject ILogger<Destinations> logger
 
-<PageTitle>My trips</PageTitle>
+<PageTitle>Minun matkani</PageTitle>
 
 <AuthorizeView>
     <Authorized>
-        <h1>My trips</h1>
+        <h1>Minun matkani</h1>
         <div id="owntrips-razor" class="left">
             @if (userId != null)
             {
@@ -24,7 +24,7 @@
         </div>
     </Authorized>
     <NotAuthorized>
-        <div>You are a public user.</div>
+        <div>Olet julkinen käyttäjä.</div>
     </NotAuthorized>
 </AuthorizeView>
 

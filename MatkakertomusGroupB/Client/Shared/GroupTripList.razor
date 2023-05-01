@@ -6,7 +6,7 @@
 @inject HttpClient Http
 @inject AuthenticationStateProvider asp
 
-<h5>List of all trips, current count: @trips</h5>
+<h5>Lista kaikista matkoista, lukumäärä: @trips</h5>
 <div id="grouptriplist-razor" class="left">
 	@if (list != null)
 	{
@@ -14,8 +14,8 @@
 		{
 			<TripItem Trip="@t">
 				<ul id="@($"privateitem-{t.Private.ToString()}-{t.DatumStart.Value.ToString("yyyy-MM-dd")}-{t.DatumEnd.Value.ToString("yyyy-MM-dd")}")" class="list-item">
-					<li><b>Trip start:</b> @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
-					<li><b>Trip end:</b> @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
+					<li><b>Matkan alku:</b> @t.DatumStart.Value.ToString("yyyy-MM-dd")</li>
+					<li><b>Matkan loppu:</b> @t.DatumEnd.Value.ToString("yyyy-MM-dd")</li>
 					<br />
 					<StoryList tripId="@t.TripId" GroupList=true />
 				</ul>

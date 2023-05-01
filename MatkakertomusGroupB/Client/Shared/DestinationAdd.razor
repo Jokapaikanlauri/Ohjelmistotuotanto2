@@ -15,30 +15,30 @@
 <div>
 	<NewDestination>
 		<div class="addHeader">
-			<h4>Add a new destination</h4>
+			<h4>Lisää uusi matkakohde</h4>
 		</div>
 		<div id="destinations-razor-add" class="addDetails">
 
 			<EditForm Model="@destination" OnValidSubmit="@addDestination">
 				<DataAnnotationsValidator />
 				<ValidationSummary />
-				<label>Name</label>
+				<label>Nimi</label>
 				<br />
-				<InputText id="Input_Destination_Name" @bind-Value="destination.Name" onchange="@InputCheck()" placeholder="Name.." style="width:100%" />
+				<InputText id="Input_Destination_Name" @bind-Value="destination.Name" onchange="@InputCheck()" placeholder="Nimi.." style="width:100%" />
 				<br />
-				<label>Country</label>
+				<label>Maa</label>
 				<br />
-				<InputText id="Input_Destination_Country" @bind-Value="destination.Country" onchange="@InputCheck()" placeholder="Country.." style="width:100%" />
+				<InputText id="Input_Destination_Country" @bind-Value="destination.Country" onchange="@InputCheck()" placeholder="Maa.." style="width:100%" />
 				<br />
-				<label>Municipality</label>
+				<label>Paikkakunta</label>
 				<br />
-				<InputText id="Input_Destination_Municipality" @bind-Value="destination.Municipality" placeholder="Municipality.." style="width:100%" />
+				<InputText id="Input_Destination_Municipality" @bind-Value="destination.Municipality" placeholder="Paikkakunta.." style="width:100%" />
 				<br />
-				<label>Description</label>
+				<label>Kuvaus</label>
 				<br />
-				<InputTextArea id="Input_Destination_Description" @bind-Value="destination.Description" placeholder="Description.." style="width:100%" />
+				<InputTextArea id="Input_Destination_Description" @bind-Value="destination.Description" placeholder="Kuvaus.." style="width:100%" />
 				<br />
-				<label>Image</label>
+				<label>Kuva</label>
 				<InputFile id="Input_Destination_Image" OnChange="@OnInputFileChange" style="max-width:100%" />
 				<br />
 				<br />
@@ -49,7 +49,7 @@
 				<br />
 				@if (!InputCheck())
 				{
-					<p>Insert destination Name and Country to add destination.</p>
+					<p>Syötä matkakotheen nimi ja maa lisätäksesi matkakohteen.</p>
 				}
 				else
 				{
@@ -66,19 +66,19 @@
 @if (added)
 {
 	<div id="destination-added-alert" class="alert alert-success fade-in" role="alert">
-		Destination was added successfully!
+		Matkakakohde lisättiin onnistuneest!
 	</div>
 }
 @if (failed)
 {
 	<div id="destination-added-alert" class="alert alert-danger fade-in" role="alert">
-		It's not a destination if it does not have a name!
+		Ei se ole matkakohde jos et anna sille nimeä!
 	</div>
 }
 @if (nameExists)
 {
 	<div id="destination-added-alert" class="alert alert-danger fade-in" role="alert">
-		Destination with this name already exists!
+		Samalla nimellä oleva matkakohde on jo olemassa!
 	</div>
 }
 

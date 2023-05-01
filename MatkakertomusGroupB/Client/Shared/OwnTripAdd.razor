@@ -11,32 +11,32 @@
 
 <div>
 	<div class="addHeader">
-		<h4>Add new trip</h4>
+		<h4>Lisää uusi matka</h4>
 	</div>
 	<div id="trip-razor-add" class="addDetails">
 		<NewTrip>
 			<EditForm Model="@tDTO" OnValidSubmit="@Save">
 				<DataAnnotationsValidator />
 				<ValidationSummary />
-				<label>Start date:</label>
+				<label>Alkupäivämäärä:</label>
 				<br />
 				<InputDate id="Input_Trip_StartDate" @bind-Value="tDTO.DatumStart" onchange="@DateCheck()" />
 				<br /> <br />
-				<label>End date:</label>
+				<label>Loppupäivämäärä:</label>
 				<br />
 				<InputDate id="Input_Trip_EndDate" @bind-Value="tDTO.DatumEnd" onchange="@DateCheck()" />
 				<br /> <br />
-				<label>Check box for private trip: </label>
+				<label>Rastita jos yksityinen: </label>
 				<InputCheckbox id="Input_Trip_Private" @bind-Value="tDTO.Private" />
 				<br /><br />
 				@if (!DateCheck())
 				{
-					<p>Check the dates!</p>
+					<p>Tarkista päivämäärät!</p>
 				}
 				else
 				{
 					<button id="addSubmit" type="submit" class="btn btn-success">
-						<span class="oi oi-plus" aria-hidden="true"> Add trip</span>
+						<span class="oi oi-plus" aria-hidden="true"> Lisää matka</span>
 					</button>
 				}
 			</EditForm>
@@ -46,13 +46,13 @@
 	@if (added)
 	{
 		<div id="trip-added-alert" class="alert alert-success fade-in" role="alert">
-			A new trip was created successfully!
+			Uusi matka lisätty onnistuneesti!
 		</div>
 	}
 	@if (failed)
 	{
 		<div id="trip-added-alert" class="alert alert-danger fade-in" role="alert">
-			There was a problem creating a new trip.
+			Odottamaton virhe lisätessä matkaa.
 		</div>
 	}
 </div>

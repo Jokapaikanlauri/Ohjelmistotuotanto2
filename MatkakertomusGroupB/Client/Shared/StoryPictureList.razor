@@ -12,7 +12,7 @@
 	@if (list.Count != 0)
 	{
 		<button id="togglevisibility-story-pictures" class="btn btn-success" @onclick=@ShowPictures>
-			<span class="oi oi-eye" aria-hidden="true"> Show or hide story pictures</span>
+			<span class="oi oi-eye" aria-hidden="true"> Piilota/paljasta tarinan kuvat</span>
 		</button>
 		@if (showPictures)
 		{
@@ -23,7 +23,7 @@
 				@if (!GroupList)
 				{
 					<button class="btn btn-danger" @onclick="@(() => Delete(p.PictureId))">
-						<span class="oi oi-delete" aria-hidden="true"> Delete below picture from story</span>
+						<span class="oi oi-delete" aria-hidden="true"> Poista alla oleva kuva</span>
 					</button>
 				}
 				<br />
@@ -37,21 +37,21 @@
 		{
 			<br />
 			<br />
-			<h6>Story picture count: @pictures</h6>
+			<h6>Tarinaan liittyviä kuvia: @pictures kpl</h6>
 		}
 	}
 	else
 	{
 		<br />
 		<br />
-		<h6>Story picture count: @pictures</h6>
+		<h6>Tarinaan liittyviä kuvia: @pictures kpl</h6>
 	}
 }
 else
 {
 	<br />
 	<br />
-	<h6>No pictures could be fetched</h6>
+	<h6>Kuvia ei löydetty!</h6>
 }
 
 @code {

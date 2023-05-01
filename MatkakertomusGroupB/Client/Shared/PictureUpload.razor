@@ -7,10 +7,10 @@
 
 
 
-<h4>Upload pictures to your story</h4>
+<h4>Liitä kuvia matkaasi</h4>
 <br />
-<p>Select up to 3 images to upload to your story.</p>
-<p>You can upload pictures to the story multiple times.</p>
+<p>Voi liittää maksimissaan kolme kuvaa kerralla.</p>
+<p>Voit suorittaa liittämisen useamman kerran.</p>
 
 <!--This is how you upload multiple files-->
 <InputFile OnChange="@OnInputFileChange" multiple />
@@ -36,7 +36,7 @@ shows you the uploaded filenames and stored filenames-->
 }-->
 @if (tooManyFiles)
 {
-    <h4>Upload max 3 files at a time.</h4>
+    <h4>Vain kolmen kuvan yhtäaikainen liittäminen on sallittua!</h4>
 }
 
 @code {

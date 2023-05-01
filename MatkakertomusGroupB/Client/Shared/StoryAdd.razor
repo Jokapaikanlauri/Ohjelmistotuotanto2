@@ -8,18 +8,18 @@
 @inject NavigationManager nav
 
 
-<h4>Add new story to trip</h4>
+<h4>Liitä uusi tarina matkaan</h4>
 <NewStory>
 	<EditForm Model="@sDTO" OnValidSubmit="@Save">
 		<DataAnnotationsValidator />
 		<ValidationSummary />
 
-		<label>Destination:</label>
+		<label>Matkakohde:</label>
 		<br />
 		<InputSelect @bind-Value="sDTO.DestinationId">
 			@if (destinations == null)
 			{
-				<option selected value="">No destinations available</option>
+				<option selected value="">Matkakohteita ei saatavilla</option>
 			}
 			else
 			{
@@ -30,30 +30,30 @@
 			}
 		</InputSelect>
 		<br /> <br />
-		<label>Date:</label>
+		<label>Päivämäärä:</label>
 		<br />
 		<InputDate id="Input_Story_Datum" @bind-Value="sDTO.Datum" />
 		<br /> <br />
-		<label>Tell your story: </label> <br />
+		<label>Kerro tarinasi: </label> <br />
 		<InputTextArea id="Input_Story_Description" @bind-Value="sDTO.Description" style="width:100%" />
 		<br /><br />
 		<button id="addSubmit-story" type="submit" class="btn btn-success">
-			<span class="oi oi-plus" aria-hidden="true"> Add story to your trip</span>
+			<span class="oi oi-plus" aria-hidden="true"> Lisää tarina matkaasi</span>
 		</button>
 	</EditForm>
 </NewStory>
-<p>Once you have added the story, you can add pictures.</p>
+<p>Kun olet lisännyt matkan voi lisätä kuvasi siihen</p>
 
 @if (added)
 {
 	<div id="story-added-alert" class="alert alert-success fade-in" role="alert">
-		A new trip was created successfully!
+		Uusi matka lisätty onnistuneesti!
 	</div>
 }
 @if (failed)
 {
 	<div id="story-added-alert" class="alert alert-danger fade-in" role="alert">
-		Saving changes failed. If the problem persists contact support
+		Muutosten tallentaminen epäonnistui. Jos ongelma toistuu ota yhteys tukeen!
 	</div>
 }
 

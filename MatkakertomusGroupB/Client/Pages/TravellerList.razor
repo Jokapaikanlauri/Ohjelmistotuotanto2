@@ -7,11 +7,11 @@
 @inject HttpClient Http
 
 
-<PageTitle>Traveller List</PageTitle>
+<PageTitle>Jäsenet</PageTitle>
 
-<h1>Traveller List</h1>
+<h1>Jäsenet</h1>
 
-<p role="status">Here you can see all registered travellers, current count: @count</p>
+<p role="status">Tällä sivustolla näet kaikki rekisteröityneet jäsenet. Heitä yhteensä: @count</p>
 
 @if (list != null)
 {
@@ -21,11 +21,11 @@
 			<TravellerItem Traveller="@t">
 				<div id="traveller-listing-item-@t.Nickname" class="list-item">
 					<ul>
-						<li><b>First name:</b> @t.Forename</li>
-						<li><b>Last name:</b> @t.Surname</li>
-						<li><b>Nickname:</b> @t.Nickname</li>
-						<li><b>Municipality:</b> @t.Municipality</li>
-						<li><b>Description:</b> @t.Description</li>
+						<li><b>Etunimi:</b> @t.Forename</li>
+						<li><b>Sukunimi:</b> @t.Surname</li>
+						<li><b>Nimimerkki:</b> @t.Nickname</li>
+						<li><b>Paikkakunta:</b> @t.Municipality</li>
+						<li><b>Kuvaus:</b> @t.Description</li>
 					</ul>
 					<img src="data:image/png;base64,@t.Image" style="max-width:70%" />
 				</div>

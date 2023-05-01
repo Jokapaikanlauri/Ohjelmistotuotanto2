@@ -13,7 +13,7 @@
 	if (list.Count != 0)
 	{
 		<button id="togglevisibility-story" class="btn btn-success" @onclick=@ShowStories>
-			<span class="oi oi-eye" aria-hidden="true"> Show or hide trip stories</span>
+			<span class="oi oi-eye" aria-hidden="true"> Piilota/paljasta tarinat</span>
 		</button>
 		if (showStories)
 		{
@@ -22,13 +22,13 @@
 				<br />
 				<StoryItem Story="@s">
 					<ul id="story-ul-list" class="list-item">
-						<li><b>Date:</b> @s.Datum.ToString("yyyy-MM-dd")</li>
+						<li><b>Päivämäärä:</b> @s.Datum.ToString("yyyy-MM-dd")</li>
 						<DestinationInfo destinationId=@s.DestinationId />
-						<li><b>Story:</b> @s.Description</li>
+						<li><b>Tarina:</b> @s.Description</li>
 						@if (UserId != null)
 						{
 							<button id="editStoryButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/story/edit/{s.StoryId}")'>
-								<span class="oi oi-pencil" aria-hidden="true"> Edit story</span>
+								<span class="oi oi-pencil" aria-hidden="true"> Muokkaa tarinaa</span>
 							</button>
 						}
 						<StoryPictureList StoryId=@s.StoryId GroupList=@GroupList />
@@ -40,19 +40,19 @@
 		else
 		{
 			<br />
-			<h6>Trip story count: @stories</h6>
+			<h6>Matkaan liittyvät tarinat: @stories kpl</h6>
 		}
 	}
 	else
 	{
 		<br />
-		<h6>Trip story count: @stories</h6>
+		<h6>Matkaan liittyvät tarinat: @stories kpl</h6>
 	}
 }
 else
 {
 	<br />
-	<h6>No stories could be fetched</h6>
+	<h6>Tarinoita ei löydetty!</h6>
 }
 
 @code {

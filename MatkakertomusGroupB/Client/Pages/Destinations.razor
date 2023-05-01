@@ -11,12 +11,12 @@
 @inject NavigationManager nav
 
 
-<PageTitle>Destinations</PageTitle>
+<PageTitle>Matkakohteet</PageTitle>
 <head>
 	<link rel="icon" type="image/x-icon" href="globe.png" />
 </head>
 
-<h1>Destinations</h1>
+<h1>Matkakohteet</h1>
 <!--Tee tähän forms add buttonin taakse ja lisätyt matkakohteet näytetään tällä sivulla, poista ominaisuus
 	toimii vain jos matkakohde on käyttäjän lisäämä
 -->
@@ -32,9 +32,9 @@
 						<DestinationItem Destination="@d">
 							<ul>
 								<h4>@d.Name</h4>
-								<li><b>Country:</b> @d.Country</li>
-								<li><b>Municipality:</b> @d.Municipality</li>
-								<li><b>Description:</b> @d.Description</li>
+								<li><b>Maa:</b> @d.Country</li>
+								<li><b>Paikkakunta:</b> @d.Municipality</li>
+								<li><b>Kuvaus:</b> @d.Description</li>
 								<br>
 								@if (d.Image != null)
 								{
@@ -47,7 +47,7 @@
 								@if (@d.Stories == null)
 								{
 									<button id="editDestButton" class="btn btn-warning" @onclick='()=>nav.NavigateTo($"/destination/edit/{d.DestinationId}")'>
-										<span class="oi oi-pencil" aria-hidden="true"> Edit</span>
+										<span class="oi oi-pencil" aria-hidden="true"> Muokkaa</span>
 									</button>
 								}
 							</ul>
@@ -58,8 +58,8 @@
 			}
 			else
 			{
-				<h5>Loading... </h5>
-				<h6>If this message persists: the destinations element could not be fetched. Please notify support</h6>
+				<h5>Ladataan... </h5>
+				<h6>Jos tämä ilmotus ei poistu: matkakohde elementtiä ei voitu ladata. Ilmoita tukipalveluun!</h6>
 			}
 		</div>
 		<div class="right">
@@ -75,9 +75,9 @@
 					<div id="@($"{d.Name}-div")" class="list-item">
 						<DestinationItem Destination="@d">
 							<h4>@d.Name</h4>
-							<li><b>Country:</b> @d.Country</li>
-							<li><b>Municipality:</b> @d.Municipality</li>
-							<li><b>Description:</b> @d.Description</li>
+							<li><b>Maa:</b> @d.Country</li>
+							<li><b>Paikkakunta:</b> @d.Municipality</li>
+							<li><b>Kuvaus:</b> @d.Description</li>
 							<br>
 							@if (d.Image != null)
 							{
@@ -93,8 +93,8 @@
 			}
 			else
 			{
-				<h5>Loading... </h5>
-				<h6>If this message persists: the destinations element could not be fetched. Please notify support</h6>
+				<h5>Ladataan... </h5>
+				<h6>Jos tämä ilmotus ei poistu: matkakohde elementtiä ei voitu ladata. Ilmoita tukipalveluun!</h6>
 			}
 		</div>
 	</NotAuthorized>

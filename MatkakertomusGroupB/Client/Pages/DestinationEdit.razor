@@ -10,7 +10,7 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
-<h3>Destination Edit</h3>
+<h3>Matkakohteen muokkaus</h3>
 
 @if (@dDTO != null)
 {
@@ -20,28 +20,28 @@
 				<DataAnnotationsValidator />
 				<ValidationSummary />
 
-				<label>Name</label>
+				<label>Nimi</label>
 				<br />
-				<InputText id="Input_Name" @bind-Value="dDTO.Name" placeholder="Name.." />
-				<br />
-				<br />
-				<label>Country</label>
-				<br />
-				<InputText id="Input_Country" @bind-Value="dDTO.Country" placeholder="Country.." />
+				<InputText id="Input_Name" @bind-Value="dDTO.Name" placeholder="Nimi.." />
 				<br />
 				<br />
-				<label>Municipality</label>
+				<label>Maa</label>
 				<br />
-				<InputText id="Input_Municipality" @bind-Value="dDTO.Municipality" placeholder="Municipality.." />
+				<InputText id="Input_Country" @bind-Value="dDTO.Country" placeholder="Maa.." />
 				<br />
 				<br />
-				<label>Description</label>
+				<label>Paikkakunta</label>
 				<br />
-				<InputTextArea id="Input_Description" @bind-Value="dDTO.Description" placeholder="Description.." style="width:20%" />
+				<InputText id="Input_Municipality" @bind-Value="dDTO.Municipality" placeholder="Paikkakunta.." />
+				<br />
+				<br />
+				<label>Kuvaus</label>
+				<br />
+				<InputTextArea id="Input_Description" @bind-Value="dDTO.Description" placeholder="Kuvaus.." style="width:20%" />
 				<br />
 				<br />
 
-				<label>Image</label>
+				<label>Kuva</label>
 				<InputFile id="Input_Image" OnChange="@OnInputFileChange" style="max-width:100%" multiple />
 				<br />
 
@@ -53,13 +53,13 @@
 				<br />
 
 				<button id="navbackButton" class="btn btn-success" type="button" @onclick='()=>nav.NavigateTo($"/destinations")'>
-					<span class="oi oi-eject" aria-hidden="true"> Back to destinations</span>
+					<span class="oi oi-eject" aria-hidden="true"> Takaisin matkakohteisiin</span>
 				</button>
 				<button id="editSubmitButton" type="submit" class="btn btn-warning">
-					<span class="oi oi-check" aria-hidden="true"> Save Changes</span>
+					<span class="oi oi-check" aria-hidden="true"> Tallenna muutokset</span>
 				</button>
 				<button id="deleteDestinationButton" class="btn btn-danger" type="button" @onclick="@Delete">
-					<span class="oi oi-delete" aria-hidden="true"> Delete</span>
+					<span class="oi oi-delete" aria-hidden="true"> Poista</span>
 				</button>
 
 			</EditForm>
@@ -70,13 +70,13 @@
 @if (edited)
 {
 	<div id="destinationd-edited-alert" class="alert alert-success fade-in" role="alert">
-		Destination was edited successfully!
+		Muutokset matkakohteeseen tallennettu onnistuneesti!
 	</div>
 }
 @if (deleted)
 {
 	<div id="destinationd-edited-alert" class="alert alert-success fade-in" role="alert">
-		Destination was deleted successfully!
+		Matkakohde poistettu onnistuneesti!
 	</div>
 }
 
@@ -84,21 +84,21 @@
 @if (failed)
 {
 	<div id="destinationd-edited-alert" class="alert alert-danger fade-in" role="alert">
-		Unexpected error while editing!
+		Odottamaton virhe tallennettaessa muutoksia!
 	</div>
 }
 
 @if (deleteFailed)
 {
 	<div id="destinationd-edited-alert" class="alert alert-danger fade-in" role="alert">
-		Error while deleting, destination has stories!
+		Virhe poistettaessa, matkakohteeseen liittyy tarinoita!
 	</div>
 }
 
 @if (editFailed)
 {
 	<div id="destinationd-edited-alert" class="alert alert-danger fade-in" role="alert">
-		Error while editing, destination has stories!
+		Virhe tallennettaessa muutoksia, matkakohteeseen liittyy tarinoita!
 	</div>
 }
 

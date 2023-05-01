@@ -8,7 +8,7 @@
 @inject AuthenticationStateProvider asp
 @inject NavigationManager nav
 
-<h1>Edit trip</h1>
+<h1>Muokkaa matkaa</h1>
 
 <div id="ownTripEdit-razor" class="left">
     @if (@tDTO != null)
@@ -17,27 +17,27 @@
             <EditForm Model="@tDTO" OnValidSubmit="@Save">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-                <label>Start date:</label>
+                <label>Alkupäivämäärä:</label>
                 <br />
                 <InputDate id="Input_Trip_Edit_StartDate" @bind-Value="tDTO.DatumStart" />
                 <br /> <br />
-                <label>End date:</label>
+                <label>Loppupäivämäärä:</label>
                 <br />
                 <InputDate id="Input_Trip_Edit_EndDate" @bind-Value="tDTO.DatumEnd" />
                 <br /> <br />
-                <label>Check the box if trip is private: </label>
+                <label>Rastita jos yksityinen: </label>
                 <InputCheckbox id="Input_Trip_Edit_Private" @bind-Value="tDTO.Private" />
                 <br /><br />
-                <p>NOTE: Deleting the trip will also delete all the stories and pictures attached to it!!!</p>
+                <p>HUOM! Matkan poisto poistaa myös kaikki siihen liittyvät tarinat ja kuvat!!!</p>
                 <br />
                 <button id="navbackButton" class="btn btn-success" type="button" @onclick='()=>nav.NavigateTo($"/trips")'>
-                    <span class="oi oi-eject" aria-hidden="true"> Back to trips</span>
+                    <span class="oi oi-eject" aria-hidden="true"> Takaisin matkoihin</span>
                     </button>
                 <button id="editSubmit-trip" type="submit" class="btn btn-warning">
-                    <span class="oi oi-check" aria-hidden="true"> Save Changes</span>
+                    <span class="oi oi-check" aria-hidden="true"> Tallenne muutokset</span>
                     </button>
                 <button id="deleteTripButton" class="btn btn-danger" type="button" @onclick="@Delete">
-                    <span class="oi oi-delete" aria-hidden="true"> Delete</span>
+                    <span class="oi oi-delete" aria-hidden="true"> Poista</span>
                     </button>
                 <br /><br/>
             </EditForm>
@@ -47,26 +47,26 @@
     @if (edited)
     {
         <div id="trip-edit-saved-alert" class="alert alert-success fade-in" role="alert">
-            Trip was edited successfully!
+            Muutokset matkaan tallennettiin onnistuneesti!
         </div>
     }
 
         @if (deleted)
     {
         <div id="trip-edit-saved-alert" class="alert alert-success fade-in" role="alert">
-            Trip was deleted successfully!
+            Matka poistettiin onnistuneesti!
         </div>
     }
         @if (failed)
     {
         <div id="trip-edit-saved-alert" class="alert alert-danger fade-in" role="alert">
-            Saving new Trip failed. If the problem persists contact support
+            Muutosten tallentaminen matkaan epäonnistui! Jos ongelma toistuu ota yhteys tukipalveluun
         </div>
     }
     @if (deleteFailed)
     {
         <div id="trip-edit-saved-alert" class="alert alert-danger fade-in" role="alert">
-            Deleting Trip failed. If the problem persists contact support
+            Matkan poistaminen epäonnistui. Jos ongelma toistuu ota yhteys tukipalveluun
         </div>
     }
 
