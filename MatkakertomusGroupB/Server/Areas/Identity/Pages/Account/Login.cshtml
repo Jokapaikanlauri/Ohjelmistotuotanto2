@@ -2,53 +2,59 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Kirjaudu sisään";
+	ViewData["Title"] = "Kirjaudu sisään";
 }
 
 <h1>@ViewData["Title"]</h1>
 <div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <h2>Kirjaudu sisään.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Sähköposti</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="salasana" />
-                    <label asp-for="Input.Password" class="form-label">Salasana</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Kirjaudu sisään</button>
-                </div>
-                <div>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Rekisteröidy uutena käyttäjänä</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Tervetuloa takaisin matkaaja!</h3>
-            <hr />
-            <div>Eiköhän kirjauduta sisään ja jaetaan matkustamisen riemu yhdessä!</div>
-        </section>
-    </div>
+	<div class="col-md-4">
+		<section>
+			<form id="account" method="post">
+				<h2>Kirjaudu sisään.</h2>
+				<hr />
+				<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+				<div class="form-floating mb-3">
+					<input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+					<label asp-for="Input.Email" class="form-label">Sähköposti</label>
+					<span asp-validation-for="Input.Email" class="text-danger" data-val="true" data-val-regex="Sähköpostiosoite ei ole kelvollinen."></span>
+					<div class="invalid-feedback">
+						@if (ViewData.ModelState.TryGetValue("Input.Email", out var error))
+						{
+							<span>@error.Errors[0].ErrorMessage</span>
+						}
+					</div>
+				</div>
+				<div class="form-floating mb-3">
+					<input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="salasana" />
+					<label asp-for="Input.Password" class="form-label">Salasana</label>
+					<span asp-validation-for="Input.Password" class="text-danger"></span>
+				</div>
+				<div class="checkbox mb-3">
+					<label asp-for="Input.RememberMe" class="form-label">
+						<input class="form-check-input" asp-for="Input.RememberMe" />
+						@Html.DisplayNameFor(m => m.Input.RememberMe)
+					</label>
+				</div>
+				<div>
+					<button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Kirjaudu sisään</button>
+				</div>
+				<div>
+					<p>
+						<a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Rekisteröidy uutena käyttäjänä</a>
+					</p>
+				</div>
+			</form>
+		</section>
+	</div>
+	<div class="col-md-6 col-md-offset-2">
+		<section>
+			<h3>Tervetuloa takaisin matkaaja!</h3>
+			<hr />
+			<div>Eiköhän kirjauduta sisään ja jaetaan matkustamisen riemu yhdessä!</div>
+		</section>
+	</div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+	<partial name="_ValidationScriptsPartial" />
 }

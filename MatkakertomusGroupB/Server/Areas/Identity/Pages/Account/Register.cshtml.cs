@@ -95,7 +95,7 @@ namespace MatkakertomusGroupB.Server.Areas.Identity.Pages.Account
 			///     directly from your code. This API may change or be removed in future releases.
 			/// </summary>
 			[Required]
-			[EmailAddress]
+			[EmailAddress(ErrorMessage = "Sähköpostiosoite ei ole kelvollinen.")]
 			[Display(Name = "Email")]
 			public string Email { get; set; }
 
